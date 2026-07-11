@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>5. Sınıf Fen: Hücre ve Organelleri | Hafıza Teknikleri + Etkinlikler</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    background: #F4F9F4;
+    color: #1A3B2E;
+    padding: 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* tema renkleri: doğa, hücre yeşili ve turuncu kontrast */
+  :root {
+    --cell-green-dark: #2A6B45;
+    --cell-green-light: #E6F3EA;
+    --cell-accent: #E88C2E;
+    --cell-blue: #2C7A6E;
+    --cell-gray: #F9F7F3;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, #2A6B45, #1F8A5C);
+    border-radius: 32px;
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 28px;
+    color: white;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+  }
+  .hero-icon {
+    font-size: 68px;
+  }
+  .hero h2 {
+    font-size: 1.8rem;
+    font-weight: 800;
+  }
+  .hero p {
+    font-size: 0.85rem;
+    opacity: 0.9;
+    margin-top: 6px;
+  }
+
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+  .tab {
+    background: white;
+    border: none;
+    padding: 8px 24px;
+    border-radius: 60px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: 0.2s;
+    color: #2A6B45;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    border: 1px solid #C8E0D2;
+  }
+  .tab.active {
+    background: var(--cell-green-dark);
+    color: white;
+    border-color: var(--cell-green-dark);
+    box-shadow: 0 6px 12px rgba(42,107,69,0.2);
+  }
+  .panel {
+    display: none;
+    animation: fade 0.2s ease;
+  }
+  .panel.active {
+    display: block;
+  }
+  @keyframes fade {
+    from { opacity: 0; transform: translateY(5px);}
+    to { opacity: 1; transform: translateY(0);}
+  }
+
+  .section-label {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #6A8E7C;
+    margin: 28px 0 12px 0;
+  }
+
+  /* CHUNK GRID */
+  .chunk-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .chunk {
+    background: white;
+    border-radius: 28px;
+    padding: 18px;
+    border: 1px solid #DCEADE;
+    transition: all 0.1s;
+  }
+  .chunk h4 {
+    font-size: 0.85rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    letter-spacing: 0.5px;
+  }
+  .chunk ul {
+    list-style: none;
+  }
+  .chunk ul li {
+    font-size: 0.8rem;
+    margin-bottom: 8px;
+    padding-left: 20px;
+    position: relative;
+    line-height: 1.4;
+  }
+  .chunk ul li::before {
+    content: "🌿";
+    position: absolute;
+    left: 0;
+    font-size: 12px;
+  }
+  .chunk-orange h4 { color: var(--cell-accent); }
+  .chunk-green h4 { color: var(--cell-green-dark); }
+  .chunk-blue h4 { color: var(--cell-blue); }
+  .chunk-purple h4 { color: #9B6B9E; }
+
+  .info-card {
+    background: white;
+    border-radius: 24px;
+    padding: 18px 20px;
+    border: 1px solid #DAEBDD;
+    margin-bottom: 18px;
+  }
+  .info-card h3 {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--cell-green-dark);
+    margin-bottom: 8px;
+  }
+  .compare-table {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  .compare-card {
+    background: white;
+    border-radius: 28px;
+    padding: 18px;
+    flex: 1;
+    border-top: 6px solid var(--cell-green-dark);
+  }
+  .organelle-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+    margin-top: 10px;
+  }
+  .org-item {
+    background: #FDF8EF;
+    border-radius: 40px;
+    padding: 6px 14px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  /* SÜRÜKLE BIRAK STİLLERİ */
+  .drag-area {
+    background: #FEFCF7;
+    border-radius: 32px;
+    padding: 20px;
+    margin-bottom: 32px;
+    border: 2px solid #D9E6D5;
+  }
+  .drag-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--cell-green-dark);
+  }
+  .drag-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    background: #F2F8F2;
+    padding: 18px;
+    border-radius: 32px;
+    margin-bottom: 24px;
+  }
+  .drag-word, .drag-statement {
+    background: white;
+    border-radius: 60px;
+    padding: 8px 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    font-weight: 600;
+    font-size: 0.8rem;
+    cursor: grab;
+    border: 1px solid #BEDFC4;
+    user-select: none;
+    transition: 0.1s;
+  }
+  .drag-word:active, .drag-statement:active {
+    cursor: grabbing;
+  }
+  .drag-word.dragging, .drag-statement.dragging {
+    opacity: 0.4;
+  }
+  .drop-zones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  .drop-zone {
+    background: #F1F5EF;
+    border-radius: 36px;
+    padding: 16px 28px;
+    text-align: center;
+    min-width: 180px;
+    border: 2px dashed #AFC8B2;
+    transition: 0.1s;
+  }
+  .drop-zone h4 {
+    font-weight: 800;
+    margin-bottom: 12px;
+  }
+  .drop-zone.drag-over {
+    background: #E2F0E2;
+    border-color: var(--cell-green-dark);
+  }
+  .dropped-items {
+    min-height: 70px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+  .dropped-badge {
+    background: #C8E0D0;
+    padding: 6px 12px;
+    border-radius: 40px;
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+  .fill-sentences {
+    margin: 20px 0;
+  }
+  .sentence {
+    background: white;
+    border-radius: 20px;
+    padding: 12px 18px;
+    margin-bottom: 14px;
+    font-size: 0.85rem;
+  }
+  .drop-slot {
+    display: inline-block;
+    background: #F0E5D6;
+    border-radius: 40px;
+    padding: 4px 14px;
+    min-width: 100px;
+    text-align: center;
+    font-weight: 700;
+    margin: 0 4px;
+    border: 1px dashed #ACBFA7;
+  }
+  .drop-slot.filled {
+    background: #C6E2CF;
+    border: 1px solid #2A6B45;
+    color: #1A4A2F;
+  }
+  .word-bank {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .reset-btn {
+    background: var(--cell-accent);
+    border: none;
+    color: white;
+    padding: 8px 20px;
+    border-radius: 60px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 12px;
+    font-size: 0.75rem;
+  }
+  .reset-btn:hover {
+    background: #C5711E;
+  }
+
+  /* QUIZ STILLERI */
+  .quiz-q {
+    background: white;
+    border-radius: 24px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    border: 1px solid #D9E3D4;
+  }
+  .quiz-opt {
+    background: #FCFAF5;
+    border: 1px solid #D0DEC8;
+    padding: 8px 18px;
+    border-radius: 60px;
+    margin: 6px 0;
+    cursor: pointer;
+  }
+  .quiz-opt.correct {
+    background: #DFF2E3;
+    border-color: #2A6B45;
+  }
+  .quiz-opt.wrong {
+    background: #FFEDE6;
+    border-color: #E88C2E;
+  }
+  .score-bar {
+    background: #E3EEDE;
+    border-radius: 60px;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    font-weight: bold;
+    margin-top: 20px;
+    display: none;
+  }
+  @media (max-width: 700px) {
+    .hero { flex-direction: column; text-align: center; }
+    .chunk-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-icon">🔬🧫</div>
+  <div>
+    <h2>Hücre ve Organelleri</h2>
+    <p>5. Sınıf Fen Bilimleri · Kalıcı öğrenme için hafıza teknikleri, sürükle-bırak etkinlikleri<br>
+    <strong>F.5.3.1.1</strong> — Hücrenin temel kısımları, organeller, bitki-hayvan hücresi farkları</p>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('bilgi',this)">📘 Temel Bilgiler</button>
+  <button class="tab" onclick="showTab('karsilastir',this)">🔬 Karşılaştırma & Organeller</button>
+  <button class="tab" onclick="showTab('teknik',this)">🧠 Hafıza Teknikleri</button>
+  <button class="tab" onclick="showTab('etkinlik',this)">🎮 Sürükle & Etkinlik</button>
+  <button class="tab" onclick="showTab('quiz',this)">✅ 10 Soruluk Quiz</button>
+</div>
+
+<!-- PANEL 1 - TEMEL BİLGİLER -->
+<div id="tab-bilgi" class="panel active">
+  <div class="section-label">🧬 Hücre konusunu 4 grupta öğren (Chunking)</div>
+  <div class="chunk-grid">
+    <div class="chunk chunk-orange">
+      <h4>🔬 Mikroskop & Tarih</h4>
+      <ul><li>Zacharias Janssen (1590) ilk mikroskop</li><li>Robert Hooke (1665) "Cellula" → hücre</li><li>Leeuwenhoek: ilk canlı hücre</li><li>Kısımlar: objektif, oküler, ayar vidaları</li><li>Lam + Lamel: preparat hazırlama</li></ul>
+    </div>
+    <div class="chunk chunk-green">
+      <h4>🧫 Hücrenin Kısımları</h4>
+      <ul><li>Hücre Zarı: seçici geçirgen, canlı</li><li>Hücre Duvarı: bitkilerde, sert, cansız, tam geçirgen</li><li>Çekirdek: yönetim ve kalıtım</li><li>Sitoplazma: yarı akışkan sıvı, organeller burada</li></ul>
+    </div>
+    <div class="chunk chunk-blue">
+      <h4>⚙️ Organeller (Görevleri)</h4>
+      <ul><li>Mitokondri: enerji üretir</li><li>Kloroplast: fotosentez (bitki)</li><li>Ribozom: protein sentezi</li><li>Endoplazmik retikulum: madde taşınması</li><li>Golgi: salgı paketleme</li><li>Lizozom: sindirim (hayvan)</li><li>Koful: depolama</li><li>Sentrozom: bölünme (hayvan)</li></ul>
+    </div>
+    <div class="chunk chunk-purple">
+      <h4>📐 Hücre Teorisi & Hiyerarşi</h4>
+      <ul><li>Tüm canlılar hücrelerden oluşur</li><li>Hücre temel yapı birimidir</li><li>Hücre → Doku → Organ → Sistem → Organizma</li><li>Hücreler bölünerek çoğalır</li></ul>
+    </div>
+  </div>
+  <div class="info-card">
+    <h3>🔬 Mikroskobun önemli kısımları</h3>
+    <p>📌 <strong>Objektif</strong> (büyütme), <strong>Oküler</strong> (bakılan mercek), <strong>Kaba/İnce ayar</strong> (netlik), <strong>Tabla</strong> (preparat yeri), <strong>Lam</strong> (cam taşıyıcı), <strong>Lamel</strong> (kapak camı).</p>
+  </div>
+</div>
+
+<!-- PANEL 2 - KARŞILAŞTIRMA VE ORGANELLER -->
+<div id="tab-karsilastir" class="panel">
+  <div class="section-label">🌱 Bitki Hücresi vs 🐾 Hayvan Hücresi</div>
+  <div class="compare-table">
+    <div class="compare-card"><h3>🌿 Bitki Hücresi</h3><ul><li>Köşeli, düzgün şekil</li><li>Hücre duvarı var</li><li>Kloroplast var (fotosentez)</li><li>Koful büyük ve az sayıda</li><li>Sentrozom yok</li><li>Lizozom (gelişmişlerde yok, ilkelde var)</li></ul></div>
+    <div class="compare-card"><h3>🐕 Hayvan Hücresi</h3><ul><li>Yuvarlak, oval şekil</li><li>Hücre duvarı yok</li><li>Kloroplast yok</li><li>Koful küçük ve çok sayıda</li><li>Sentrozom var (bölünme)</li><li>Lizozom var</li></ul></div>
+  </div>
+  <div class="section-label">📦 Organeller ve Görevleri (Kısa notlar)</div>
+  <div class="organelle-grid">
+    <div class="org-item">⚡ Mitokondri: Enerji fabrikası</div>
+    <div class="org-item">🍃 Kloroplast: Fotosentez (bitki)</div>
+    <div class="org-item">🧬 Ribozom: Protein üretimi</div>
+    <div class="org-item">🚚 Endoplazmik Retikulum: Taşıma yolları</div>
+    <div class="org-item">📦 Golgi: Paketleme & salgı</div>
+    <div class="org-item">🗑️ Lizozom: Hücre içi sindirim</div>
+    <div class="org-item">💧 Koful: Depo (su, atık)</div>
+    <div class="org-item">⚙️ Sentrozom: Hücre bölünmesi (hayvan)</div>
+  </div>
+  <div class="info-card">
+    <h3>🔁 Hücre → Doku → Organ → Sistem → Organizma</h3>
+    <p>Örnek: Kas hücresi → Kas dokusu → Kalp (organ) → Dolaşım sistemi → İnsan (organizma). Canlılık basamakları bu şekilde ilerler.</p>
+  </div>
+</div>
+
+<!-- PANEL 3 - HAFIZA TEKNİKLERİ -->
+<div id="tab-teknik" class="panel">
+  <div class="section-label">🔡 Akrostiş ile organelleri ezberle: “MİT-KLOR-GOL-RİBO-LİZ-SENT”</div>
+  <div class="info-card"><h3>💡 MİT - Klor - Gol - Rib - Liz - Sent</h3><p><strong>MİT</strong>okondri = Maşallah Enerji üretir<br><strong>KLOR</strong>oplast = Klorofil ile besin üretir<br><strong>GOL</strong>gi = Gönderilecekleri Paketler<br><strong>RİBO</strong>zom = Protein imalatçısı<br><strong>LİZ</strong>ozom = Sindirim timi<br><strong>SENT</strong>rozom = Senden bölünme sorumlusu</p></div>
+  <div class="chunk-grid">
+    <div class="chunk chunk-green"><h4>🌿 Bitki Farkı (AKILDA KALICI)</h4><ul><li>Bitki: DUVAR + KLOROPLAST + BÜYÜK KOFUL</li><li>Hayvan: SENTROZOM + LİZOZOM + KÜÇÜK KOFULLAR</li><li>"Duvarlı evde kloroplastlı mutfak, büyük depo; hayvanın hücresinde sentrozomlu bölünme, küçük dolaplar."</li></ul></div>
+    <div class="chunk chunk-orange"><h4>🧠 Sayısal ezber (Chunking)</h4><ul><li>Hücre zarı: Seçici Geçirgen</li><li>Hücre duvarı: Cansız, Tam Geçirgen</li><li>Çekirdek: Yönetici</li><li>Sitoplazma: Organeller yüzer</li></ul></div>
+  </div>
+</div>
+
+<!-- PANEL 4 - SÜRÜKLE BIRAK ETKİNLİKLER (10 DOĞRU/YANLIŞ + 10 BOŞLUK) -->
+<div id="tab-etkinlik" class="panel">
+  <!-- Bölüm 1: 10 Doğru/Yanlış -->
+  <div class="drag-area">
+    <div class="drag-title">✅❌ 10 DOĞRU / YANLIŞ ETKİNLİĞİ (Sürükle bırak)</div>
+    <div class="drag-items" id="tf-items-container">
+      <div class="drag-statement" draggable="true" data-tf="true">1. Hücre duvarı sadece bitki hücrelerinde bulunur.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">2. Mitokondri sadece hayvan hücrelerinde bulunur.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">3. Kloroplast fotosentez yapar.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">4. Lizozom hayvan hücrelerinde bulunur (bitki hücresinde gelişmişlerde yok).</div>
+      <div class="drag-statement" draggable="true" data-tf="true">5. Hücre zarı seçici geçirgendir.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">6. Sentrozom bitki hücrelerinde bulunur.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">7. Koful bitki hücrelerinde küçük ve çok sayıdadır.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">8. Hücrenin keşfi ve adlandırılması Robert Hooke tarafından yapılmıştır.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">9. Ribozom protein sentezinde görevlidir.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">10. Hücre zarı cansız ve tam geçirgendir.</div>
+    </div>
+    <div class="drop-zones">
+      <div class="drop-zone" data-zone="true" id="dropTrueZone">
+        <h4>✅ DOĞRU</h4>
+        <div class="dropped-items" id="trueDropped"></div>
+      </div>
+      <div class="drop-zone" data-zone="false" id="dropFalseZone">
+        <h4>❌ YANLIŞ</h4>
+        <div class="dropped-items" id="falseDropped"></div>
+      </div>
+    </div>
+    <button class="reset-btn" id="resetTFBtn">🔄 Doğru/Yanlış Etkinliğini Sıfırla</button>
+  </div>
+
+  <!-- Bölüm 2: 10 Boşluk Doldurma (Sürükle bırak) -->
+  <div class="drag-area">
+    <div class="drag-title">📝 10 BOŞLUK DOLDURMA (Sözcükleri sürükle)</div>
+    <div class="word-bank" id="fillWordBank">
+      <div class="drag-word" draggable="true" data-fillword="Çekirdek">Çekirdek</div>
+      <div class="drag-word" draggable="true" data-fillword="Kloroplast">Kloroplast</div>
+      <div class="drag-word" draggable="true" data-fillword="Mitokondri">Mitokondri</div>
+      <div class="drag-word" draggable="true" data-fillword="Lizozom">Lizozom</div>
+      <div class="drag-word" draggable="true" data-fillword="Endoplazmik retikulum">Endoplazmik retikulum</div>
+      <div class="drag-word" draggable="true" data-fillword="Golgi aygıtı">Golgi aygıtı</div>
+      <div class="drag-word" draggable="true" data-fillword="Hücre zarı">Hücre zarı</div>
+      <div class="drag-word" draggable="true" data-fillword="Doku">Doku</div>
+      <div class="drag-word" draggable="true" data-fillword="Lam">Lam</div>
+      <div class="drag-word" draggable="true" data-fillword="Ribozom">Ribozom</div>
+    </div>
+    <div class="fill-sentences" id="fillSentencesContainer">
+      <div class="sentence">① Hücrenin yönetim ve kalıtım merkezi <span class="drop-slot" data-correct="Çekirdek">______</span>'dir.</div>
+      <div class="sentence">② Bitki hücresinde bulunan, fotosentezi sağlayan organel <span class="drop-slot" data-correct="Kloroplast">______</span>'dir.</div>
+      <div class="sentence">③ Hücrenin enerji ihtiyacını karşılayan organel <span class="drop-slot" data-correct="Mitokondri">______</span>'dir.</div>
+      <div class="sentence">④ Hücre içi sindirimden sorumlu organel <span class="drop-slot" data-correct="Lizozom">______</span>'dur.</div>
+      <div class="sentence">⑤ Hücrede madde taşınmasını sağlayan organel <span class="drop-slot" data-correct="Endoplazmik retikulum">______</span>'dur.</div>
+      <div class="sentence">⑥ Salgı maddelerinin paketlenmesini sağlayan organel <span class="drop-slot" data-correct="Golgi aygıtı">______</span>'dır.</div>
+      <div class="sentence">⑦ Hücreyi dış ortamdan ayıran ve madde giriş-çıkışını kontrol eden yapı <span class="drop-slot" data-correct="Hücre zarı">______</span>'dır.</div>
+      <div class="sentence">⑧ Aynı görevi yapan hücrelerin bir araya gelmesiyle <span class="drop-slot" data-correct="Doku">______</span> oluşur.</div>
+      <div class="sentence">⑨ Mikroskopta incelenecek maddenin üzerine konulduğu cam parçasına <span class="drop-slot" data-correct="Lam">______</span> denir.</div>
+      <div class="sentence">⑩ Protein sentezinde görevli en küçük organel <span class="drop-slot" data-correct="Ribozom">______</span>'dur.</div>
+    </div>
+    <button class="reset-btn" id="resetFillBtn">🔄 Boşluk Etkinliğini Sıfırla</button>
+  </div>
+</div>
+
+<!-- PANEL 5 - 10 SORULUK QUIZ -->
+<div id="tab-quiz" class="panel">
+  <div class="section-label">✅ 10 SORULUK HÜCRE UZMANLIK QUIZİ</div>
+  <div id="quiz-container"></div>
+  <div class="score-bar" id="score-bar" style="display: none;">🎯 Puan: <strong id="score-val">0</strong> / 10 &nbsp;|&nbsp; <span id="score-msg"></span></div>
+</div>
+
+<script>
+  // ---------- QUIZ (10 soru) ----------
+  const quizQuestions = [
+    { q: "Hücreyi ilk kez kim adlandırmıştır?", opts: ["Antonie van Leeuwenhoek", "Robert Hooke", "Zacharias Janssen", "Galileo"], a: 1, exp: "Robert Hooke, mantar hücrelerini incelerken 'cellula' adını vermiştir." },
+    { q: "Hangisi sadece bitki hücresinde bulunur?", opts: ["Mitokondri", "Ribozom", "Kloroplast", "Lizozom"], a: 2, exp: "Kloroplast sadece bitki hücrelerinde bulunur, fotosentez yapar." },
+    { q: "Hücrenin içini dolduran yarı akışkan sıvı nedir?", opts: ["Çekirdek", "Sitoplazma", "Koful", "Hücre zarı"], a: 1, exp: "Sitoplazma organelleri içinde bulunduran yarı akışkan sıvıdır." },
+    { q: "Hangisi hayvan hücresinde bulunur?", opts: ["Hücre duvarı", "Kloroplast", "Sentrozom", "Büyük koful"], a: 2, exp: "Sentrozom hayvan hücresinde bulunur, bitki hücresinde yoktur." },
+    { q: "Hücre duvarının özelliği aşağıdakilerden hangisidir?", opts: ["Canlı ve seçici geçirgen", "Cansız ve tam geçirgen", "Canlı ve tam geçirgen", "Cansız ve seçici geçirgen"], a: 1, exp: "Hücre duvarı cansızdır ve maddelerin geçişini engellemez." },
+    { q: "Organellerin bulunduğu yer neresidir?", opts: ["Çekirdek", "Sitoplazma", "Koful", "Hücre zarı"], a: 1, exp: "Mitokondri, ribozom gibi organeller sitoplazma içinde yer alır." },
+    { q: "Hangi organel hücre bölünmesinde görev alır?", opts: ["Lizozom", "Golgi", "Sentrozom", "Kloroplast"], a: 2, exp: "Sentrozom (hayvan hücresinde) iğ ipliklerini oluşturarak bölünmeyi sağlar." },
+    { q: "Hücre teorisine göre yeni hücreler nasıl oluşur?", opts: ["Rastgele oluşur", "Mevcut hücrelerin bölünmesiyle", "Hücre dışından gelir", "Sitoplazmadan oluşur"], a: 1, exp: "Tüm hücreler var olan hücrelerin bölünmesiyle meydana gelir." },
+    { q: "Kalp hangi yapıya örnektir?", opts: ["Hücre", "Doku", "Organ", "Sistem"], a: 2, exp: "Kalp, farklı dokulardan oluşmuş bir organdır." },
+    { q: "Hangisi tek hücreli canlıdır?", opts: ["Köpek", "Çam ağacı", "Amip", "Mantar"], a: 2, exp: "Amip, bir hücreden oluşan tek hücreli canlıdır." }
+  ];
+  let quizAnswered = new Array(10).fill(false);
+  let quizScores = new Array(10).fill(false);
+  function buildQuiz() {
+    const container = document.getElementById('quiz-container');
+    if(!container) return;
+    container.innerHTML = '';
+    quizQuestions.forEach((q, idx) => {
+      const div = document.createElement('div'); div.className = 'quiz-q';
+      let optsHtml = '';
+      q.opts.forEach((opt, optIdx) => {
+        optsHtml += `<button class="quiz-opt" onclick="checkQuiz(${idx}, ${optIdx})" id="qzopt${idx}_${optIdx}">${opt}</button>`;
+      });
+      div.innerHTML = `<p><strong>Soru ${idx+1}:</strong> ${q.q}</p><div class="quiz-opts">${optsHtml}</div><div class="quiz-fb" id="qzfb${idx}"></div>`;
+      container.appendChild(div);
+    });
+  }
+  function checkQuiz(qIdx, chosen) {
+    if(quizAnswered[qIdx]) return;
+    quizAnswered[qIdx] = true;
+    const q = quizQuestions[qIdx];
+    const isCorrect = (chosen === q.a);
+    quizScores[qIdx] = isCorrect;
+    for(let i=0; i<q.opts.length; i++) {
+      const btn = document.getElementById(`qzopt${qIdx}_${i}`);
+      if(btn) { btn.disabled = true; if(i===q.a) btn.classList.add('correct'); else if(i===chosen && !isCorrect) btn.classList.add('wrong'); }
+    }
+    const fbDiv = document.getElementById(`qzfb${qIdx}`);
+    fbDiv.style.display = 'block';
+    fbDiv.className = `quiz-fb show ${isCorrect ? 'ok' : 'nope'}`;
+    fbDiv.textContent = isCorrect ? `✓ Doğru! ${q.exp}` : `✗ Yanlış! Doğru: ${q.opts[q.a]}. ${q.exp}`;
+    if(quizAnswered.every(v => v===true)) {
+      const total = quizScores.filter(Boolean).length;
+      document.getElementById('score-val').innerHTML = total;
+      let mesaj = total<=4 ? '📖 Tekrar et, hafıza tekniklerine dön!' : (total<=7 ? '👏 İyi, bir kez daha dene!' : (total<=9 ? '🎉 Harikasın!' : '🏆 Mükemmel, hücre uzmanısın!'));
+      document.getElementById('score-msg').innerHTML = mesaj;
+      document.getElementById('score-bar').style.display = 'flex';
+    }
+  }
+  window.checkQuiz = checkQuiz;
+  
+  // ---------- SÜRÜKLE BIRAK (DOĞRU/YANLIŞ) ----------
+  let dragged = null;
+  document.addEventListener('dragstart', (e) => {
+    if(e.target.classList.contains('drag-statement') || e.target.classList.contains('drag-word')) {
+      dragged = e.target;
+      e.target.classList.add('dragging');
+      e.dataTransfer.setData('text/plain', e.target.innerText);
+      e.dataTransfer.effectAllowed = 'move';
+    }
+  });
+  document.addEventListener('dragend', (e) => {
+    if(e.target.classList.contains('drag-statement') || e.target.classList.contains('drag-word')) e.target.classList.remove('dragging');
+    dragged = null;
+  });
+  const dropZones = document.querySelectorAll('.drop-zone');
+  dropZones.forEach(zone => {
+    zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', () => { zone.classList.remove('drag-over'); });
+    zone.addEventListener('drop', (e) => {
+      e.preventDefault(); zone.classList.remove('drag-over');
+      if(!dragged) return;
+      if(dragged.classList.contains('drag-statement')) {
+        const isTrueZone = zone.getAttribute('data-zone') === 'true';
+        const statementTruth = dragged.getAttribute('data-tf') === 'true';
+        if(isTrueZone !== statementTruth) { alert('❌ Bu ifade buraya ait değil! Tekrar dene.'); return; }
+        const targetList = zone.querySelector('.dropped-items');
+        const badge = document.createElement('div'); badge.className = 'dropped-badge'; badge.innerText = dragged.innerText;
+        targetList.appendChild(badge);
+        dragged.remove(); dragged = null;
+      }
+    });
+  });
+  // Fill-in drop (boşluklar)
+  const fillSlots = document.querySelectorAll('.drop-slot');
+  fillSlots.forEach(slot => {
+    slot.addEventListener('dragover', (e) => { e.preventDefault(); slot.style.backgroundColor = '#F3E0C0'; });
+    slot.addEventListener('dragleave', () => { if(!slot.classList.contains('filled')) slot.style.backgroundColor = '#F0E5D6'; });
+    slot.addEventListener('drop', (e) => {
+      e.preventDefault(); slot.style.backgroundColor = '#E3D4C0';
+      if(!dragged || !dragged.classList.contains('drag-word')) return;
+      const correctAnswer = slot.getAttribute('data-correct');
+      const droppedWord = dragged.getAttribute('data-fillword');
+      if(correctAnswer === droppedWord) {
+        if(slot.classList.contains('filled')) return;
+        slot.innerText = droppedWord; slot.classList.add('filled');
+        dragged.remove(); dragged = null;
+      } else { alert(`Yanlış kelime! "${droppedWord}" bu boşluğa uygun değil.`); }
+    });
+  });
+  // RESET fonksiyonları
+  function resetTF() {
+    const trueContainer = document.getElementById('trueDropped'); const falseContainer = document.getElementById('falseDropped');
+    trueContainer.innerHTML = ''; falseContainer.innerHTML = '';
+    const originalStatements = [
+      "1. Hücre duvarı sadece bitki hücrelerinde bulunur.", "2. Mitokondri sadece hayvan hücrelerinde bulunur.",
+      "3. Kloroplast fotosentez yapar.", "4. Lizozom hayvan hücrelerinde bulunur (bitki hücresinde gelişmişlerde yok).",
+      "5. Hücre zarı seçici geçirgendir.", "6. Sentrozom bitki hücrelerinde bulunur.",
+      "7. Koful bitki hücrelerinde küçük ve çok sayıdadır.", "8. Hücrenin keşfi ve adlandırılması Robert Hooke tarafından yapılmıştır.",
+      "9. Ribozom protein sentezinde görevlidir.", "10. Hücre zarı cansız ve tam geçirgendir."
+    ];
+    const tfValues = ["true","false","true","true","true","false","false","true","true","false"];
+    const container = document.getElementById('tf-items-container');
+    container.innerHTML = '';
+    for(let i=0; i<originalStatements.length; i++) {
+      const div = document.createElement('div');
+      div.className = 'drag-statement';
+      div.setAttribute('draggable', 'true');
+      div.setAttribute('data-tf', tfValues[i]);
+      div.innerText = originalStatements[i];
+      container.appendChild(div);
+    }
+    dragged = null;
+  }
+  function resetFill() {
+    const wordBankDiv = document.getElementById('fillWordBank');
+    const originalWords = ["Çekirdek","Kloroplast","Mitokondri","Lizozom","Endoplazmik retikulum","Golgi aygıtı","Hücre zarı","Doku","Lam","Ribozom"];
+    wordBankDiv.innerHTML = '';
+    originalWords.forEach(w => {
+      const wordDiv = document.createElement('div');
+      wordDiv.className = 'drag-word';
+      wordDiv.setAttribute('draggable', 'true');
+      wordDiv.setAttribute('data-fillword', w);
+      wordDiv.innerText = w;
+      wordBankDiv.appendChild(wordDiv);
+    });
+    const slots = document.querySelectorAll('.drop-slot');
+    const originalTexts = ["______","______","______","______","______","______","______","______","______","______"];
+    slots.forEach((slot, idx) => {
+      slot.innerText = originalTexts[idx];
+      slot.classList.remove('filled');
+      slot.style.backgroundColor = '#F0E5D6';
+    });
+    dragged = null;
+  }
+  document.getElementById('resetTFBtn')?.addEventListener('click', resetTF);
+  document.getElementById('resetFillBtn')?.addEventListener('click', resetFill);
+  
+  function showTab(tabId, btn) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(`tab-${tabId}`).classList.add('active');
+    btn.classList.add('active');
+  }
+  window.showTab = showTab;
+  buildQuiz();
+</script>
+</body>
+</html>

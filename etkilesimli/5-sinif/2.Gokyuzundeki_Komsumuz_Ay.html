@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gökyüzündeki Komşumuz: Ay</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Tahoma,sans-serif;background:#F0F4FF;color:#1a1a2e;padding:20px;max-width:820px;margin:auto;line-height:1.6}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);border-radius:18px;padding:2rem 2rem 1.5rem;margin-bottom:20px;color:#fff;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;background:rgba(200,200,255,0.06)}
+.hero::after{content:'';position:absolute;bottom:-30px;left:60px;width:120px;height:120px;border-radius:50%;background:rgba(200,200,255,0.04)}
+.hero-top{display:flex;align-items:center;gap:18px;margin-bottom:12px}
+.moon-big{font-size:64px;filter:drop-shadow(0 0 18px rgba(220,220,255,0.5))}
+.hero h1{font-size:24px;font-weight:800;color:#E8EAFF;margin-bottom:4px}
+.hero p{font-size:13px;color:rgba(220,220,255,0.75);line-height:1.6}
+.hero .kazanim{display:inline-block;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:6px;font-size:11px;color:#C8D0FF;padding:3px 10px;margin-top:8px}
+
+/* TABS */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.tab{padding:8px 16px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;border:2px solid #4A6FA5;background:#fff;color:#4A6FA5;transition:all .18s}
+.tab.active{background:#4A6FA5;color:#fff}
+.tab:hover:not(.active){background:#EEF2FF}
+
+/* PANELS */
+.panel{display:none}
+.panel.active{display:block}
+
+/* SECTION LABEL */
+.slabel{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#7a8bbf;margin:18px 0 10px}
+
+/* CHUNK GRID */
+.cg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.chunk{border-radius:12px;padding:14px;border:1.5px solid;background:#fff}
+.chunk h4{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.chunk ul{list-style:none;font-size:13px;color:#444;line-height:1.9}
+.chunk ul li{display:flex;align-items:flex-start;gap:6px}
+.chunk ul li::before{content:'›';font-weight:700;flex-shrink:0;margin-top:1px}
+
+.c1{border-color:#B3C6FF;} .c1 h4{color:#2244AA} .c1 li::before{color:#4A6FA5}
+.c2{border-color:#FFD0A0;} .c2 h4{color:#AA5500} .c2 li::before{color:#DD7700}
+.c3{border-color:#B3EED0;} .c3 h4{color:#006633} .c3 li::before{color:#22AA66}
+.c4{border-color:#E0B3FF;} .c4 h4{color:#660099} .c4 li::before{color:#9933CC}
+
+/* INFO CARD */
+.icard{border-radius:12px;padding:14px 16px;border:1px solid #D5DCF5;background:#fff;margin-bottom:10px}
+.icard h3{font-size:14px;font-weight:700;color:#2244AA;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.icard p{font-size:13px;color:#444;line-height:1.7}
+
+/* STAT CARDS */
+.scards{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px;margin-bottom:14px}
+.scard{border-radius:12px;padding:14px;border:1px solid #D5DCF5;background:#fff;text-align:center}
+.scard .si{font-size:28px;margin-bottom:6px}
+.scard .sl{font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+.scard .sv{font-size:19px;font-weight:800;color:#1a1a2e;line-height:1.2}
+.scard .sn{font-size:11px;color:#888;margin-top:4px;line-height:1.4}
+
+/* ANALOGY */
+.analogy{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:8px;align-items:center;padding:16px;border-radius:12px;background:#F8F0FF;border:1.5px solid #DCC5FF;margin-bottom:12px}
+.anitem{text-align:center}
+.anitem .ae{font-size:42px;margin-bottom:4px;display:block}
+.anitem .an{font-size:13px;font-weight:700;color:#330066}
+.anitem .as{font-size:11px;color:#777}
+.anmid{font-size:22px;color:#bbb;text-align:center}
+
+/* EVRES */
+.evres-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.evre{border-radius:10px;padding:10px 8px;background:#fff;border:1.5px solid #D5DCF5;text-align:center}
+.evre .em{font-size:30px;margin-bottom:4px}
+.evre .en{font-size:12px;font-weight:700;color:#2244AA}
+.evre .ed{font-size:11px;color:#666;margin-top:3px;line-height:1.4}
+.evre.highlighted{border-color:#4A6FA5;background:#EEF2FF}
+
+/* TIMELINE */
+.tl{position:relative;padding-left:22px;margin-bottom:14px}
+.tl::before{content:'';position:absolute;left:6px;top:4px;bottom:4px;width:2px;background:#C5D0F0}
+.tli{position:relative;margin-bottom:14px}
+.tldot{position:absolute;left:-18px;top:5px;width:12px;height:12px;border-radius:50%;background:#4A6FA5}
+.tli h4{font-size:13px;font-weight:700;color:#1a1a2e;margin-bottom:2px}
+.tli p{font-size:12px;color:#555;line-height:1.5}
+.tli .badge{display:inline-block;font-size:10px;font-weight:700;padding:1px 7px;border-radius:5px;background:#EEF2FF;color:#4A6FA5;margin-left:6px}
+
+/* MNEMONIC */
+.mbox{border-radius:12px;padding:16px;background:#FFFBE6;border:1.5px solid #FFD000;margin-bottom:14px}
+.mbox h3{font-size:13px;font-weight:800;color:#7A5800;margin-bottom:12px}
+.mrow{display:flex;align-items:flex-start;gap:10px;margin-bottom:9px}
+.ml{width:30px;height:30px;border-radius:8px;background:#1a1a2e;color:#E8EAFF;font-size:15px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mt{font-size:13px;color:#5A3E00;line-height:1.6;padding-top:4px}
+.mt strong{color:#8B5E00}
+
+/* HAREKET */
+.hmovs{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.hmov{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border-radius:10px;background:#fff;border:1.5px solid #D5DCF5}
+.hmov .hnum{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;flex-shrink:0;color:#fff}
+.hnum.h1{background:#4A6FA5}
+.hnum.h2{background:#7744BB}
+.hnum.h3{background:#33AA77}
+.hmov-body h4{font-size:13px;font-weight:700;color:#1a1a2e;margin-bottom:3px}
+.hmov-body p{font-size:12px;color:#555;line-height:1.5}
+
+/* ÖZEL AY */
+.special-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.sbox{border-radius:10px;padding:12px;border:1.5px solid;background:#fff}
+.sbox h4{font-size:12px;font-weight:700;margin-bottom:4px}
+.sbox p{font-size:12px;color:#555;line-height:1.5}
+.sb1{border-color:#FFD0D0} .sb1 h4{color:#AA2222}
+.sb2{border-color:#D0D0FF} .sb2 h4{color:#2222AA}
+.sb3{border-color:#FFE5B0} .sb3 h4{color:#AA7700}
+.sb4{border-color:#C0F0D0} .sb4 h4{color:#006633}
+
+/* QUIZ */
+.quiz-q{border-radius:12px;border:1.5px solid #D5DCF5;background:#fff;padding:14px 16px;margin-bottom:12px}
+.quiz-q .qno{font-size:10px;color:#4A6FA5;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.quiz-q p{font-size:14px;font-weight:600;color:#1a1a2e;margin-bottom:10px;line-height:1.5}
+.qopts{display:flex;flex-direction:column;gap:6px}
+.qopt{padding:9px 14px;border-radius:8px;border:1.5px solid #ddd;background:#fafafa;font-size:13px;cursor:pointer;color:#333;text-align:left;font-family:'Segoe UI',sans-serif;transition:all .15s}
+.qopt:hover:not(:disabled){border-color:#4A6FA5;color:#2244AA;background:#EEF2FF}
+.qopt.correct{background:#E6F9F0;border-color:#22AA66;color:#006633;font-weight:600}
+.qopt.wrong{background:#FFEBEB;border-color:#CC2222;color:#AA0000}
+.qopt:disabled{cursor:default}
+.qfb{font-size:12px;margin-top:8px;padding:7px 10px;border-radius:8px;display:none;line-height:1.5}
+.qfb.show{display:block}
+.qfb.ok{background:#E6F9F0;color:#006633}
+.qfb.nope{background:#FFEBEB;color:#AA0000}
+.score-bar{display:flex;align-items:center;gap:10px;margin-top:14px;padding:14px 16px;border-radius:12px;background:linear-gradient(135deg,#1a1a2e,#0f3460);color:#E8EAFF;font-size:14px}
+.score-bar strong{font-size:22px;color:#A0C8FF}
+
+/* REPEAT PLAN */
+.rplan{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.rp{border-radius:10px;padding:10px;background:#fff;border:1.5px solid #D5DCF5;text-align:center}
+.rp .ri{font-size:22px;margin-bottom:4px}
+.rp .rt{font-size:11px;font-weight:700;color:#4A6FA5}
+.rp .rd{font-size:11px;color:#666;margin-top:3px;line-height:1.4}
+
+@media(max-width:600px){
+  .cg{grid-template-columns:1fr}.evres-grid{grid-template-columns:repeat(2,1fr)}.analogy{grid-template-columns:1fr auto 1fr;}.anitem:nth-child(4){display:none}.anitem:nth-child(5){grid-column:span 1}.special-grid{grid-template-columns:1fr}.rplan{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-top">
+    <div class="moon-big">🌕</div>
+    <div>
+      <h1>Gökyüzündeki Komşumuz: Ay</h1>
+      <p>5. Sınıf Fen Bilimleri · 1. Ünite · 2. Fasikül<br>Hafıza teknikleriyle kalıcı öğrenme</p>
+      <span class="kazanim">F.5.1.2.1 · F.5.1.2.2</span>
+    </div>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('yapi',this)">🌙 Yapı & Özellikler</button>
+  <button class="tab" onclick="showTab('hareket',this)">🔄 Hareketler</button>
+  <button class="tab" onclick="showTab('evreler',this)">🌑 Ay Evreleri</button>
+  <button class="tab" onclick="showTab('tarih',this)">🚀 Tarihsel Keşifler</button>
+  <button class="tab" onclick="showTab('teknik',this)">🧠 Hafıza Tekniği</button>
+  <button class="tab" onclick="showTab('quiz',this)">✅ Quiz (10 Soru)</button>
+</div>
+
+<!-- ===================== PANEL 1: YAPI ===================== -->
+<div id="tab-yapi" class="panel active">
+  <div class="slabel">Chunking — 4 Grupta Ay'ı Tanı</div>
+  <div class="cg">
+    <div class="chunk c1">
+      <h4>🌙 Ay Nedir?</h4>
+      <ul>
+        <li>Dünya'nın tek doğal uydusudur</li>
+        <li>Gece gökyüzünün en parlak cismi</li>
+        <li>Işık üretmez, Güneş'i yansıtır</li>
+        <li>Dünya'ya en yakın gök cismi</li>
+        <li>Küre şeklindedir</li>
+      </ul>
+    </div>
+    <div class="chunk c2">
+      <h4>📏 Boyut & Uzaklık</h4>
+      <ul>
+        <li>Çapı Dünya'nın ¼'ü kadar</li>
+        <li>Dünya alanına 50 Ay sığar</li>
+        <li>Dünya'ya uzaklığı: 384.000 km</li>
+        <li>Dünya'dan büyük görünür (yakın!)</li>
+      </ul>
+    </div>
+    <div class="chunk c3">
+      <h4>🌡️ Atmosfer & İklim</h4>
+      <ul>
+        <li>Atmosfer yok denecek kadar ince</li>
+        <li>Rüzgar, yağmur görülmez</li>
+        <li>Gece: −174 °C / Gündüz: +125 °C</li>
+        <li>Büyük sıcaklık farkı var</li>
+      </ul>
+    </div>
+    <div class="chunk c4">
+      <h4>🌋 Yüzey Yapısı</h4>
+      <ul>
+        <li>Kayalıklar ve dağlar var</li>
+        <li>Ay Denizi: koyu, düz bölgeler</li>
+        <li>Ay Dağları: açık, engebeli bölgeler</li>
+        <li>Kraterler: meteor çarpmaları</li>
+        <li>Yüzey toz tabakasıyla kaplı</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="slabel">Büyüklükleri Zihninde Canlandır — Analoji</div>
+  <div class="analogy">
+    <div class="anitem"><span class="ae">🏋️</span><div class="an">Pilates Topu</div><div class="as">= Güneş</div></div>
+    <div class="anmid">›</div>
+    <div class="anitem"><span class="ae">🏓</span><div class="an">Pinpon Topu</div><div class="as">= Dünya</div></div>
+    <div class="anmid">›</div>
+    <div class="anitem"><span class="ae">🫛</span><div class="an">Bezelye Tanesi</div><div class="as">= Ay</div></div>
+  </div>
+
+  <div class="slabel">Neden Ay'da Kraterler Var?</div>
+  <div class="icard">
+    <h3>💥 Kısa Zincir Mantığı</h3>
+    <p>Ay'da atmosfer çok ince → Meteorlar yüzeye çarpabiliyor → Kraterler oluşuyor → Rüzgar-yağmur yok → Kraterler silinmiyor → Yüzeydeki izler <strong>milyarlarca yıl</strong> değişmeden kalıyor!</p>
+  </div>
+
+  <div class="slabel">Ay'da Yaşam Olabilir mi?</div>
+  <div class="icard">
+    <h3>🔬 3 Şart Gerekiyor</h3>
+    <p>Yaşam için: <strong>1)</strong> Yeterli kalınlıkta atmosfer &nbsp; <strong>2)</strong> Su ve oksijen &nbsp; <strong>3)</strong> Gece-gündüz sıcaklık farkının az olması. Ay'da bunların hiçbiri yok — bu yüzden şu an Ay'da yaşam mümkün değil.</p>
+  </div>
+</div>
+
+<!-- ===================== PANEL 2: HAREKET ===================== -->
+<div id="tab-hareket" class="panel">
+  <div class="slabel">Ay'ın 3 Hareketi — Hepsi Saat Yönünün Tersine!</div>
+  <div class="hmovs">
+    <div class="hmov">
+      <div class="hnum h1">1</div>
+      <div class="hmov-body">
+        <h4>Dönme Hareketi — Kendi Ekseni Etrafında</h4>
+        <p>Ay, kendi ekseni etrafında döner. Bu hareket <strong>27 gün 8 saatte</strong> tamamlanır.</p>
+      </div>
+    </div>
+    <div class="hmov">
+      <div class="hnum h2">2</div>
+      <div class="hmov-body">
+        <h4>Dolanma Hareketi — Dünya Etrafında</h4>
+        <p>Ay, Dünya'nın etrafında dolanır. Bu hareket de <strong>27 gün 8 saatte</strong> tamamlanır. Bu yüzden Ay'ın hep aynı yüzünü görürüz! Dönme ve dolanma süresi eşit = her zaman aynı yüz.</p>
+      </div>
+    </div>
+    <div class="hmov">
+      <div class="hnum h3">3</div>
+      <div class="hmov-body">
+        <h4>Dolanma Hareketi — Güneş Etrafında</h4>
+        <p>Ay, Dünya ile birlikte Güneş etrafında dolanır. Bu hareket <strong>365 gün 6 saatte</strong> tamamlanır.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="slabel">Kritik Sayılar</div>
+  <div class="scards">
+    <div class="scard"><div class="si">🔄</div><div class="sl">Dönme & Dolanma</div><div class="sv">27 Gün 8 Saat</div><div class="sn">Kendi ekseni ve Dünya etrafı</div></div>
+    <div class="scard"><div class="si">🌟</div><div class="sl">Güneş Etrafı</div><div class="sv">365 Gün 6 Saat</div><div class="sn">Dünya ile birlikte</div></div>
+    <div class="scard"><div class="si">🌕</div><div class="sl">Tam Evre Turu</div><div class="sv">29 Gün 12 Saat</div><div class="sn">Bir ay = bir evre turu</div></div>
+    <div class="scard"><div class="si">🌊</div><div class="sl">Gelgit</div><div class="sv">Med-Cezir</div><div class="sn">Ay çekimi → deniz gelgiti</div></div>
+  </div>
+
+  <div class="icard">
+    <h3>🤔 Neden Hep Aynı Yüzü Görürüz?</h3>
+    <p>Ay'ın kendi ekseni etrafında dönme süresi (27g 8s) ile Dünya etrafındaki dolanma süresi (27g 8s) <strong>tam olarak eşit!</strong> Bu büyük bir tesadüf gibi görünse de Dünya'nın çekim kuvveti Ay'ı bu şekilde "kilitlemiştir". Bu olaya <em>kilitli dönüş</em> denir.</p>
+  </div>
+</div>
+
+<!-- ===================== PANEL 3: EVRELER ===================== -->
+<div id="tab-evreler" class="panel">
+  <div class="slabel">4 Ana Evre — Aralarında 1 Hafta Var</div>
+  <div class="evres-grid">
+    <div class="evre">
+      <div class="em">🌑</div>
+      <div class="en">Yeni Ay</div>
+      <div class="ed">Güneş ile Dünya arasında. Ay görünmez. Sıfır ışık.</div>
+    </div>
+    <div class="evre highlighted">
+      <div class="em">🌓</div>
+      <div class="en">İlk Dördün</div>
+      <div class="ed">Sağ taraf aydınlık. "D" harfi gibi görünür.</div>
+    </div>
+    <div class="evre highlighted">
+      <div class="em">🌕</div>
+      <div class="en">Dolunay</div>
+      <div class="ed">Tüm yüz aydınlık. Parlak ve tam daire.</div>
+    </div>
+    <div class="evre">
+      <div class="em">🌗</div>
+      <div class="en">Son Dördün</div>
+      <div class="ed">Sol taraf aydınlık. Ters "D" gibi görünür.</div>
+    </div>
+  </div>
+
+  <div class="slabel">2 Ara Evre (Her biri 2 kez tekrar eder)</div>
+  <div class="cg">
+    <div class="chunk c1">
+      <h4>🌙 Hilal Evresi</h4>
+      <ul>
+        <li>Son dördün → Yeni ay arası</li>
+        <li>Yeni ay → İlk dördün arası</li>
+        <li>Ay "C" ya da "ters C" görünür</li>
+        <li>Bayrağımızdaki Ay bu evrede!</li>
+      </ul>
+    </div>
+    <div class="chunk c3">
+      <h4>🌔 Şişkin Ay Evresi</h4>
+      <ul>
+        <li>İlk dördün → Dolunay arası</li>
+        <li>Dolunay → Son dördün arası</li>
+        <li>Ay dolunaya yakın görünür</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="slabel">Tam Sıralama (8 Evre)</div>
+  <div class="icard">
+    <h3>🔢 Evre Sırası — Ezberle!</h3>
+    <p style="font-size:15px;text-align:center;letter-spacing:2px;margin:10px 0">🌑 → 🌒 → 🌓 → 🌔 → 🌕 → 🌖 → 🌗 → 🌘</p>
+    <p style="text-align:center;font-size:12px;color:#666">Yeni Ay · Hilal · İlk Dördün · Şişkin Ay · Dolunay · Şişkin Ay · Son Dördün · Hilal</p>
+  </div>
+
+  <div class="slabel">Özel Ay İsimleri</div>
+  <div class="special-grid">
+    <div class="sbox sb1"><h4>🔴 Süper Kanlı Ay</h4><p>Süper Ay + Tam Ay tutulması aynı anda → Ay kızıla döner</p></div>
+    <div class="sbox sb2"><h4>🔵 Mavi Ay</h4><p>Bir takvim ayında iki kez dolunay olması. Renk maviye dönmez!</p></div>
+    <div class="sbox sb3"><h4>⭐ Süper Ay</h4><p>Ay Dünya'ya yakınken yeni ay veya dolunaysa daha büyük görünür</p></div>
+    <div class="sbox sb4"><h4>🌊 Gelgit (Med-Cezir)</h4><p>Ay'ın çekimi → Deniz ve okyanus sularının yükselip alçalması</p></div>
+  </div>
+</div>
+
+<!-- ===================== PANEL 4: TARİH ===================== -->
+<div id="tab-tarih" class="panel">
+  <div class="slabel">Uzay Tarihi Zaman Tüneli</div>
+  <div class="tl">
+    <div class="tli">
+      <div class="tldot"></div>
+      <h4>Ali Kuşçu <span class="badge">Osmanlı Bilgini</span></h4>
+      <p>Ay'ın gerçeğe en yakın haliyle ilk haritasını çizdi. NASA, onun anısına Ay'ın bir bölümüne "Ali Kuşçu" adını verdi.</p>
+    </div>
+    <div class="tli">
+      <div class="tldot"></div>
+      <h4>Sputnik 1 <span class="badge">1957</span></h4>
+      <p>Ruslar tarafından fırlatılan Dünya'nın ilk yapay uydusu.</p>
+    </div>
+    <div class="tli">
+      <div class="tldot"></div>
+      <h4>Laika <span class="badge">Sputnik 2</span></h4>
+      <p>Uzaya giden ilk canlı — Laika adlı bir köpek. Sputnik 2 ile uzaya gönderildi.</p>
+    </div>
+    <div class="tli">
+      <div class="tldot"></div>
+      <h4>Yuri Gagarin <span class="badge">12 Nisan 1961</span></h4>
+      <p>Rus kozmonot — uzaya çıkan ilk insan. Vostok uzay aracıyla yolculuk yaptı.</p>
+    </div>
+    <div class="tli">
+      <div class="tldot"></div>
+      <h4>Neil Armstrong <span class="badge">16 Temmuz 1969</span></h4>
+      <p>Apollo 11 uzay aracıyla Ay'a ayak basan ilk insan. "Küçük bir adım, insanlık için büyük bir sıçrayış!"</p>
+    </div>
+    <div class="tli">
+      <div class="tldot"></div>
+      <h4>Millî Uzay Programı (TUA) <span class="badge">2021</span></h4>
+      <p>Türkiye, uzay alanındaki teknolojik kapasitesini artırmak için Türkiye Uzay Ajansı ile birlikte bu programı başlattı.</p>
+    </div>
+  </div>
+
+  <div class="slabel">Hızlı Hafıza Kartları</div>
+  <div class="scards">
+    <div class="scard"><div class="si">🗺️</div><div class="sl">İlk Ay Haritası</div><div class="sv">Ali Kuşçu</div><div class="sn">NASA adını verdi</div></div>
+    <div class="scard"><div class="si">🛸</div><div class="sl">İlk Yapay Uydu</div><div class="sv">Sputnik 1</div><div class="sn">Ruslar yaptı</div></div>
+    <div class="scard"><div class="si">🐕</div><div class="sl">Uzaydaki İlk Canlı</div><div class="sv">Laika</div><div class="sn">Sputnik 2 ile</div></div>
+    <div class="scard"><div class="si">👨‍🚀</div><div class="sl">Uzaydaki İlk İnsan</div><div class="sv">Y. Gagarin</div><div class="sn">12 Nisan 1961</div></div>
+    <div class="scard"><div class="si">🌙</div><div class="sl">Ay'daki İlk İnsan</div><div class="sv">N. Armstrong</div><div class="sn">Apollo 11 · 1969</div></div>
+  </div>
+</div>
+
+<!-- ===================== PANEL 5: TEKNİK ===================== -->
+<div id="tab-teknik" class="panel">
+  <div class="slabel">🔡 Akrostiş — "UYDUMUZ" ile 7 Kritik Bilgi</div>
+  <div class="mbox">
+    <h3>💡 Her harf bir gerçeği temsil ediyor:</h3>
+    <div class="mrow"><div class="ml">U</div><div class="mt"><strong>Uydu</strong> — Ay, Dünya'nın tek doğal uydusudur</div></div>
+    <div class="mrow"><div class="ml">Y</div><div class="mt"><strong>Yansıtır</strong> — Ay kendi ışık üretmez, Güneş'i yansıtır</div></div>
+    <div class="mrow"><div class="ml">D</div><div class="mt"><strong>Dönme = Dolanma</strong> — Her ikisi de 27 gün 8 saat, aynı yüzü görürüz</div></div>
+    <div class="mrow"><div class="ml">U</div><div class="mt"><strong>Uzaklık</strong> — Dünya'ya 384.000 km; yakın olduğu için büyük görünür</div></div>
+    <div class="mrow"><div class="ml">M</div><div class="mt"><strong>Meteorlar</strong> — Atmosfer ince olduğu için kraterler oluşur ve silinmez</div></div>
+    <div class="mrow"><div class="ml">U</div><div class="mt"><strong>Üçte biri kadar</strong> — Çapı Dünya'nın çapının dörtte biri kadardır</div></div>
+    <div class="mrow"><div class="ml">Z</div><div class="mt"><strong>Zaman</strong> — 29 gün 12 saatte bir tam evre turu = 1 ay</div></div>
+  </div>
+
+  <div class="slabel">🎯 Şekil-Harf Eşleştirmesi — Evreleri Hatırla</div>
+  <div class="icard">
+    <h3>✏️ Her evre bir harfe benziyor!</h3>
+    <p>
+      <strong>İlk Dördün</strong> → "D" harfi gibi (sağ taraf aydınlık)<br>
+      <strong>Son Dördün</strong> → Ters "D" yani "⊃" gibi (sol taraf aydınlık)<br>
+      <strong>Hilal</strong> → "C" ya da ters "C" gibi<br>
+      <strong>Yeni Ay</strong> → Hiç yok — tamamen karanlık<br>
+      <strong>Dolunay</strong> → Tam daire "O" gibi
+    </p>
+  </div>
+
+  <div class="slabel">🧠 Zincir Hafıza — Neyin Sebebi Ne?</div>
+  <div class="icard">
+    <h3>🔗 Neden-Sonuç Zincirleri</h3>
+    <p>
+      <strong>Atmosfer yok</strong> → Rüzgar-yağmur yok → İzler silinmez → Kraterler kalır<br><br>
+      <strong>Dönme = Dolanma süresi</strong> → Hep aynı yüzü görürüz<br><br>
+      <strong>Ay Dünya'ya yakın</strong> → Diğer yıldızlardan küçük ama büyük görünür<br><br>
+      <strong>Ay'ın çekimi</strong> → Denizlerde gelgit (med-cezir) oluşur
+    </p>
+  </div>
+
+  <div class="slabel">📅 Tekrar Planı (Spaced Repetition)</div>
+  <div class="rplan">
+    <div class="rp"><div class="ri">📖</div><div class="rt">Bugün</div><div class="rd">Tüm sekmeleri oku, quiz çöz</div></div>
+    <div class="rp"><div class="ri">🔢</div><div class="rt">Yarın</div><div class="rd">Tarihsel kart & sayıları gözden geçir</div></div>
+    <div class="rp"><div class="ri">🌑</div><div class="rt">3. Gün</div><div class="rd">8 evreyi sırayla ezberden söyle</div></div>
+    <div class="rp"><div class="ri">✅</div><div class="rt">1 Hafta</div><div class="rd">Quiz tekrar çöz, yanlışları oku</div></div>
+  </div>
+</div>
+
+<!-- ===================== PANEL 6: QUIZ ===================== -->
+<div id="tab-quiz" class="panel">
+  <div class="slabel">10 Soruluk Mini Quiz</div>
+  <div id="quiz-container"></div>
+  <div class="score-bar" id="score-bar" style="display:none">
+    🌙 Toplam Puan: <strong id="score-val">0</strong>/10 &nbsp;·&nbsp; <span id="score-msg" style="font-size:13px"></span>
+  </div>
+</div>
+
+<script>
+const qs=[
+  {q:"Ay, ışığını nereden alır?",opts:["Kendi içinden üretir","Güneş'ten yansıtır","Dünya'dan yansıtır","Yıldızlardan alır"],a:1,exp:"Ay bir ışık kaynağı değildir. Güneş'ten aldığı ışığı Dünya'ya yansıtır. Bu yüzden 'aydınlatılmış cisim' olarak adlandırılır."},
+  {q:"Ay'ın Dünya'ya olan uzaklığı yaklaşık kaçtır?",opts:["384 bin km","150 milyon km","1 milyon km","100 bin km"],a:0,exp:"Ay, Dünya'ya yaklaşık 384.000 km uzaklıktadır. Bu mesafe sabit değildir, sürekli değişir."},
+  {q:"Ay'ın kendi ekseni etrafındaki dönme süresi kaçtır?",opts:["29 gün 12 saat","365 gün","27 gün 8 saat","7 gün"],a:2,exp:"Ay'ın kendi ekseni etrafındaki dönme süresi 27 gün 8 saattir. Dolanma süresi de aynıdır, bu yüzden hep aynı yüzünü görürüz!"},
+  {q:"Ay'ın ilk dördün evresinde nasıl görünür?",opts:["Tamamen karanlık","\"D\" harfi gibi","Tam daire","Ters \"D\" gibi"],a:1,exp:"İlk dördün evresinde Güneş, Ay'ın sağ tarafını aydınlatır ve \"D\" harfi şeklinde görünür."},
+  {q:"Aşağıdakilerden hangisi Ay'da görülmez?",opts:["Kraterler","Dağlar","Rüzgar ve yağmur","Toz tabakası"],a:2,exp:"Ay'ın atmosferi çok ince olduğu için rüzgar, yağmur gibi meteorolojik olaylar görülmez. Bu yüzden Ay'daki izler milyarlarca yıl değişmeden kalır."},
+  {q:"Ay'ın 8 evresinin tamamlanması ne kadar sürer?",opts:["27 gün 8 saat","365 gün","30 gün","29 gün 12 saat"],a:3,exp:"Ay'ın evrelerinin tamamlanması 29 gün 12 saat sürer. Bu süreye 1 ay (takvim ayı) denir."},
+  {q:"Ay'a ilk ayak basan astronot kimdir?",opts:["Yuri Gagarin","Neil Armstrong","Ali Kuşçu","Laika"],a:1,exp:"Neil Armstrong, 16 Temmuz 1969'da Apollo 11 uzay aracıyla Ay'a ayak basan ilk insandır. Yuri Gagarin ise uzaya çıkan ilk insandır."},
+  {q:"Büyüklük sıralaması hangisi doğrudur?",opts:["Güneş > Ay > Dünya","Dünya > Güneş > Ay","Güneş > Dünya > Ay","Ay > Dünya > Güneş"],a:2,exp:"Doğru sıra: Güneş > Dünya > Ay. Kaynaklarda bu Pilates topu (Güneş) > Pinpon topu (Dünya) > Bezelye (Ay) şeklinde özetlenmiştir."},
+  {q:"\"Mavi Ay\" ne anlama gelir?",opts:["Ay'ın rengi maviye döner","Bir ayda iki kez dolunay olması","Ay'ın Dünya'ya en yakın olması","Ay tutulması sırasında görünüm"],a:1,exp:"Mavi Ay, Ay'ın renginin maviye dönmesi değildir. Bir takvim ayı içinde ikinci kez dolunay yaşanmasına Mavi Ay denir."},
+  {q:"Ay'ın çekiminin denizlerde oluşturduğu yükselme-alçalma olayı nedir?",opts:["Tsunami","Gelgit (Med-Cezir)","Deprem","Kasırga"],a:1,exp:"Ay'ın Dünya etrafındaki hareketi ve çekim kuvveti, deniz ve okyanus sularında yükselme ve alçalmaya neden olur. Buna gelgit veya med-cezir denir."}
+];
+
+let answered=new Array(qs.length).fill(false);
+let scores=new Array(qs.length).fill(false);
+
+function buildQuiz(){
+  const c=document.getElementById('quiz-container');
+  qs.forEach((q,i)=>{
+    const div=document.createElement('div');
+    div.className='quiz-q';
+    div.id='q'+i;
+    const optsHtml=q.opts.map((o,j)=>`<button class="qopt" onclick="checkAns(${i},${j})" id="o${i}_${j}">${o}</button>`).join('');
+    div.innerHTML=`<div class="qno">Soru ${i+1} / 10</div><p>${q.q}</p><div class="qopts">${optsHtml}</div><div class="qfb" id="fb${i}"></div>`;
+    c.appendChild(div);
+  });
+}
+
+function checkAns(qi,chosen){
+  if(answered[qi])return;
+  answered[qi]=true;
+  const q=qs[qi];
+  const correct=chosen===q.a;
+  scores[qi]=correct;
+  for(let j=0;j<q.opts.length;j++){
+    const btn=document.getElementById('o'+qi+'_'+j);
+    btn.disabled=true;
+    if(j===q.a)btn.classList.add('correct');
+    else if(j===chosen&&!correct)btn.classList.add('wrong');
+  }
+  const fb=document.getElementById('fb'+qi);
+  fb.className='qfb show '+(correct?'ok':'nope');
+  fb.textContent=(correct?'✓ Doğru! ':'✗ Yanlış. ')+q.exp;
+  if(answered.every(Boolean)){
+    const total=scores.filter(Boolean).length;
+    document.getElementById('score-val').textContent=total;
+    const msgs=['Hafıza tekniklerine dön ve tekrar dene! 💪','Fena değil! Biraz daha çalış. 📚','İyi iş! Neredeyse tam puan. 👍','Mükemmel! Ay Uzmanısın! 🌕'];
+    document.getElementById('score-msg').textContent=msgs[total<4?0:total<7?1:total<10?2:3];
+    document.getElementById('score-bar').style.display='flex';
+  }
+}
+
+function showTab(id,el){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  el.classList.add('active');
+}
+
+buildQuiz();
+</script>
+</body>
+</html>

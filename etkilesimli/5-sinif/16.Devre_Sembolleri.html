@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>5. Sınıf Fen: Devre Elemanları ve Sembolleri | Hafıza Teknikleri + Etkinlikler</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    background: #F0F5FA;
+    color: #1A3B4F;
+    padding: 24px 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  :root {
+    --circuit-blue: #1E6F9F;
+    --circuit-yellow: #F4B942;
+    --circuit-orange: #E67E22;
+    --light-bg: #FEFCF5;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, #1E6F9F, #0D4A6E);
+    border-radius: 32px;
+    padding: 1.6rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 28px;
+    color: white;
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+  }
+  .hero-icon {
+    font-size: 68px;
+    filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.2));
+  }
+  .hero h2 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+  }
+  .hero p {
+    font-size: 0.85rem;
+    opacity: 0.9;
+    margin-top: 6px;
+  }
+
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .tab {
+    background: white;
+    border: none;
+    padding: 8px 24px;
+    border-radius: 60px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: 0.2s;
+    color: #1E6F9F;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    border: 1px solid #C5E0F0;
+  }
+  .tab.active {
+    background: var(--circuit-blue);
+    color: white;
+    border-color: var(--circuit-blue);
+    box-shadow: 0 6px 12px rgba(30,111,159,0.3);
+  }
+  .panel {
+    display: none;
+    animation: fadeIn 0.2s ease;
+  }
+  .panel.active {
+    display: block;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px);}
+    to { opacity: 1; transform: translateY(0);}
+  }
+
+  .section-label {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #5B8CAC;
+    margin: 28px 0 12px 0;
+  }
+
+  .chunk-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+    margin-bottom: 28px;
+  }
+  .chunk {
+    background: white;
+    border-radius: 28px;
+    padding: 18px;
+    border: 1px solid #D4E6F2;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+  }
+  .chunk h4 {
+    font-size: 0.9rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .chunk ul {
+    list-style: none;
+  }
+  .chunk ul li {
+    font-size: 0.8rem;
+    margin-bottom: 8px;
+    padding-left: 22px;
+    position: relative;
+    line-height: 1.4;
+  }
+  .chunk ul li::before {
+    content: "⚡";
+    position: absolute;
+    left: 0;
+    font-size: 12px;
+  }
+  .chunk-blue h4 { color: #1E6F9F; }
+  .chunk-yellow h4 { color: #E67E22; }
+  .chunk-green h4 { color: #2E7D64; }
+  .chunk-purple h4 { color: #8F5C8C; }
+
+  .info-card {
+    background: white;
+    border-radius: 24px;
+    padding: 18px;
+    border: 1px solid #D4E6F2;
+    margin-bottom: 20px;
+  }
+  .info-card h3 {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #1E6F9F;
+    margin-bottom: 8px;
+  }
+  .symbol-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-around;
+    margin: 15px 0;
+  }
+  .symbol-item {
+    text-align: center;
+    background: #F9FCFE;
+    padding: 12px;
+    border-radius: 20px;
+    min-width: 100px;
+  }
+  .symbol {
+    font-size: 36px;
+    font-weight: bold;
+  }
+  .fail-list {
+    background: #FFF4E8;
+    border-radius: 20px;
+    padding: 12px 18px;
+  }
+
+  /* Sürükle bırak stilleri */
+  .drag-area {
+    background: #FEFCF7;
+    border-radius: 32px;
+    padding: 20px;
+    margin-bottom: 32px;
+    border: 2px solid #D4E6F2;
+  }
+  .drag-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #1E6F9F;
+  }
+  .drag-items, .word-bank {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    background: #F2F8FC;
+    padding: 18px;
+    border-radius: 32px;
+    margin-bottom: 24px;
+  }
+  .drag-statement, .drag-word {
+    background: white;
+    border-radius: 60px;
+    padding: 8px 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    font-weight: 600;
+    font-size: 0.8rem;
+    cursor: grab;
+    border: 1px solid #BED6E7;
+    user-select: none;
+  }
+  .drag-statement:active, .drag-word:active { cursor: grabbing; }
+  .drag-statement.dragging, .drag-word.dragging { opacity: 0.4; }
+  .drop-zones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  .drop-zone {
+    background: #F2F4F8;
+    border-radius: 36px;
+    padding: 16px 28px;
+    text-align: center;
+    min-width: 200px;
+    border: 2px dashed #B0C4DE;
+  }
+  .drop-zone h4 { font-weight: 800; margin-bottom: 12px; }
+  .drop-zone.drag-over { background: #E6F0F8; border-color: #1E6F9F; }
+  .dropped-items {
+    min-height: 70px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+  .dropped-badge {
+    background: #D4E6F2;
+    padding: 6px 12px;
+    border-radius: 40px;
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+  .fill-sentences { margin: 20px 0; }
+  .sentence {
+    background: white;
+    border-radius: 20px;
+    padding: 12px 18px;
+    margin-bottom: 14px;
+    font-size: 0.85rem;
+    border-left: 4px solid #F4B942;
+  }
+  .drop-slot {
+    display: inline-block;
+    background: #EDF3F8;
+    border-radius: 40px;
+    padding: 4px 14px;
+    min-width: 100px;
+    text-align: center;
+    font-weight: 700;
+    margin: 0 4px;
+    border: 1px dashed #89B7D1;
+  }
+  .drop-slot.filled {
+    background: #C8E6D9;
+    border: 1px solid #2E7D64;
+    color: #1A5A48;
+  }
+  .reset-btn {
+    background: #1E6F9F;
+    border: none;
+    color: white;
+    padding: 8px 24px;
+    border-radius: 60px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 12px;
+    font-size: 0.75rem;
+  }
+  .reset-btn:hover { background: #0D4A6E; }
+
+  /* Quiz stilleri */
+  .quiz-q {
+    background: white;
+    border-radius: 24px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    border: 1px solid #D4E6F2;
+  }
+  .quiz-opt {
+    background: #FEFAF2;
+    border: 1px solid #CFDFE9;
+    padding: 8px 18px;
+    border-radius: 60px;
+    margin: 6px 0;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+  }
+  .quiz-opt.correct { background: #DFF2E3; border-color: #2E7D64; }
+  .quiz-opt.wrong { background: #FFEDE6; border-color: #E67E22; }
+  .quiz-fb { margin-top: 10px; padding: 8px 12px; border-radius: 20px; display: none; }
+  .quiz-fb.show { display: block; }
+  .quiz-fb.ok { background: #E6F7E6; color: #2E7D64; }
+  .quiz-fb.nope { background: #FFEFE0; color: #C4510A; }
+  .score-bar {
+    background: #E1EFF7;
+    border-radius: 60px;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    font-weight: bold;
+    margin-top: 20px;
+    display: none;
+  }
+  @media (max-width: 700px) {
+    .hero { flex-direction: column; text-align: center; }
+    .chunk-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-icon">🔌💡</div>
+  <div>
+    <h2>Devre Elemanlarının Sembollerle Gösterimi ve Devre Şemaları</h2>
+    <p>5. Sınıf Fen Bilimleri · Elektrik devre elemanları, sembolleri ve devre şemaları<br>
+    <strong>F.5.6.1.1</strong> — Devre elemanlarını sembolleriyle gösterir ve basit bir devre şeması çizer.</p>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('bilgi',this)">📘 Temel Bilgiler</button>
+  <button class="tab" onclick="showTab('semboller',this)">🔌 Semboller & Çalışmama Nedenleri</button>
+  <button class="tab" onclick="showTab('teknik',this)">🧠 Hafıza Teknikleri</button>
+  <button class="tab" onclick="showTab('etkinlik',this)">🎮 Sürükle & Etkinlik</button>
+  <button class="tab" onclick="showTab('quiz',this)">✅ 10 Soruluk Quiz</button>
+</div>
+
+<!-- PANEL 1: TEMEL BİLGİLER (CHUNKING) -->
+<div id="tab-bilgi" class="panel active">
+  <div class="section-label">🔌 DEVRE ELEMANLARI - 4 GRUPLA ÖĞREN</div>
+  <div class="chunk-grid">
+    <div class="chunk chunk-blue">
+      <h4>🔋 Pil (Enerji Kaynağı)</h4>
+      <ul>
+        <li>Devreye elektrik enerjisi verir</li>
+        <li>Sembol: uzun (+) ve kısa (-) çizgi</li>
+        <li>Uzun çizgi artı kutup, kısa çizgi eksi kutup</li>
+        <li>Pil yatağı fiziksel eleman, sembolü yok</li>
+      </ul>
+    </div>
+    <div class="chunk chunk-yellow">
+      <h4>💡 Ampul (Işık Kaynağı)</h4>
+      <ul>
+        <li>Elektrik enerjisini ısı ve ışığa dönüştürür</li>
+        <li>Sembol: içinde çarpı (X) olan daire</li>
+        <li>Duy: ampulün takıldığı yuva (sembol yok)</li>
+      </ul>
+    </div>
+    <div class="chunk chunk-green">
+      <h4>🔘 Anahtar (Kontrol Elemanı)</h4>
+      <ul>
+        <li>Devreyi açar/kapar, elektrik akışını kontrol eder</li>
+        <li>Açık anahtar: devrede boşluk → ışık yanmaz</li>
+        <li>Kapalı anahtar: devre tamamlanır → ışık yanar</li>
+      </ul>
+    </div>
+    <div class="chunk chunk-purple">
+      <h4>📏 Bağlantı Kablosu</h4>
+      <ul>
+        <li>Elektrik enerjisini taşır, elemanları birbirine bağlar</li>
+        <li>Sembol: düz çizgi (──)</li>
+        <li>Kesik kablo → devre çalışmaz</li>
+      </ul>
+    </div>
+  </div>
+  <div class="info-card">
+    <h3>⚡ Neden Sembol Kullanırız?</h3>
+    <p>Gerçek devre elemanlarını resmetmek zor ve zaman alıcıdır. Semboller sayesinde devre şemaları herkes tarafından standart şekilde anlaşılır, çizimi kolaylaşır. Trafik işaretleri gibi evrensel bir dildir.</p>
+  </div>
+</div>
+
+<!-- PANEL 2: SEMBOLLER VE ÇALIŞMAMA NEDENLERİ -->
+<div id="tab-semboller" class="panel">
+  <div class="section-label">🔌 DEVRE ELEMANLARI SEMBOLLERİ</div>
+  <div class="symbol-grid">
+    <div class="symbol-item"><div class="symbol">⎯⎯│⎯⎯</div><p>Pil (Artı/Eksi)</p><small>Uzun +, kısa -</small></div>
+    <div class="symbol-item"><div class="symbol">◯ ✕ </div><p>Ampul</p><small>Daire içinde X</small></div>
+    <div class="symbol-item"><div class="symbol">─/ ─</div><p>Açık Anahtar</p><small>Boşluk var</small></div>
+    <div class="symbol-item"><div class="symbol">─•─</div><p>Kapalı Anahtar</p><small>Devre tamam</small></div>
+    <div class="symbol-item"><div class="symbol">────</div><p>Bağlantı Kablosu</p><small>Düz çizgi</small></div>
+  </div>
+  <div class="section-label">⚠️ DEVRE NEDEN ÇALIŞMAZ? (4 TEMEL NEDEN)</div>
+  <div class="fail-list">
+    <p>✔ <strong>Kablo kesikse</strong> → elektrik turunu tamamlayamaz</p>
+    <p>✔ <strong>Anahtar açık konumdaysa</strong> → devrede boşluk vardır</p>
+    <p>✔ <strong>Pil yoksa</strong> → enerji kaynağı olmadığından ampul yanmaz</p>
+    <p>✔ <strong>Piller ters bağlanmışsa</strong> → (zıt kutuplar birbirine bakıyorsa) piller birbirini sıfırlar</p>
+  </div>
+  <div class="info-card">
+    <h3>📌 Devre Şeması Nedir?</h3>
+    <p>Gerçek devre elemanlarının sembollerle kâğıt üzerinde gösterilmesine <strong>devre şeması</strong> denir. Örneğin: pil + kapalı anahtar + ampul + kablo ile basit bir lamba devresi çizilir.</p>
+  </div>
+</div>
+
+<!-- PANEL 3: HAFIZA TEKNİKLERİ -->
+<div id="tab-teknik" class="panel">
+  <div class="section-label">🔡 Akrostiş: "PAK" (Pil, Ampul, Kablo) + Anahtar</div>
+  <div class="info-card">
+    <h3>💡 P - A - K - A (Pil, Ampul, Kablo, Anahtar)</h3>
+    <p><strong>P</strong>il: Devreye enerji verir (Artı uzun, eksi kısa)<br>
+    <strong>A</strong>mpul: Işık verir (Daire içinde X)<br>
+    <strong>K</strong>ablo: İletim sağlar (Düz çizgi)<br>
+    <strong>A</strong>nahtar: Kontrol eder (Açık/kapalı)</p>
+  </div>
+  <div class="chunk-grid">
+    <div class="chunk chunk-blue"><h4>🎯 Anahtar Ezberi</h4><ul><li>Açık anahtar → devre açık → ışık kapalı</li><li>Kapalı anahtar → devre kapalı → ışık yanar</li><li>"Açık devre = boşluk, ışık yok"</li></ul></div>
+    <div class="chunk chunk-yellow"><h4>📌 Sembol Hatırlatma</h4><ul><li>Pil: “Uzun +, kısa -“</li><li>Ampul: “Çarpı işareti hapiste” (daire içinde X)</li><li>Anahtar: “Kesik çizgi = açık, nokta = kapalı”</li></ul></div>
+    <div class="chunk chunk-green"><h4>⚠️ Çalışmama Nedenleri (K-P-A-T)</h4><ul><li>Kablo kesik</li><li>Pil yok</li><li>Anahtar açık</li><li>Ters pil bağlantısı</li></ul></div>
+  </div>
+</div>
+
+<!-- PANEL 4: SÜRÜKLE BIRAK ETKİNLİKLER (10 DOĞRU/YANLIŞ + 10 BOŞLUK) -->
+<div id="tab-etkinlik" class="panel">
+  <!-- Bölüm 1: 10 Doğru/Yanlış -->
+  <div class="drag-area">
+    <div class="drag-title">✅❌ 10 DOĞRU / YANLIŞ ETKİNLİĞİ (Sürükle bırak)</div>
+    <div class="drag-items" id="tf-items-container">
+      <div class="drag-statement" draggable="true" data-tf="true">1. Pilin sembolünde uzun çizgi artı kutbu temsil eder.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">2. Ampulün sembolü içi boş bir dairedir.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">3. Kapalı anahtar devredeki elektrik akışını sağlar.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">4. Açık anahtarlı devrede ampul yanar.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">5. Bağlantı kablosunun sembolü düz bir çizgidir.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">6. Pillerin ters bağlanması devrenin çalışmasını sağlar.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">7. Devre şeması, semboller kullanılarak çizilen şemadır.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">8. Pilin görevi ampulün ışığını kontrol etmektir.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">9. Kesik kablo varsa devre çalışmaz.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">10. Duy ve pil yatağının ayrı bir sembolü yoktur.</div>
+    </div>
+    <div class="drop-zones">
+      <div class="drop-zone" data-zone="true" id="dropTrueZone">
+        <h4>✅ DOĞRU</h4>
+        <div class="dropped-items" id="trueDropped"></div>
+      </div>
+      <div class="drop-zone" data-zone="false" id="dropFalseZone">
+        <h4>❌ YANLIŞ</h4>
+        <div class="dropped-items" id="falseDropped"></div>
+      </div>
+    </div>
+    <button class="reset-btn" id="resetTFBtn">🔄 Doğru/Yanlış Etkinliğini Sıfırla</button>
+  </div>
+
+  <!-- Bölüm 2: 10 Boşluk Doldurma (Sürükle) -->
+  <div class="drag-area">
+    <div class="drag-title">📝 10 BOŞLUK DOLDURMA (Sözcükleri sürükle)</div>
+    <div class="word-bank" id="fillWordBank">
+      <div class="drag-word" draggable="true" data-fillword="pil">pil</div>
+      <div class="drag-word" draggable="true" data-fillword="ampul">ampul</div>
+      <div class="drag-word" draggable="true" data-fillword="anahtar">anahtar</div>
+      <div class="drag-word" draggable="true" data-fillword="kablo">kablo</div>
+      <div class="drag-word" draggable="true" data-fillword="sembol">sembol</div>
+      <div class="drag-word" draggable="true" data-fillword="artı">artı</div>
+      <div class="drag-word" draggable="true" data-fillword="açık">açık</div>
+      <div class="drag-word" draggable="true" data-fillword="kapalı">kapalı</div>
+      <div class="drag-word" draggable="true" data-fillword="ters">ters</div>
+      <div class="drag-word" draggable="true" data-fillword="şema">şema</div>
+    </div>
+    <div class="fill-sentences" id="fillSentencesContainer">
+      <div class="sentence">① Devreye elektrik enerjisini sağlayan elemana <span class="drop-slot" data-correct="pil">______</span> denir.</div>
+      <div class="sentence">② Elektrik enerjisini ışık ve ısıya çeviren eleman <span class="drop-slot" data-correct="ampul">______</span>'dür.</div>
+      <div class="sentence">③ Devrenin açılıp kapanmasını sağlayan kontrol elemanı <span class="drop-slot" data-correct="anahtar">______</span>'tır.</div>
+      <div class="sentence">④ Devre elemanlarını birbirine bağlayan iletken <span class="drop-slot" data-correct="kablo">______</span>'dur.</div>
+      <div class="sentence">⑤ Devre elemanlarının standart çizimlerine <span class="drop-slot" data-correct="sembol">______</span> denir.</div>
+      <div class="sentence">⑥ Pilin uzun çizgisi <span class="drop-slot" data-correct="artı">______</span> (+) kutbu gösterir.</div>
+      <div class="sentence">⑦ Anahtar <span class="drop-slot" data-correct="açık">______</span> konumda ise devrede boşluk olur, ampul yanmaz.</div>
+      <div class="sentence">⑧ Anahtar <span class="drop-slot" data-correct="kapalı">______</span> konumda ise devre tamamlanır, ampul yanar.</div>
+      <div class="sentence">⑨ Pillerin <span class="drop-slot" data-correct="ters">______</span> bağlanması devrenin çalışmamasına neden olur.</div>
+      <div class="sentence">⑩ Sembollerle çizilen devreye devre <span class="drop-slot" data-correct="şema">______</span>sı denir.</div>
+    </div>
+    <button class="reset-btn" id="resetFillBtn">🔄 Boşluk Etkinliğini Sıfırla</button>
+  </div>
+</div>
+
+<!-- PANEL 5: 10 SORULUK QUIZ -->
+<div id="tab-quiz" class="panel">
+  <div class="section-label">✅ DEVRE ELEMANLARI – 10 SORULUK UZMANLIK QUIZİ</div>
+  <div id="quiz-container"></div>
+  <div class="score-bar" id="score-bar" style="display: none;">🔌 Puan: <strong id="score-val">0</strong> / 10 &nbsp;|&nbsp; <span id="score-msg"></span></div>
+</div>
+
+<script>
+  // ---------- 10 SORULUK QUIZ ----------
+  const quizData = [
+    { q: "Pilin sembolünde uzun çizgi neyi temsil eder?", opts: ["Eksi (-) kutbu", "Artı (+) kutbu", "Nötr kutup", "Toprak hattı"], a: 1, exp: "Uzun çizgi artı (+), kısa çizgi eksi (-) kutbudur." },
+    { q: "Ampulün sembolü aşağıdakilerden hangisidir?", opts: ["Daire içinde nokta", "Daire içinde çarpı (X)", "İçi dolu daire", "Üçgen"], a: 1, exp: "Ampul sembolü, içinde X işareti bulunan dairedir." },
+    { q: "Anahtar açık konumda iken devrede ne olur?", opts: ["Devre tamamlanır, ışık yanar", "Devrede boşluk olur, ışık yanmaz", "Pil biter", "Ampul patlar"], a: 1, exp: "Açık anahtar devrede boşluk oluşturur, elektrik akışı olmaz." },
+    { q: "Devre şeması nedir?", opts: ["Gerçek devrenin fotoğrafı", "Devre elemanlarının sembollerle gösterimi", "Pillerin bağlanma şekli", "Kablo renkleri"], a: 1, exp: "Devre şeması, semboller kullanılarak çizilen devre planıdır." },
+    { q: "Aşağıdakilerden hangisi devrenin çalışmama nedenlerinden DEĞİLDİR?", opts: ["Kablo kesik", "Pil yok", "Ampul çok parlak", "Anahtar açık"], a: 2, exp: "Ampulün parlak olması devrenin çalıştığını gösterir, çalışmama nedeni değildir." },
+    { q: "Pillerin ters bağlanması durumunda ne olur?", opts: ["Devre daha parlak yanar", "Piller birbirini sıfırlar, devre çalışmaz", "Sadece bir pil çalışır", "Ampul patlar"], a: 1, exp: "Ters bağlı piller birbirinin enerjisini sıfırlar, devre çalışmaz." },
+    { q: "Bağlantı kablosunun sembolü aşağıdakilerden hangisidir?", opts: ["Düz çizgi (──)", "Dalgalı çizgi", "Kesik çizgi", "Noktalı çizgi"], a: 0, exp: "Bağlantı kablosu düz bir çizgi ile gösterilir." },
+    { q: "Kapalı anahtarın devreye etkisi nedir?", opts: ["Elektrik akışını keser", "Devreyi tamamlar, akışı sağlar", "Pili boşaltır", "Ampulü söndürür"], a: 1, exp: "Kapalı anahtar devredeki boşluğu kapatır ve elektrik akışını sağlar." },
+    { q: "Aşağıdakilerden hangisinin ayrı bir sembolü yoktur?", opts: ["Pil", "Ampul", "Anahtar", "Pil yatağı"], a: 3, exp: "Pil yatağı ve duy, fiziksel elemanlardır, devre şemasında özel sembolleri yoktur." },
+    { q: "Bir devrede ampulün yanması için aşağıdakilerden hangisi kesinlikle gereklidir?", opts: ["Pil", "Anahtarın açık olması", "Kesik kablo", "Pillerin ters bağlanması"], a: 0, exp: "Enerji kaynağı (pil) olmadan ampul asla yanmaz." }
+  ];
+  let quizAnswered = new Array(10).fill(false);
+  let quizScores = new Array(10).fill(false);
+
+  function buildQuiz() {
+    const container = document.getElementById('quiz-container');
+    if (!container) return;
+    container.innerHTML = '';
+    quizData.forEach((q, idx) => {
+      const div = document.createElement('div'); div.className = 'quiz-q';
+      let optsHtml = '';
+      q.opts.forEach((opt, optIdx) => {
+        optsHtml += `<button class="quiz-opt" onclick="checkQuiz(${idx}, ${optIdx})" id="qzopt${idx}_${optIdx}">${opt}</button><br>`;
+      });
+      div.innerHTML = `<p><strong>Soru ${idx+1}:</strong> ${q.q}</p><div class="quiz-opts">${optsHtml}</div><div class="quiz-fb" id="qzfb${idx}"></div>`;
+      container.appendChild(div);
+    });
+  }
+
+  function checkQuiz(qIdx, chosen) {
+    if (quizAnswered[qIdx]) return;
+    quizAnswered[qIdx] = true;
+    const q = quizData[qIdx];
+    const isCorrect = (chosen === q.a);
+    quizScores[qIdx] = isCorrect;
+    for (let i = 0; i < q.opts.length; i++) {
+      const btn = document.getElementById(`qzopt${qIdx}_${i}`);
+      if (btn) { btn.disabled = true; if (i === q.a) btn.classList.add('correct'); else if (i === chosen && !isCorrect) btn.classList.add('wrong'); }
+    }
+    const fbDiv = document.getElementById(`qzfb${qIdx}`);
+    fbDiv.style.display = 'block';
+    fbDiv.className = `quiz-fb show ${isCorrect ? 'ok' : 'nope'}`;
+    fbDiv.textContent = isCorrect ? `✓ Doğru! ${q.exp}` : `✗ Yanlış! Doğru: ${q.opts[q.a]}. ${q.exp}`;
+    if (quizAnswered.every(v => v === true)) {
+      const total = quizScores.filter(Boolean).length;
+      document.getElementById('score-val').innerHTML = total;
+      let msg = total <= 4 ? '📖 Devre elemanlarını ve sembolleri tekrar et!' : (total <= 7 ? '🔌 İyi! Biraz daha pratik yap.' : (total <= 9 ? '🎉 Harikasın! Devre Uzmanısın!' : '🏆 Mükemmel! Elektrik devrelerini çok iyi kavradın!'));
+      document.getElementById('score-msg').innerHTML = msg;
+      document.getElementById('score-bar').style.display = 'flex';
+    }
+  }
+  window.checkQuiz = checkQuiz;
+
+  // ---------- SÜRÜKLE BIRAK (DOĞRU/YANLIŞ) ----------
+  let draggedItem = null;
+  document.addEventListener('dragstart', (e) => {
+    if (e.target.classList.contains('drag-statement') || e.target.classList.contains('drag-word')) {
+      draggedItem = e.target;
+      e.target.classList.add('dragging');
+      e.dataTransfer.setData('text/plain', e.target.innerText);
+      e.dataTransfer.effectAllowed = 'move';
+    }
+  });
+  document.addEventListener('dragend', (e) => {
+    if (e.target.classList.contains('drag-statement') || e.target.classList.contains('drag-word')) e.target.classList.remove('dragging');
+    draggedItem = null;
+  });
+  const dropZones = document.querySelectorAll('.drop-zone');
+  dropZones.forEach(zone => {
+    zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', () => { zone.classList.remove('drag-over'); });
+    zone.addEventListener('drop', (e) => {
+      e.preventDefault(); zone.classList.remove('drag-over');
+      if (!draggedItem) return;
+      if (draggedItem.classList.contains('drag-statement')) {
+        const isTrueZone = zone.getAttribute('data-zone') === 'true';
+        const statementTruth = draggedItem.getAttribute('data-tf') === 'true';
+        if (isTrueZone !== statementTruth) { alert('❌ Bu ifade buraya ait değil! Tekrar dene.'); return; }
+        const targetList = zone.querySelector('.dropped-items');
+        const badge = document.createElement('div'); badge.className = 'dropped-badge'; badge.innerText = draggedItem.innerText;
+        targetList.appendChild(badge);
+        draggedItem.remove(); draggedItem = null;
+      }
+    });
+  });
+  // Fill-in boşluklar
+  const fillSlots = document.querySelectorAll('.drop-slot');
+  fillSlots.forEach(slot => {
+    slot.addEventListener('dragover', (e) => { e.preventDefault(); slot.style.backgroundColor = '#E0F0FA'; });
+    slot.addEventListener('dragleave', () => { if (!slot.classList.contains('filled')) slot.style.backgroundColor = '#EDF3F8'; });
+    slot.addEventListener('drop', (e) => {
+      e.preventDefault(); slot.style.backgroundColor = '#EDF3F8';
+      if (!draggedItem || !draggedItem.classList.contains('drag-word')) return;
+      const correctAnswer = slot.getAttribute('data-correct');
+      const droppedWord = draggedItem.getAttribute('data-fillword');
+      if (correctAnswer === droppedWord) {
+        if (slot.classList.contains('filled')) return;
+        slot.innerText = droppedWord; slot.classList.add('filled');
+        draggedItem.remove(); draggedItem = null;
+      } else { alert(`Yanlış kelime! "${droppedWord}" bu boşluğa uygun değil.`); }
+    });
+  });
+
+  // RESET DOĞRU/YANLIŞ
+  function resetTF() {
+    const trueDiv = document.getElementById('trueDropped'); const falseDiv = document.getElementById('falseDropped');
+    trueDiv.innerHTML = ''; falseDiv.innerHTML = '';
+    const originalStatements = [
+      "1. Pilin sembolünde uzun çizgi artı kutbu temsil eder.", "2. Ampulün sembolü içi boş bir dairedir.",
+      "3. Kapalı anahtar devredeki elektrik akışını sağlar.", "4. Açık anahtarlı devrede ampul yanar.",
+      "5. Bağlantı kablosunun sembolü düz bir çizgidir.", "6. Pillerin ters bağlanması devrenin çalışmasını sağlar.",
+      "7. Devre şeması, semboller kullanılarak çizilen şemadır.", "8. Pilin görevi ampulün ışığını kontrol etmektir.",
+      "9. Kesik kablo varsa devre çalışmaz.", "10. Duy ve pil yatağının ayrı bir sembolü yoktur."
+    ];
+    const tfVals = ["true","false","true","false","true","false","true","false","true","true"];
+    const container = document.getElementById('tf-items-container');
+    container.innerHTML = '';
+    for (let i = 0; i < originalStatements.length; i++) {
+      const div = document.createElement('div');
+      div.className = 'drag-statement';
+      div.setAttribute('draggable', 'true');
+      div.setAttribute('data-tf', tfVals[i]);
+      div.innerText = originalStatements[i];
+      container.appendChild(div);
+    }
+    draggedItem = null;
+  }
+  // RESET BOŞLUK
+  function resetFill() {
+    const bank = document.getElementById('fillWordBank');
+    const originalWords = ["pil","ampul","anahtar","kablo","sembol","artı","açık","kapalı","ters","şema"];
+    bank.innerHTML = '';
+    originalWords.forEach(w => {
+      const wordDiv = document.createElement('div');
+      wordDiv.className = 'drag-word';
+      wordDiv.setAttribute('draggable', 'true');
+      wordDiv.setAttribute('data-fillword', w);
+      wordDiv.innerText = w;
+      bank.appendChild(wordDiv);
+    });
+    const slots = document.querySelectorAll('.drop-slot');
+    const placeholders = ["______","______","______","______","______","______","______","______","______","______"];
+    slots.forEach((slot, idx) => {
+      slot.innerText = placeholders[idx];
+      slot.classList.remove('filled');
+      slot.style.backgroundColor = '#EDF3F8';
+    });
+    draggedItem = null;
+  }
+  document.getElementById('resetTFBtn')?.addEventListener('click', resetTF);
+  document.getElementById('resetFillBtn')?.addEventListener('click', resetFill);
+
+  function showTab(tabId, btn) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(`tab-${tabId}`).classList.add('active');
+    btn.classList.add('active');
+  }
+  window.showTab = showTab;
+  buildQuiz();
+</script>
+</body>
+</html>

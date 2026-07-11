@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>5. Sınıf Fen: Maddenin Tanecikli Yapısı | Hafıza Teknikleri + Etkinlikler</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    background: #F2F8F5;
+    color: #1A3B2E;
+    padding: 24px 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  :root {
+    --particle-blue: #2C7A6E;
+    --particle-orange: #E67E22;
+    --particle-light: #D9E8E3;
+    --solid-brown: #8B5A2B;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, #2C7A6E, #1E5A4F);
+    border-radius: 32px;
+    padding: 1.6rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 28px;
+    color: white;
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+  }
+  .hero-icon {
+    font-size: 68px;
+    filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.2));
+  }
+  .hero h2 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+  }
+  .hero p {
+    font-size: 0.85rem;
+    opacity: 0.9;
+    margin-top: 6px;
+  }
+
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .tab {
+    background: white;
+    border: none;
+    padding: 8px 24px;
+    border-radius: 60px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: 0.2s;
+    color: #2C7A6E;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    border: 1px solid #C5E0D9;
+  }
+  .tab.active {
+    background: var(--particle-blue);
+    color: white;
+    border-color: var(--particle-blue);
+    box-shadow: 0 6px 12px rgba(44,122,110,0.3);
+  }
+  .panel {
+    display: none;
+    animation: fadeIn 0.2s ease;
+  }
+  .panel.active {
+    display: block;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px);}
+    to { opacity: 1; transform: translateY(0);}
+  }
+
+  .section-label {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #6C8B80;
+    margin: 28px 0 12px 0;
+  }
+
+  .chunk-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+    margin-bottom: 28px;
+  }
+  .chunk {
+    background: white;
+    border-radius: 28px;
+    padding: 18px;
+    border: 1px solid #D0E2DC;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+  }
+  .chunk h4 {
+    font-size: 0.9rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .chunk ul {
+    list-style: none;
+  }
+  .chunk ul li {
+    font-size: 0.8rem;
+    margin-bottom: 8px;
+    padding-left: 22px;
+    position: relative;
+    line-height: 1.4;
+  }
+  .chunk ul li::before {
+    content: "⚛️";
+    position: absolute;
+    left: 0;
+    font-size: 12px;
+  }
+  .chunk-blue h4 { color: #2C7A6E; }
+  .chunk-orange h4 { color: #E67E22; }
+  .chunk-green h4 { color: #2E7D64; }
+  .chunk-purple h4 { color: #8F5C8C; }
+
+  .info-card {
+    background: white;
+    border-radius: 24px;
+    padding: 18px;
+    border: 1px solid #D0E2DC;
+    margin-bottom: 20px;
+  }
+  .info-card h3 {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #2C7A6E;
+    margin-bottom: 8px;
+  }
+  .state-compare {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: space-between;
+    margin-top: 12px;
+  }
+  .state-box {
+    flex: 1;
+    background: #F9FCFA;
+    border-radius: 24px;
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #C5E0D9;
+  }
+  .state-icon {
+    font-size: 36px;
+  }
+
+  /* Sürükle bırak stilleri */
+  .drag-area {
+    background: #FEFCF7;
+    border-radius: 32px;
+    padding: 20px;
+    margin-bottom: 32px;
+    border: 2px solid #D0E2DC;
+  }
+  .drag-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #2C7A6E;
+  }
+  .drag-items, .word-bank {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    background: #F2F8F5;
+    padding: 18px;
+    border-radius: 32px;
+    margin-bottom: 24px;
+  }
+  .drag-statement, .drag-word {
+    background: white;
+    border-radius: 60px;
+    padding: 8px 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    font-weight: 600;
+    font-size: 0.8rem;
+    cursor: grab;
+    border: 1px solid #BED6CF;
+    user-select: none;
+  }
+  .drag-statement:active, .drag-word:active { cursor: grabbing; }
+  .drag-statement.dragging, .drag-word.dragging { opacity: 0.4; }
+  .drop-zones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  .drop-zone {
+    background: #F2F4F0;
+    border-radius: 36px;
+    padding: 16px 28px;
+    text-align: center;
+    min-width: 200px;
+    border: 2px dashed #B5CFC6;
+  }
+  .drop-zone h4 { font-weight: 800; margin-bottom: 12px; }
+  .drop-zone.drag-over { background: #E6F0ED; border-color: #2C7A6E; }
+  .dropped-items {
+    min-height: 70px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+  .dropped-badge {
+    background: #D0E2DC;
+    padding: 6px 12px;
+    border-radius: 40px;
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+  .fill-sentences { margin: 20px 0; }
+  .sentence {
+    background: white;
+    border-radius: 20px;
+    padding: 12px 18px;
+    margin-bottom: 14px;
+    font-size: 0.85rem;
+    border-left: 4px solid #E67E22;
+  }
+  .drop-slot {
+    display: inline-block;
+    background: #E8F0ED;
+    border-radius: 40px;
+    padding: 4px 14px;
+    min-width: 100px;
+    text-align: center;
+    font-weight: 700;
+    margin: 0 4px;
+    border: 1px dashed #9BBFB4;
+  }
+  .drop-slot.filled {
+    background: #C8E6D9;
+    border: 1px solid #2E7D64;
+    color: #1A5A48;
+  }
+  .reset-btn {
+    background: #2C7A6E;
+    border: none;
+    color: white;
+    padding: 8px 24px;
+    border-radius: 60px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 12px;
+    font-size: 0.75rem;
+  }
+  .reset-btn:hover { background: #1E5A4F; }
+
+  /* Quiz stilleri */
+  .quiz-q {
+    background: white;
+    border-radius: 24px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    border: 1px solid #D0E2DC;
+  }
+  .quiz-opt {
+    background: #FEFAF2;
+    border: 1px solid #CFDFD9;
+    padding: 8px 18px;
+    border-radius: 60px;
+    margin: 6px 0;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+  }
+  .quiz-opt.correct { background: #DFF2E3; border-color: #2E7D64; }
+  .quiz-opt.wrong { background: #FFEDE6; border-color: #E67E22; }
+  .quiz-fb { margin-top: 10px; padding: 8px 12px; border-radius: 20px; display: none; }
+  .quiz-fb.show { display: block; }
+  .quiz-fb.ok { background: #E6F7E6; color: #2E7D64; }
+  .quiz-fb.nope { background: #FFEFE0; color: #C4510A; }
+  .score-bar {
+    background: #E2F0EC;
+    border-radius: 60px;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    font-weight: bold;
+    margin-top: 20px;
+    display: none;
+  }
+  @media (max-width: 700px) {
+    .hero { flex-direction: column; text-align: center; }
+    .chunk-grid { grid-template-columns: 1fr; }
+    .state-compare { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-icon">⚛️🔬</div>
+  <div>
+    <h2>Maddenin Tanecikli Yapısı</h2>
+    <p>5. Sınıf Fen Bilimleri · Katı, Sıvı, Gaz Tanecikleri ve Hareketleri<br>
+    <strong>F.5.5.1.1</strong> — Maddelerin tanecikli yapısını, hareketlerini ve hâl özelliklerini açıklar.</p>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('bilgi',this)">📘 Temel Bilgiler</button>
+  <button class="tab" onclick="showTab('haller',this)">🔬 Katı-Sıvı-Gaz Karşılaştırma</button>
+  <button class="tab" onclick="showTab('teknik',this)">🧠 Hafıza Teknikleri</button>
+  <button class="tab" onclick="showTab('etkinlik',this)">🎮 Sürükle & Etkinlik</button>
+  <button class="tab" onclick="showTab('quiz',this)">✅ 10 Soruluk Quiz</button>
+</div>
+
+<!-- PANEL 1: TEMEL BİLGİLER (CHUNKING) -->
+<div id="tab-bilgi" class="panel active">
+  <div class="section-label">⚛️ MADDENİN TANECİKLİ YAPISI - 4 GRUP</div>
+  <div class="chunk-grid">
+    <div class="chunk chunk-blue">
+      <h4>📜 Tarihçe & Tanecik</h4>
+      <ul>
+        <li>Democritus (MÖ 400) ilk kez "atom" fikrini ortaya attı</li>
+        <li>Madde: kütlesi ve hacmi olan her şey</li>
+        <li>Maddeler gözle görülemeyen taneciklerden oluşur</li>
+        <li>Tanecikler sürekli hareket halindedir</li>
+      </ul>
+    </div>
+    <div class="chunk chunk-orange">
+      <h4>🔄 Tanecik Hareketleri</h4>
+      <ul>
+        <li>Titreşim: yerinde sallanma (katılar)</li>
+        <li>Dönme: kendi etrafında dönme</li>
+        <li>Öteleme: bir yerden başka yere gitme</li>
+        <li>Sıvı ve gazlar titreşim+dönme+öteleme yapar</li>
+      </ul>
+    </div>
+    <div class="chunk chunk-green">
+      <h4>🧊 Katı Maddeler</h4>
+      <ul>
+        <li>Tanecikler birbirine çok yakın, boşluk yok denecek kadar az</li>
+        <li>Sadece titreşim hareketi</li>
+        <li>Belirli şekil ve hacim, sıkıştırılamaz</li>
+      </ul>
+    </div>
+    <div class="chunk chunk-purple">
+      <h4>💧 Gazlar & Sıvılar</h4>
+      <ul>
+        <li>Sıvı: tanecik arası boşluk az, akışkan, sıkıştırılamaz</li>
+        <li>Gaz: tanecik arası boşluk çok, sıkıştırılabilir, akışkan</li>
+        <li>Hâl değişiminde tanecikler değişmez, boşluk ve hareket değişir</li>
+      </ul>
+    </div>
+  </div>
+  <div class="info-card">
+    <h3>🔬 Democritus'un Hayal Deneyi</h3>
+    <p>Bir elmayı sürekli ikiye bölersek en sonunda bölünemeyecek küçük bir tanecik (atom) kalır. Modern bilim de maddelerin atom ve moleküllerden oluştuğunu kanıtlamıştır.</p>
+  </div>
+</div>
+
+<!-- PANEL 2: KATI-SIVI-GAZ KARŞILAŞTIRMA VE HAREKETLER -->
+<div id="tab-haller" class="panel">
+  <div class="section-label">📊 KATI - SIVI - GAZ KARŞILAŞTIRMA TABLOSU</div>
+  <div class="info-card">
+    <div class="state-compare">
+      <div class="state-box"><div class="state-icon">🧊</div><h3>Katı</h3><p>Boşluk: Yok denecek<br>Hareket: Titreşim<br>Şekil: Belirli<br>Sıkışma: Hayır</p></div>
+      <div class="state-box"><div class="state-icon">💧</div><h3>Sıvı</h3><p>Boşluk: Az<br>Hareket: Titreşim + Dönme + Öteleme<br>Şekil: Kabın şeklini alır<br>Sıkışma: Hayır (kabul)</p></div>
+      <div class="state-box"><div class="state-icon">💨</div><h3>Gaz</h3><p>Boşluk: Çok fazla<br>Hareket: Titreşim + Dönme + Öteleme<br>Şekil: Belirsiz, yayılır<br>Sıkışma: Evet</p></div>
+    </div>
+  </div>
+  <div class="section-label">🔄 TANECİK HAREKET TÜRLERİ</div>
+  <div class="info-card">
+    <p>🔹 <strong>Titreşim:</strong> Taneciklerin olduğu yerde sallanması (katı, sıvı, gaz).<br>
+    🔹 <strong>Dönme:</strong> Taneciklerin kendi ekseni etrafında dönmesi (sıvı, gaz).<br>
+    🔹 <strong>Öteleme:</strong> Taneciklerin bir yerden başka yere gitmesi (sıvı, gaz, akışkanlık sağlar).</p>
+    <p style="margin-top: 12px;"><strong>📌 Önemli:</strong> Gazlar sıkıştırılabilir çünkü tanecikler arasında çok boşluk vardır. Katı ve sıvılar sıkıştırılamaz.</p>
+  </div>
+  <div class="info-card">
+    <h3>🌡️ Hâl Değişimi ve Tanecikler</h3>
+    <p>Katı ısıtıldığında tanecikler arası boşluk artar, hareketlilik artar → sıvı olur. Sıvı ısıtıldığında boşluk daha da artar → gaz olur. Taneciklerin <strong>kendisi</strong> değişmez, sadece düzeni ve hareketi değişir.</p>
+  </div>
+</div>
+
+<!-- PANEL 3: HAFIZA TEKNİKLERİ -->
+<div id="tab-teknik" class="panel">
+  <div class="section-label">🔡 Akrostiş: “KATI SIVI GAZ”</div>
+  <div class="info-card">
+    <h3>💡 K - S - G kuralı (Katı Sıkı, Sıvı Salınır, Gaz Gezer)</h3>
+    <p><strong>K</strong>atı: <strong>K</strong>asılı tanecikler, sadece titreşim.<br>
+    <strong>S</strong>ıvı: <strong>S</strong>alınım (öteleme + dönme + titreşim), akışkan.<br>
+    <strong>G</strong>az: <strong>G</strong>ezgin tanecikler, boşluk çok, sıkışır.</p>
+  </div>
+  <div class="chunk-grid">
+    <div class="chunk chunk-blue"><h4>📦 Sıkıştırılabilme (G-A-Z)</h4><ul><li>Gaz = Sıkışabilir</li><li>Katı ve Sıvı sıkışmaz</li><li>“Gaz Arabada Sıkışır” (şişirilmiş balon)</li></ul></div>
+    <div class="chunk chunk-orange"><h4>🎯 Hareket hatırlatma (T-D-Ö)</h4><ul><li>Titreşim = Tüm hallerde var</li><li>Dönme ve Öteleme sıvı+ gazda</li></ul></div>
+    <div class="chunk chunk-green"><h4>🧪 Deney: Şırınga ile hava sıkıştırma</h4><ul><li>Hava dolu şırınganın pistonu itilince hava sıkışır (gaz).</li><li>Su dolu şırınga sıkışmaz (sıvı).</li></ul></div>
+  </div>
+  <div class="info-card">
+    <h3>🧠 Zihinsel Canlandırma: “Okul koridoru”</h3>
+    <p>Katı: Öğrenciler sıralarında sabit (titreşim). Sıvı: Teneffüste koridorda yürüyen öğrenciler (öteleme+dönme). Gaz: Çok geniş alanda koşan, her yere yayılan öğrenciler.</p>
+  </div>
+</div>
+
+<!-- PANEL 4: SÜRÜKLE BIRAK ETKİNLİKLER (10 DOĞRU/YANLIŞ + 10 BOŞLUK) -->
+<div id="tab-etkinlik" class="panel">
+  <!-- Bölüm 1: 10 Doğru/Yanlış -->
+  <div class="drag-area">
+    <div class="drag-title">✅❌ 10 DOĞRU / YANLIŞ ETKİNLİĞİ (Sürükle bırak)</div>
+    <div class="drag-items" id="tf-items-container">
+      <div class="drag-statement" draggable="true" data-tf="true">1. Maddeler gözle görülemeyen taneciklerden oluşur.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">2. Katı maddelerin tanecikleri arasında çok fazla boşluk vardır.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">3. Gazlar sıkıştırılabilir.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">4. Sıvıların belirli bir şekli vardır.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">5. Democritus, maddenin tanecikli yapısından bahseden ilk filozoftur.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">6. Sadece gaz tanecikleri titreşim hareketi yapar.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">7. Sıvı tanecikleri öteleme, dönme ve titreşim hareketi yapar.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">8. Katı maddeler akışkandır.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">9. Hâl değişiminde taneciklerin kendisi değişmez, aralarındaki boşluk değişir.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">10. Sıvılar gazlardan daha kolay sıkıştırılabilir.</div>
+    </div>
+    <div class="drop-zones">
+      <div class="drop-zone" data-zone="true" id="dropTrueZone">
+        <h4>✅ DOĞRU</h4>
+        <div class="dropped-items" id="trueDropped"></div>
+      </div>
+      <div class="drop-zone" data-zone="false" id="dropFalseZone">
+        <h4>❌ YANLIŞ</h4>
+        <div class="dropped-items" id="falseDropped"></div>
+      </div>
+    </div>
+    <button class="reset-btn" id="resetTFBtn">🔄 Doğru/Yanlış Etkinliğini Sıfırla</button>
+  </div>
+
+  <!-- Bölüm 2: 10 Boşluk Doldurma (Sürükle) -->
+  <div class="drag-area">
+    <div class="drag-title">📝 10 BOŞLUK DOLDURMA (Sözcükleri sürükle)</div>
+    <div class="word-bank" id="fillWordBank">
+      <div class="drag-word" draggable="true" data-fillword="tanecik">tanecik</div>
+      <div class="drag-word" draggable="true" data-fillword="titreşim">titreşim</div>
+      <div class="drag-word" draggable="true" data-fillword="öteleme">öteleme</div>
+      <div class="drag-word" draggable="true" data-fillword="Democritus">Democritus</div>
+      <div class="drag-word" draggable="true" data-fillword="sıkıştırılabilir">sıkıştırılabilir</div>
+      <div class="drag-word" draggable="true" data-fillword="boşluk">boşluk</div>
+      <div class="drag-word" draggable="true" data-fillword="akışkan">akışkan</div>
+      <div class="drag-word" draggable="true" data-fillword="katı">katı</div>
+      <div class="drag-word" draggable="true" data-fillword="gaz">gaz</div>
+      <div class="drag-word" draggable="true" data-fillword="hacim">hacim</div>
+    </div>
+    <div class="fill-sentences" id="fillSentencesContainer">
+      <div class="sentence">① Maddenin en küçük yapı taşına <span class="drop-slot" data-correct="tanecik">______</span> denir (atom/molekül).</div>
+      <div class="sentence">② Katı maddelerin tanecikleri sadece <span class="drop-slot" data-correct="titreşim">______</span> hareketi yapar.</div>
+      <div class="sentence">③ Sıvı ve gaz taneciklerinin bir yerden başka yere gitmesine <span class="drop-slot" data-correct="öteleme">______</span> hareketi denir.</div>
+      <div class="sentence">④ Maddenin tanecikli yapısını ilk kez öne süren filozof <span class="drop-slot" data-correct="Democritus">______</span>'tur.</div>
+      <div class="sentence">⑤ Gaz maddeler <span class="drop-slot" data-correct="sıkıştırılabilir">______</span> özelliğine sahiptir.</div>
+      <div class="sentence">⑥ Tanecikler arasındaki <span class="drop-slot" data-correct="boşluk">______</span> gazlarda en fazladır.</div>
+      <div class="sentence">⑦ Sıvılar ve gazlar <span class="drop-slot" data-correct="akışkan">______</span> maddelerdir.</div>
+      <div class="sentence">⑧ Belirli şekli ve hacmi olan madde hâli <span class="drop-slot" data-correct="katı">______</span>'dır.</div>
+      <div class="sentence">⑨ Sıkıştırılabilen tek madde hâli <span class="drop-slot" data-correct="gaz">______</span>'dır.</div>
+      <div class="sentence">⑩ Maddenin boşlukta kapladığı yere <span class="drop-slot" data-correct="hacim">______</span> denir.</div>
+    </div>
+    <button class="reset-btn" id="resetFillBtn">🔄 Boşluk Etkinliğini Sıfırla</button>
+  </div>
+</div>
+
+<!-- PANEL 5: 10 SORULUK QUIZ -->
+<div id="tab-quiz" class="panel">
+  <div class="section-label">✅ MADDENİN TANECİKLİ YAPISI – 10 SORULUK UZMANLIK QUIZİ</div>
+  <div id="quiz-container"></div>
+  <div class="score-bar" id="score-bar" style="display: none;">⚛️ Puan: <strong id="score-val">0</strong> / 10 &nbsp;|&nbsp; <span id="score-msg"></span></div>
+</div>
+
+<script>
+  // ---------- 10 SORULUK QUIZ ----------
+  const quizData = [
+    { q: "Maddenin tanecikli yapısından ilk kez bahseden filozof kimdir?", opts: ["Aristoteles", "Democritus", "Pisagor", "Arşimet"], a: 1, exp: "Democritus, MÖ 400'lü yıllarda maddenin bölünemez parçacıklardan (atom) oluştuğunu söylemiştir." },
+    { q: "Katı maddelerin tanecikleri hangi hareketi yapabilir?", opts: ["Öteleme", "Dönme", "Titreşim", "Titreşim + öteleme"], a: 2, exp: "Katı tanecikleri sadece titreşim hareketi yapar, yer değiştiremez." },
+    { q: "Aşağıdakilerden hangisi sıkıştırılabilir?", opts: ["Tahta", "Su", "Hava", "Demir"], a: 2, exp: "Gazlar (hava) sıkıştırılabilir; katı ve sıvılar sıkıştırılamaz." },
+    { q: "Sıvıların şekli ile ilgili hangisi doğrudur?", opts: ["Belirli bir şekli vardır", "Bulunduğu kabın şeklini alır", "Gaz gibi yayılır", "Katı gibi serttir"], a: 1, exp: "Sıvılar akışkandır ve bulundukları kabın şeklini alırlar." },
+    { q: "Tanecikler arasındaki boşluğun en fazla olduğu madde hâli hangisidir?", opts: ["Katı", "Sıvı", "Gaz", "Plazma"], a: 2, exp: "Gazlarda tanecikler arası boşluk çok fazladır, bu nedenle sıkıştırılabilirler." },
+    { q: "Aşağıdakilerden hangisi gazların özelliği değildir?", opts: ["Akışkandır", "Belirli bir şekli yoktur", "Sıkıştırılamaz", "Her tarafa yayılır"], a: 2, exp: "Gazlar sıkıştırılabilir, bu ifade yanlıştır." },
+    { q: "Bir madde eridiğinde (katı → sıvı) aşağıdakilerden hangisi değişir?", opts: ["Taneciklerin büyüklüğü", "Taneciklerin kimyasal yapısı", "Tanecikler arası boşluk", "Tanecik sayısı"], a: 2, exp: "Hâl değişiminde tanecikler arası boşluk artar, taneciklerin kendisi değişmez." },
+    { q: "Sıvı ve gazların ortak özelliği aşağıdakilerden hangisidir?", opts: ["Sıkıştırılabilir olmaları", "Belirli şekillerinin olması", "Akışkan olmaları", "Sadece titreşim hareketi yapmaları"], a: 2, exp: "Hem sıvılar hem gazlar akışkandır ve bulundukları ortama yayılabilirler." },
+    { q: "Bir bardaktaki suyun hacmi sabittir fakat şekli değişir. Bu durum suyun hangi özelliğini gösterir?", opts: ["Katı olduğunu", "Sıkıştırılabildiğini", "Akışkan ve belirli şeklinin olmadığını", "Gaz gibi davrandığını"], a: 2, exp: "Su sıvıdır, belirli hacmi vardır ancak kabın şeklini alır." },
+    { q: "Democritus'un 'bölünemeyen parçacık' dediği kavram günümüzde ne olarak bilinir?", opts: ["Molekül", "Atom", "Tanecik", "Hücre"], a: 1, exp: "Democritus'un 'atomos' dediği parçacık, günümüzde atom olarak bilinir." }
+  ];
+  let quizAnswered = new Array(10).fill(false);
+  let quizScores = new Array(10).fill(false);
+
+  function buildQuiz() {
+    const container = document.getElementById('quiz-container');
+    if (!container) return;
+    container.innerHTML = '';
+    quizData.forEach((q, idx) => {
+      const div = document.createElement('div'); div.className = 'quiz-q';
+      let optsHtml = '';
+      q.opts.forEach((opt, optIdx) => {
+        optsHtml += `<button class="quiz-opt" onclick="checkQuiz(${idx}, ${optIdx})" id="qzopt${idx}_${optIdx}">${opt}</button><br>`;
+      });
+      div.innerHTML = `<p><strong>Soru ${idx+1}:</strong> ${q.q}</p><div class="quiz-opts">${optsHtml}</div><div class="quiz-fb" id="qzfb${idx}"></div>`;
+      container.appendChild(div);
+    });
+  }
+
+  function checkQuiz(qIdx, chosen) {
+    if (quizAnswered[qIdx]) return;
+    quizAnswered[qIdx] = true;
+    const q = quizData[qIdx];
+    const isCorrect = (chosen === q.a);
+    quizScores[qIdx] = isCorrect;
+    for (let i = 0; i < q.opts.length; i++) {
+      const btn = document.getElementById(`qzopt${qIdx}_${i}`);
+      if (btn) { btn.disabled = true; if (i === q.a) btn.classList.add('correct'); else if (i === chosen && !isCorrect) btn.classList.add('wrong'); }
+    }
+    const fbDiv = document.getElementById(`qzfb${qIdx}`);
+    fbDiv.style.display = 'block';
+    fbDiv.className = `quiz-fb show ${isCorrect ? 'ok' : 'nope'}`;
+    fbDiv.textContent = isCorrect ? `✓ Doğru! ${q.exp}` : `✗ Yanlış! Doğru: ${q.opts[q.a]}. ${q.exp}`;
+    if (quizAnswered.every(v => v === true)) {
+      const total = quizScores.filter(Boolean).length;
+      document.getElementById('score-val').innerHTML = total;
+      let msg = total <= 4 ? '📖 Tanecikleri tekrar et, etkinliklere göz at!' : (total <= 7 ? '⚛️ İyi! Biraz daha pratik yap.' : (total <= 9 ? '🎉 Harikasın! Madde Uzmanısın!' : '🏆 Mükemmel! Tanecikleri çok iyi kavradın!'));
+      document.getElementById('score-msg').innerHTML = msg;
+      document.getElementById('score-bar').style.display = 'flex';
+    }
+  }
+  window.checkQuiz = checkQuiz;
+
+  // ---------- SÜRÜKLE BIRAK (DOĞRU/YANLIŞ) ----------
+  let draggedItem = null;
+  document.addEventListener('dragstart', (e) => {
+    if (e.target.classList.contains('drag-statement') || e.target.classList.contains('drag-word')) {
+      draggedItem = e.target;
+      e.target.classList.add('dragging');
+      e.dataTransfer.setData('text/plain', e.target.innerText);
+      e.dataTransfer.effectAllowed = 'move';
+    }
+  });
+  document.addEventListener('dragend', (e) => {
+    if (e.target.classList.contains('drag-statement') || e.target.classList.contains('drag-word')) e.target.classList.remove('dragging');
+    draggedItem = null;
+  });
+  const dropZones = document.querySelectorAll('.drop-zone');
+  dropZones.forEach(zone => {
+    zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', () => { zone.classList.remove('drag-over'); });
+    zone.addEventListener('drop', (e) => {
+      e.preventDefault(); zone.classList.remove('drag-over');
+      if (!draggedItem) return;
+      if (draggedItem.classList.contains('drag-statement')) {
+        const isTrueZone = zone.getAttribute('data-zone') === 'true';
+        const statementTruth = draggedItem.getAttribute('data-tf') === 'true';
+        if (isTrueZone !== statementTruth) { alert('❌ Bu ifade buraya ait değil! Tekrar dene.'); return; }
+        const targetList = zone.querySelector('.dropped-items');
+        const badge = document.createElement('div'); badge.className = 'dropped-badge'; badge.innerText = draggedItem.innerText;
+        targetList.appendChild(badge);
+        draggedItem.remove(); draggedItem = null;
+      }
+    });
+  });
+  // Fill-in boşluklar
+  const fillSlots = document.querySelectorAll('.drop-slot');
+  fillSlots.forEach(slot => {
+    slot.addEventListener('dragover', (e) => { e.preventDefault(); slot.style.backgroundColor = '#E0F0EA'; });
+    slot.addEventListener('dragleave', () => { if (!slot.classList.contains('filled')) slot.style.backgroundColor = '#E8F0ED'; });
+    slot.addEventListener('drop', (e) => {
+      e.preventDefault(); slot.style.backgroundColor = '#E8F0ED';
+      if (!draggedItem || !draggedItem.classList.contains('drag-word')) return;
+      const correctAnswer = slot.getAttribute('data-correct');
+      const droppedWord = draggedItem.getAttribute('data-fillword');
+      if (correctAnswer === droppedWord) {
+        if (slot.classList.contains('filled')) return;
+        slot.innerText = droppedWord; slot.classList.add('filled');
+        draggedItem.remove(); draggedItem = null;
+      } else { alert(`Yanlış kelime! "${droppedWord}" bu boşluğa uygun değil.`); }
+    });
+  });
+
+  // RESET DOĞRU/YANLIŞ
+  function resetTF() {
+    const trueDiv = document.getElementById('trueDropped'); const falseDiv = document.getElementById('falseDropped');
+    trueDiv.innerHTML = ''; falseDiv.innerHTML = '';
+    const originalStatements = [
+      "1. Maddeler gözle görülemeyen taneciklerden oluşur.", "2. Katı maddelerin tanecikleri arasında çok fazla boşluk vardır.",
+      "3. Gazlar sıkıştırılabilir.", "4. Sıvıların belirli bir şekli vardır.",
+      "5. Democritus, maddenin tanecikli yapısından bahseden ilk filozoftur.", "6. Sadece gaz tanecikleri titreşim hareketi yapar.",
+      "7. Sıvı tanecikleri öteleme, dönme ve titreşim hareketi yapar.", "8. Katı maddeler akışkandır.",
+      "9. Hâl değişiminde taneciklerin kendisi değişmez, aralarındaki boşluk değişir.", "10. Sıvılar gazlardan daha kolay sıkıştırılabilir."
+    ];
+    const tfVals = ["true","false","true","false","true","false","true","false","true","false"];
+    const container = document.getElementById('tf-items-container');
+    container.innerHTML = '';
+    for (let i = 0; i < originalStatements.length; i++) {
+      const div = document.createElement('div');
+      div.className = 'drag-statement';
+      div.setAttribute('draggable', 'true');
+      div.setAttribute('data-tf', tfVals[i]);
+      div.innerText = originalStatements[i];
+      container.appendChild(div);
+    }
+    draggedItem = null;
+  }
+  // RESET BOŞLUK
+  function resetFill() {
+    const bank = document.getElementById('fillWordBank');
+    const originalWords = ["tanecik","titreşim","öteleme","Democritus","sıkıştırılabilir","boşluk","akışkan","katı","gaz","hacim"];
+    bank.innerHTML = '';
+    originalWords.forEach(w => {
+      const wordDiv = document.createElement('div');
+      wordDiv.className = 'drag-word';
+      wordDiv.setAttribute('draggable', 'true');
+      wordDiv.setAttribute('data-fillword', w);
+      wordDiv.innerText = w;
+      bank.appendChild(wordDiv);
+    });
+    const slots = document.querySelectorAll('.drop-slot');
+    const placeholders = ["______","______","______","______","______","______","______","______","______","______"];
+    slots.forEach((slot, idx) => {
+      slot.innerText = placeholders[idx];
+      slot.classList.remove('filled');
+      slot.style.backgroundColor = '#E8F0ED';
+    });
+    draggedItem = null;
+  }
+  document.getElementById('resetTFBtn')?.addEventListener('click', resetTF);
+  document.getElementById('resetFillBtn')?.addEventListener('click', resetFill);
+
+  function showTab(tabId, btn) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(`tab-${tabId}`).classList.add('active');
+    btn.classList.add('active');
+  }
+  window.showTab = showTab;
+  buildQuiz();
+</script>
+</body>
+</html>

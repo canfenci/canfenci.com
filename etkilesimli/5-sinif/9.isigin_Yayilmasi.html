@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>5. Sınıf Fen: Işığın Yayılması | Hafıza Teknikleri + Etkinlikler</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    background: #FFFCF5;
+    color: #2D2B26;
+    padding: 24px 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  :root {
+    --light-yellow: #FFE9B6;
+    --light-orange: #FFB347;
+    --sun-glow: #F79D1E;
+    --dark-text: #4A3B2A;
+    --soft-blue: #CCE7F5;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, #F9A825, #F57F17);
+    border-radius: 32px;
+    padding: 1.6rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 28px;
+    color: white;
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+  }
+  .hero-icon {
+    font-size: 68px;
+    filter: drop-shadow(2px 4px 8px rgba(0,0,0,0.2));
+  }
+  .hero h2 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+  }
+  .hero p {
+    font-size: 0.85rem;
+    opacity: 0.9;
+    margin-top: 6px;
+  }
+
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .tab {
+    background: white;
+    border: none;
+    padding: 8px 24px;
+    border-radius: 60px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: 0.2s;
+    color: #C45C1A;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    border: 1px solid #FFD29E;
+  }
+  .tab.active {
+    background: var(--sun-glow);
+    color: white;
+    border-color: var(--sun-glow);
+    box-shadow: 0 6px 12px rgba(245,127,23,0.3);
+  }
+  .panel {
+    display: none;
+    animation: fadeIn 0.2s ease;
+  }
+  .panel.active {
+    display: block;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px);}
+    to { opacity: 1; transform: translateY(0);}
+  }
+
+  .section-label {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #AD7A4A;
+    margin: 28px 0 12px 0;
+  }
+
+  .chunk-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+    margin-bottom: 28px;
+  }
+  .chunk {
+    background: white;
+    border-radius: 28px;
+    padding: 18px;
+    border: 1px solid #FFE3B5;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+  }
+  .chunk h4 {
+    font-size: 0.9rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .chunk ul {
+    list-style: none;
+  }
+  .chunk ul li {
+    font-size: 0.8rem;
+    margin-bottom: 8px;
+    padding-left: 22px;
+    position: relative;
+    line-height: 1.4;
+  }
+  .chunk ul li::before {
+    content: "✨";
+    position: absolute;
+    left: 0;
+    font-size: 12px;
+  }
+  .chunk-orange h4 { color: #E67E22; }
+  .chunk-blue h4 { color: #2C7A6E; }
+  .chunk-purple h4 { color: #9B6B9E; }
+  .chunk-green h4 { color: #388E3C; }
+
+  .info-card {
+    background: white;
+    border-radius: 24px;
+    padding: 18px;
+    border: 1px solid #FFE0A8;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+  }
+  .info-card h3 {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #E67E22;
+    margin-bottom: 8px;
+  }
+  .light-sources {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin: 15px 0;
+  }
+  .source-badge {
+    background: #FFF1E0;
+    border-radius: 80px;
+    padding: 6px 18px;
+    font-weight: 600;
+    font-size: 0.8rem;
+  }
+
+  /* Sürükle bırak stilleri */
+  .drag-area {
+    background: #FFF9F0;
+    border-radius: 32px;
+    padding: 20px;
+    margin-bottom: 32px;
+    border: 2px solid #FFDEAD;
+  }
+  .drag-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #C45C1A;
+  }
+  .drag-items, .word-bank {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    background: #FFF4E6;
+    padding: 18px;
+    border-radius: 32px;
+    margin-bottom: 24px;
+  }
+  .drag-statement, .drag-word {
+    background: white;
+    border-radius: 60px;
+    padding: 8px 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    font-weight: 600;
+    font-size: 0.8rem;
+    cursor: grab;
+    border: 1px solid #F7C78A;
+    user-select: none;
+  }
+  .drag-statement:active, .drag-word:active { cursor: grabbing; }
+  .drag-statement.dragging, .drag-word.dragging { opacity: 0.4; }
+  .drop-zones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  .drop-zone {
+    background: #F9EFE2;
+    border-radius: 36px;
+    padding: 16px 28px;
+    text-align: center;
+    min-width: 200px;
+    border: 2px dashed #E6BC8E;
+  }
+  .drop-zone h4 { font-weight: 800; margin-bottom: 12px; }
+  .drop-zone.drag-over { background: #FCE9D2; border-color: #F57F17; }
+  .dropped-items {
+    min-height: 70px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+  .dropped-badge {
+    background: #F0D9B5;
+    padding: 6px 12px;
+    border-radius: 40px;
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+  .fill-sentences { margin: 20px 0; }
+  .sentence {
+    background: white;
+    border-radius: 20px;
+    padding: 12px 18px;
+    margin-bottom: 14px;
+    font-size: 0.85rem;
+    border-left: 4px solid #FFB347;
+  }
+  .drop-slot {
+    display: inline-block;
+    background: #F3E5CD;
+    border-radius: 40px;
+    padding: 4px 14px;
+    min-width: 100px;
+    text-align: center;
+    font-weight: 700;
+    margin: 0 4px;
+    border: 1px dashed #CBA66E;
+  }
+  .drop-slot.filled {
+    background: #D9E8B6;
+    border: 1px solid #5A8F2C;
+    color: #2C5A1A;
+  }
+  .reset-btn {
+    background: #F57F17;
+    border: none;
+    color: white;
+    padding: 8px 24px;
+    border-radius: 60px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 12px;
+    font-size: 0.75rem;
+  }
+  .reset-btn:hover { background: #D96C0E; }
+
+  /* Quiz stilleri */
+  .quiz-q {
+    background: white;
+    border-radius: 24px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    border: 1px solid #FFDEAD;
+  }
+  .quiz-opt {
+    background: #FEFAF2;
+    border: 1px solid #E6C99E;
+    padding: 8px 18px;
+    border-radius: 60px;
+    margin: 6px 0;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+  }
+  .quiz-opt.correct { background: #DFF2E3; border-color: #388E3C; }
+  .quiz-opt.wrong { background: #FFEDE6; border-color: #F57F17; }
+  .quiz-fb { margin-top: 10px; padding: 8px 12px; border-radius: 20px; display: none; }
+  .quiz-fb.show { display: block; }
+  .quiz-fb.ok { background: #E6F7E6; color: #2E7D32; }
+  .quiz-fb.nope { background: #FFEFE0; color: #C4510A; }
+  .score-bar {
+    background: #FFEFD6;
+    border-radius: 60px;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    font-weight: bold;
+    margin-top: 20px;
+    display: none;
+  }
+  @media (max-width: 700px) {
+    .hero { flex-direction: column; text-align: center; }
+    .chunk-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-icon">💡✨</div>
+  <div>
+    <h2>Işığın Yayılması</h2>
+    <p>5. Sınıf Fen Bilimleri · Işık kaynakları, doğrusal yayılma, gölge ve tutulmalar<br>
+    <strong>F.5.4.1.1</strong> — Işığın doğrusal yayıldığını deneylerle açıklar.</p>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('bilgi',this)">📘 Temel Bilgiler</button>
+  <button class="tab" onclick="showTab('kaynak',this)">🔆 Işık Kaynakları & Doğrusal Yayılma</button>
+  <button class="tab" onclick="showTab('teknik',this)">🧠 Hafıza Teknikleri</button>
+  <button class="tab" onclick="showTab('etkinlik',this)">🎮 Sürükle & Etkinlik</button>
+  <button class="tab" onclick="showTab('quiz',this)">✅ 10 Soruluk Quiz</button>
+</div>
+
+<!-- PANEL 1: TEMEL BİLGİLER (CHUNKING) -->
+<div id="tab-bilgi" class="panel active">
+  <div class="section-label">💡 IŞIK NEDİR? 4 GRUPLA ÖĞREN</div>
+  <div class="chunk-grid">
+    <div class="chunk chunk-orange"><h4>🌟 Işık & Enerji</h4><ul><li>Işık bir enerji çeşididir</li><li>Çevremizi görmemizi sağlar</li><li>Işık kaynakları tarafından üretilir</li><li>Güneş temel doğal kaynaktır</li></ul></div>
+    <div class="chunk chunk-blue"><h4>📌 Doğal Işık Kaynakları</h4><ul><li>Güneş, yıldızlar</li><li>Yıldırım-şimşek</li><li>Ateş böceği</li><li>Volkanik patlamalar (lav)</li></ul></div>
+    <div class="chunk chunk-purple"><h4>🏮 Yapay Işık Kaynakları</h4><ul><li>Mum, meşale, el feneri</li><li>Ampul, floresan, LED</li><li>Televizyon, telefon ekranı</li><li>İnsan yapımı tüm ışık kaynakları</li></ul></div>
+    <div class="chunk chunk-green"><h4>📐 Doğrusal Yayılma Kanıtları</h4><ul><li>Gölge oluşumu</li><li>Boru deneyi (düz borudan görme)</li><li>Lazer ışınlarının düz çizgisi</li><li>Opak cisim arkasını görememe</li><li>Güneş ve Ay tutulmaları</li></ul></div>
+  </div>
+  <div class="info-card">
+    <h3>🕯️ Işık Işını Nedir?</h3>
+    <p>Işığın yayılma yönünü göstermek için çizilen çizgilere <strong>ışık ışını (ışın)</strong> denir. Işık, herhangi bir engel yoksa her yöne <strong>doğrusal (düz çizgi)</strong> olarak yayılır.</p>
+  </div>
+</div>
+
+<!-- PANEL 2: IŞIK KAYNAKLARI VE DOĞRUSAL YAYILMA (GÖRSELLER) -->
+<div id="tab-kaynak" class="panel">
+  <div class="section-label">🌞 Doğal Işık Kaynakları</div>
+  <div class="light-sources">
+    <span class="source-badge">☀️ Güneş</span>
+    <span class="source-badge">⭐ Yıldızlar</span>
+    <span class="source-badge">⚡ Yıldırım / Şimşek</span>
+    <span class="source-badge">🐞 Ateş böceği</span>
+  </div>
+  <div class="section-label">💡 Yapay Işık Kaynakları</div>
+  <div class="light-sources">
+    <span class="source-badge">🕯️ Mum</span>
+    <span class="source-badge">🔥 Meşale</span>
+    <span class="source-badge">🔦 El feneri</span>
+    <span class="source-badge">💡 Ampul / LED</span>
+  </div>
+  <div class="info-card">
+    <h3>📐 Işığın Doğrusal Yayıldığını Gösteren Deneyler</h3>
+    <p>✔ <strong>Boru deneyi:</strong> Düz bir borudan ışık kaynağını görürüz, eğik borudan göremeyiz.<br>
+    ✔ <strong>Gölge:</strong> Işık doğrusal geldiği için opak cismin arkasında gölge oluşur.<br>
+    ✔ <strong>Lazer ışını:</strong> Tozlu ortamda lazerin düz bir çizgi çizdiğini gözlemleriz.<br>
+    ✔ <strong>Tutulmalar:</strong> Ay veya Güneş tutulması, ışığın doğrusal hareketinin sonucudur.</p>
+  </div>
+  <div class="info-card">
+    <h3>🌑 Güneş ve Ay Tutulmaları</h3>
+    <p>Güneş tutulması: Ay, Güneş ile Dünya arasına girerek ışığı engeller. Ay tutulması: Dünya'nın gölgesi Ay'ın üzerine düşer. Her ikisi de ışığın doğrusal yayılmasının kanıtıdır.</p>
+  </div>
+</div>
+
+<!-- PANEL 3: HAFIZA TEKNİKLERİ -->
+<div id="tab-teknik" class="panel">
+  <div class="section-label">🔡 Akrostiş: “IŞIK DYG” (Doğal, Yapay, Gölge)</div>
+  <div class="info-card">
+    <h3>💡 IŞIK = Işık kaynakları, Süratli doğrusal yol, Işın çizgisi, Karanlıkta görme</h3>
+    <p><strong>I</strong>şık enerjidir, <strong>Ş</strong>ekil değiştirmez (doğrusal), <strong>I</strong>şın çizgilerle temsil edilir, <strong>K</strong>anıtlar: gölge, lazer, tutulma.</p>
+  </div>
+  <div class="chunk-grid">
+    <div class="chunk chunk-orange"><h4>🔍 Doğal - Yapay Ayırt Etme</h4><ul><li>Doğal: “Güneş, Yıldız, Ateş böceği, Şimşek” (G.Y.A.Ş.)</li><li>Yapay: “Mum, Meşale, Ampul, Telefon” (M.A.T.)</li></ul></div>
+    <div class="chunk chunk-blue"><h4>📖 Doğrusal Yayılma Kelimeleri (G-L-O-T)</h4><ul><li>Gölge, Lazer, Opak cisim arkası, Tutulmalar</li></ul></div>
+    <div class="chunk chunk-purple"><h4>🎯 Işık Işını Çizimi</h4><ul><li>Işık kaynağından dışarıya doğru ok işaretli çizgiler</li><li>Her yöne doğrusal çizilir</li></ul></div>
+    <div class="chunk chunk-green"><h4>💭 Zihinsel model: Koridor lambası</h4><ul><li>Karanlık koridorda el fenerini açtığında ışık huzmesinin düz ilerlediğini görürsün.</li></ul></div>
+  </div>
+</div>
+
+<!-- PANEL 4: SÜRÜKLE BIRAK ETKİNLİKLER (10 DOĞRU/YANLIŞ + 10 BOŞLUK) -->
+<div id="tab-etkinlik" class="panel">
+  <!-- Bölüm 1: 10 Doğru/Yanlış -->
+  <div class="drag-area">
+    <div class="drag-title">✅❌ 10 DOĞRU / YANLIŞ ETKİNLİĞİ (Sürükle bırak)</div>
+    <div class="drag-items" id="tf-items-container">
+      <div class="drag-statement" draggable="true" data-tf="true">1. Işık her yöne doğrusal olarak yayılır.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">2. Ay kendiliğinden ışık üreten bir ışık kaynağıdır.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">3. Mum ve el feneri yapay ışık kaynaklarıdır.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">4. Işık eğri bir yol izler.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">5. Gölge oluşumu ışığın doğrusal yayıldığının kanıtıdır.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">6. Yıldırım ve şimşek doğal ışık kaynağıdır.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">7. Opak cismin arkasını net olarak görebiliriz.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">8. Lazer ışını doğrusal yayılır.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">9. Işık enerjisi değil, maddedir.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">10. Güneş tutulması Ay'ın Güneş ile Dünya arasına girmesiyle oluşur.</div>
+    </div>
+    <div class="drop-zones">
+      <div class="drop-zone" data-zone="true" id="dropTrueZone">
+        <h4>✅ DOĞRU</h4>
+        <div class="dropped-items" id="trueDropped"></div>
+      </div>
+      <div class="drop-zone" data-zone="false" id="dropFalseZone">
+        <h4>❌ YANLIŞ</h4>
+        <div class="dropped-items" id="falseDropped"></div>
+      </div>
+    </div>
+    <button class="reset-btn" id="resetTFBtn">🔄 Doğru/Yanlış Etkinliğini Sıfırla</button>
+  </div>
+
+  <!-- Bölüm 2: 10 Boşluk Doldurma (Sürükle) -->
+  <div class="drag-area">
+    <div class="drag-title">📝 10 BOŞLUK DOLDURMA (Sözcükleri sürükle)</div>
+    <div class="word-bank" id="fillWordBank">
+      <div class="drag-word" draggable="true" data-fillword="doğrusal">doğrusal</div>
+      <div class="drag-word" draggable="true" data-fillword="doğal">doğal</div>
+      <div class="drag-word" draggable="true" data-fillword="yapay">yapay</div>
+      <div class="drag-word" draggable="true" data-fillword="gölge">gölge</div>
+      <div class="drag-word" draggable="true" data-fillword="ışın">ışın</div>
+      <div class="drag-word" draggable="true" data-fillword="opak">opak</div>
+      <div class="drag-word" draggable="true" data-fillword="Güneş">Güneş</div>
+      <div class="drag-word" draggable="true" data-fillword="lazer">lazer</div>
+      <div class="drag-word" draggable="true" data-fillword="enerji">enerji</div>
+      <div class="drag-word" draggable="true" data-fillword="tutulma">tutulma</div>
+    </div>
+    <div class="fill-sentences" id="fillSentencesContainer">
+      <div class="sentence">① Işık, herhangi bir engel yoksa <span class="drop-slot" data-correct="doğrusal">______</span> bir yolda yayılır.</div>
+      <div class="sentence">② Güneş, <span class="drop-slot" data-correct="doğal">______</span> ışık kaynağıdır.</div>
+      <div class="sentence">③ Mum, el feneri ve ampul <span class="drop-slot" data-correct="yapay">______</span> ışık kaynaklarıdır.</div>
+      <div class="sentence">④ Işık kaynağının önüne opak cisim konulduğunda arkada <span class="drop-slot" data-correct="gölge">______</span> oluşur.</div>
+      <div class="sentence">⑤ Işığın yayılma yönünü gösteren çizgilere <span class="drop-slot" data-correct="ışın">______</span> denir.</div>
+      <div class="sentence">⑥ Işığı geçirmeyen maddelere <span class="drop-slot" data-correct="opak">______</span> madde denir.</div>
+      <div class="sentence">⑦ Dünya’daki yaşamın temel ışık kaynağı <span class="drop-slot" data-correct="Güneş">______</span>'tir.</div>
+      <div class="sentence">⑧ <span class="drop-slot" data-correct="lazer">______</span> ışınları, doğrusal yayılımın en iyi örneğidir.</div>
+      <div class="sentence">⑨ Işık bir <span class="drop-slot" data-correct="enerji">______</span> çeşididir.</div>
+      <div class="sentence">⑩ Ay'ın Dünya'nın gölgesinde kalmasına Ay <span class="drop-slot" data-correct="tutulma">______</span>sı denir.</div>
+    </div>
+    <button class="reset-btn" id="resetFillBtn">🔄 Boşluk Etkinliğini Sıfırla</button>
+  </div>
+</div>
+
+<!-- PANEL 5: 10 SORULUK QUIZ -->
+<div id="tab-quiz" class="panel">
+  <div class="section-label">✅ IŞIĞIN YAYILMASI – 10 SORU</div>
+  <div id="quiz-container"></div>
+  <div class="score-bar" id="score-bar" style="display: none;">✨ Puan: <strong id="score-val">0</strong> / 10 &nbsp;|&nbsp; <span id="score-msg"></span></div>
+</div>
+
+<script>
+  // ---------- 10 SORULUK QUIZ ----------
+  const quizData = [
+    { q: "Işık nasıl yayılır?", opts: ["Dalgalı", "Doğrusal", "Eğrisel", "Zikzak"], a: 1, exp: "Işık, her yöne doğrusal (düz) olarak yayılır." },
+    { q: "Aşağıdakilerden hangisi doğal ışık kaynağı değildir?", opts: ["Güneş", "Yıldızlar", "Ampul", "Ateş böceği"], a: 2, exp: "Ampul, insan yapımı yapay ışık kaynağıdır." },
+    { q: "Işığın doğrusal yayıldığını kanıtlayan olaylardan biri hangisidir?", opts: ["Yağmur", "Rüzgar", "Gölge oluşumu", "Ses yankısı"], a: 2, exp: "Gölge, ışığın doğrusal yayılması sayesinde oluşur." },
+    { q: "Aşağıdakilerden hangisi yapay ışık kaynağıdır?", opts: ["Yıldırım", "Meşale", "Güneş", "Ateş böceği"], a: 1, exp: "Meşale, insan tarafından oluşturulan yapay ışık kaynağıdır." },
+    { q: "Işık ışınları çizilirken hangi yönde ok işareti konulur?", opts: ["Işık kaynağına doğru", "Işık kaynağından dışarı doğru", "Her iki yöne", "Ok işareti konulmaz"], a: 1, exp: "Işın, kaynaktan çıkan yönü göstermek için dışarı doğru çizilir." },
+    { q: "Opak bir cismin arkasında gölge oluşmasının sebebi nedir?", opts: ["Işığın kırılması", "Işığın yansıması", "Işığın doğrusal yayılıp cismin engellemesi", "Işığın hızlanması"], a: 2, exp: "Işık doğrusal yayıldığı için opak cisim ışığı engeller ve arkada gölge oluşur." },
+    { q: "Hangisi ışığın doğrusal yayılımına örnek değildir?", opts: ["Lazer ışını", "Boru deneyi", "Güneş tutulması", "Aynada görüntü oluşması"], a: 3, exp: "Ayna yansıması farklı bir olaydır; doğrusal yayılımın kanıtı değildir." },
+    { q: "Ay tutulması sırasında Ay hangi gölge içine girer?", opts: ["Ay'ın gölgesi", "Güneş'in gölgesi", "Dünya'nın gölgesi", "Yıldızların gölgesi"], a: 2, exp: "Ay tutulması, Dünya'nın gölgesinin Ay'ın üzerine düşmesidir." },
+    { q: "Bir ışık kaynağından çıkan ışınlar için hangisi doğrudur?", opts: ["Sadece tek yöne gider", "Her yöne doğrusal gider", "Sadece yukarı yayılır", "Engellerden döner"], a: 1, exp: "Işık kaynağından her yöne doğrusal olarak ışınlar yayılır." },
+    { q: "Işık ile ilgili aşağıdakilerden hangisi yanlıştır?", opts: ["Işık bir enerjidir", "Işık maddedir", "Işık kaynakları tarafından üretilir", "Işık boşlukta yayılır"], a: 1, exp: "Işık madde değil, enerji çeşididir." }
+  ];
+  let quizAnswered = new Array(10).fill(false);
+  let quizScores = new Array(10).fill(false);
+
+  function buildQuiz() {
+    const container = document.getElementById('quiz-container');
+    if (!container) return;
+    container.innerHTML = '';
+    quizData.forEach((q, idx) => {
+      const div = document.createElement('div'); div.className = 'quiz-q';
+      let optsHtml = '';
+      q.opts.forEach((opt, optIdx) => {
+        optsHtml += `<button class="quiz-opt" onclick="checkQuiz(${idx}, ${optIdx})" id="qzopt${idx}_${optIdx}">${opt}</button><br>`;
+      });
+      div.innerHTML = `<p><strong>Soru ${idx+1}:</strong> ${q.q}</p><div class="quiz-opts">${optsHtml}</div><div class="quiz-fb" id="qzfb${idx}"></div>`;
+      container.appendChild(div);
+    });
+  }
+
+  function checkQuiz(qIdx, chosen) {
+    if (quizAnswered[qIdx]) return;
+    quizAnswered[qIdx] = true;
+    const q = quizData[qIdx];
+    const isCorrect = (chosen === q.a);
+    quizScores[qIdx] = isCorrect;
+    for (let i = 0; i < q.opts.length; i++) {
+      const btn = document.getElementById(`qzopt${qIdx}_${i}`);
+      if (btn) { btn.disabled = true; if (i === q.a) btn.classList.add('correct'); else if (i === chosen && !isCorrect) btn.classList.add('wrong'); }
+    }
+    const fbDiv = document.getElementById(`qzfb${qIdx}`);
+    fbDiv.style.display = 'block';
+    fbDiv.className = `quiz-fb show ${isCorrect ? 'ok' : 'nope'}`;
+    fbDiv.textContent = isCorrect ? `✓ Doğru! ${q.exp}` : `✗ Yanlış! Doğru: ${q.opts[q.a]}. ${q.exp}`;
+    if (quizAnswered.every(v => v === true)) {
+      const total = quizScores.filter(Boolean).length;
+      document.getElementById('score-val').innerHTML = total;
+      let msg = total <= 4 ? '📖 Işık konusunu tekrar et, etkinliklere göz at!' : (total <= 7 ? '💡 İyi! Biraz daha pratik yap.' : (total <= 9 ? '🎉 Harikasın! Işık Uzmanısın!' : '🏆 Mükemmel! Işık doğrusal, senin başarın parlak!'));
+      document.getElementById('score-msg').innerHTML = msg;
+      document.getElementById('score-bar').style.display = 'flex';
+    }
+  }
+  window.checkQuiz = checkQuiz;
+
+  // ---------- SÜRÜKLE BIRAK (DOĞRU/YANLIŞ) ----------
+  let draggedItem = null;
+  document.addEventListener('dragstart', (e) => {
+    if (e.target.classList.contains('drag-statement') || e.target.classList.contains('drag-word')) {
+      draggedItem = e.target;
+      e.target.classList.add('dragging');
+      e.dataTransfer.setData('text/plain', e.target.innerText);
+      e.dataTransfer.effectAllowed = 'move';
+    }
+  });
+  document.addEventListener('dragend', (e) => {
+    if (e.target.classList.contains('drag-statement') || e.target.classList.contains('drag-word')) e.target.classList.remove('dragging');
+    draggedItem = null;
+  });
+  const dropZones = document.querySelectorAll('.drop-zone');
+  dropZones.forEach(zone => {
+    zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', () => { zone.classList.remove('drag-over'); });
+    zone.addEventListener('drop', (e) => {
+      e.preventDefault(); zone.classList.remove('drag-over');
+      if (!draggedItem) return;
+      if (draggedItem.classList.contains('drag-statement')) {
+        const isTrueZone = zone.getAttribute('data-zone') === 'true';
+        const statementTruth = draggedItem.getAttribute('data-tf') === 'true';
+        if (isTrueZone !== statementTruth) { alert('❌ Bu ifade buraya ait değil! Tekrar dene.'); return; }
+        const targetList = zone.querySelector('.dropped-items');
+        const badge = document.createElement('div'); badge.className = 'dropped-badge'; badge.innerText = draggedItem.innerText;
+        targetList.appendChild(badge);
+        draggedItem.remove(); draggedItem = null;
+      }
+    });
+  });
+  // Fill-in boşluklar
+  const fillSlots = document.querySelectorAll('.drop-slot');
+  fillSlots.forEach(slot => {
+    slot.addEventListener('dragover', (e) => { e.preventDefault(); slot.style.backgroundColor = '#FCE2C1'; });
+    slot.addEventListener('dragleave', () => { if (!slot.classList.contains('filled')) slot.style.backgroundColor = '#F3E5CD'; });
+    slot.addEventListener('drop', (e) => {
+      e.preventDefault(); slot.style.backgroundColor = '#F3E5CD';
+      if (!draggedItem || !draggedItem.classList.contains('drag-word')) return;
+      const correctAnswer = slot.getAttribute('data-correct');
+      const droppedWord = draggedItem.getAttribute('data-fillword');
+      if (correctAnswer === droppedWord) {
+        if (slot.classList.contains('filled')) return;
+        slot.innerText = droppedWord; slot.classList.add('filled');
+        draggedItem.remove(); draggedItem = null;
+      } else { alert(`Yanlış kelime! "${droppedWord}" bu boşluğa uygun değil.`); }
+    });
+  });
+
+  // RESET DOĞRU/YANLIŞ
+  function resetTF() {
+    const trueDiv = document.getElementById('trueDropped'); const falseDiv = document.getElementById('falseDropped');
+    trueDiv.innerHTML = ''; falseDiv.innerHTML = '';
+    const originalStatements = [
+      "1. Işık her yöne doğrusal olarak yayılır.", "2. Ay kendiliğinden ışık üreten bir ışık kaynağıdır.",
+      "3. Mum ve el feneri yapay ışık kaynaklarıdır.", "4. Işık eğri bir yol izler.",
+      "5. Gölge oluşumu ışığın doğrusal yayıldığının kanıtıdır.", "6. Yıldırım ve şimşek doğal ışık kaynağıdır.",
+      "7. Opak cismin arkasını net olarak görebiliriz.", "8. Lazer ışını doğrusal yayılır.",
+      "9. Işık enerjisi değil, maddedir.", "10. Güneş tutulması Ay'ın Güneş ile Dünya arasına girmesiyle oluşur."
+    ];
+    const tfVals = ["true","false","true","false","true","true","false","true","false","true"];
+    const container = document.getElementById('tf-items-container');
+    container.innerHTML = '';
+    for (let i = 0; i < originalStatements.length; i++) {
+      const div = document.createElement('div');
+      div.className = 'drag-statement';
+      div.setAttribute('draggable', 'true');
+      div.setAttribute('data-tf', tfVals[i]);
+      div.innerText = originalStatements[i];
+      container.appendChild(div);
+    }
+    draggedItem = null;
+  }
+  // RESET BOŞLUK
+  function resetFill() {
+    const bank = document.getElementById('fillWordBank');
+    const originalWords = ["doğrusal","doğal","yapay","gölge","ışın","opak","Güneş","lazer","enerji","tutulma"];
+    bank.innerHTML = '';
+    originalWords.forEach(w => {
+      const wordDiv = document.createElement('div');
+      wordDiv.className = 'drag-word';
+      wordDiv.setAttribute('draggable', 'true');
+      wordDiv.setAttribute('data-fillword', w);
+      wordDiv.innerText = w;
+      bank.appendChild(wordDiv);
+    });
+    const slots = document.querySelectorAll('.drop-slot');
+    const placeholders = ["______","______","______","______","______","______","______","______","______","______"];
+    slots.forEach((slot, idx) => {
+      slot.innerText = placeholders[idx];
+      slot.classList.remove('filled');
+      slot.style.backgroundColor = '#F3E5CD';
+    });
+    draggedItem = null;
+  }
+  document.getElementById('resetTFBtn')?.addEventListener('click', resetTF);
+  document.getElementById('resetFillBtn')?.addEventListener('click', resetFill);
+
+  function showTab(tabId, btn) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(`tab-${tabId}`).classList.add('active');
+    btn.classList.add('active');
+  }
+  window.showTab = showTab;
+  buildQuiz();
+</script>
+</body>
+</html>

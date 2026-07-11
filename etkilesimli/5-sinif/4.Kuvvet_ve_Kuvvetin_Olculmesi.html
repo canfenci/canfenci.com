@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kuvvet ve Kuvvetin Ölçülmesi</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Tahoma,sans-serif;background:#F4F0FF;color:#1a1a2e;padding:20px;max-width:820px;margin:auto;line-height:1.6}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#5C2D91 0%,#7B3FC9 50%,#9B59B6 100%);border-radius:18px;padding:1.75rem 2rem;margin-bottom:20px;color:#fff;display:flex;align-items:center;gap:20px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;right:-30px;top:-30px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,0.07)}
+.hero-icon{font-size:60px;filter:drop-shadow(0 0 14px rgba(255,220,255,0.5));flex-shrink:0}
+.hero h1{font-size:22px;font-weight:800;color:#EDE7FF;margin-bottom:4px}
+.hero p{font-size:13px;opacity:.85;line-height:1.6}
+.hero .kaz{display:inline-block;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);border-radius:6px;font-size:11px;color:#E0D0FF;padding:3px 10px;margin-top:6px}
+
+/* TABS */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.tab{padding:8px 16px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;border:2px solid #7B3FC9;background:#fff;color:#7B3FC9;transition:all .18s}
+.tab.active{background:#7B3FC9;color:#fff}
+.tab:hover:not(.active){background:#F0E6FF}
+
+.panel{display:none}
+.panel.active{display:block}
+
+.slabel{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#9070BB;margin:18px 0 10px}
+
+/* CHUNK GRID */
+.cg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.chunk{border-radius:12px;padding:14px;border:1.5px solid;background:#fff}
+.chunk h4{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.chunk ul{list-style:none;font-size:13px;color:#444;line-height:1.9}
+.chunk ul li{display:flex;align-items:flex-start;gap:6px}
+.chunk ul li::before{content:'›';font-weight:700;flex-shrink:0}
+.c1{border-color:#C9A0FF} .c1 h4{color:#5C2D91} .c1 li::before{color:#7B3FC9}
+.c2{border-color:#A0C8FF} .c2 h4{color:#0044AA} .c2 li::before{color:#3399FF}
+.c3{border-color:#A0E8C0} .c3 h4{color:#006633} .c3 li::before{color:#22AA66}
+.c4{border-color:#FFD0A0} .c4 h4{color:#AA5500} .c4 li::before{color:#DD7700}
+
+/* INFO CARD */
+.icard{border-radius:12px;padding:14px 16px;border:1px solid #D5C5F0;background:#fff;margin-bottom:10px}
+.icard h3{font-size:14px;font-weight:700;color:#5C2D91;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.icard p{font-size:13px;color:#444;line-height:1.7}
+
+/* STAT CARDS */
+.scards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.scard{border-radius:12px;padding:14px;border:1px solid #D5C5F0;background:#fff;text-align:center}
+.scard .si{font-size:28px;margin-bottom:6px}
+.scard .sl{font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+.scard .sv{font-size:18px;font-weight:800;color:#5C2D91;line-height:1.2}
+.scard .sn{font-size:11px;color:#888;margin-top:4px;line-height:1.4}
+
+/* KUVVET OK VİZÜEL */
+.force-visual{background:#fff;border-radius:14px;border:1.5px solid #D5C5F0;padding:16px;margin-bottom:12px;text-align:center}
+.force-visual p{font-size:12px;color:#777;margin-top:8px}
+
+/* DİNAMOMETRE DIAGRAM */
+.dyn-wrap{display:flex;gap:16px;align-items:flex-start;margin-bottom:14px}
+.dyn-svg{flex-shrink:0}
+.dyn-info{flex:1}
+.dyn-info h4{font-size:14px;font-weight:700;color:#5C2D91;margin-bottom:10px}
+.dyn-info ul{list-style:none;font-size:13px;color:#444;line-height:2}
+.dyn-info ul li::before{content:'⚙ ';color:#7B3FC9}
+
+/* HESAP KUTUSU */
+.calc-box{background:#F0E6FF;border-radius:12px;padding:14px 16px;border:1.5px solid #B090E0;margin-bottom:12px}
+.calc-box h4{font-size:13px;font-weight:700;color:#5C2D91;margin-bottom:10px}
+.calc-step{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:13px;color:#333}
+.calc-step .badge{background:#7B3FC9;color:#fff;border-radius:6px;padding:2px 9px;font-size:11px;font-weight:700;flex-shrink:0}
+.calc-result{font-size:17px;font-weight:800;color:#5C2D91;text-align:center;padding:8px;background:#fff;border-radius:8px;margin-top:8px}
+
+/* ORAN VİZÜEL */
+.ratio-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.ratio-item{background:#fff;border-radius:12px;border:1.5px solid #D5C5F0;padding:12px;text-align:center}
+.ratio-item .rf{font-size:22px;font-weight:800;color:#5C2D91}
+.ratio-item .rv{font-size:22px;font-weight:800;color:#DD7700}
+.ratio-item .rl{font-size:12px;color:#888;margin-top:4px}
+
+/* MNEMONIC */
+.mbox{border-radius:12px;padding:16px;background:#FFFBE6;border:1.5px solid #FFD000;margin-bottom:14px}
+.mbox h3{font-size:13px;font-weight:800;color:#7A5800;margin-bottom:12px}
+.mrow{display:flex;align-items:flex-start;gap:10px;margin-bottom:9px}
+.ml{width:32px;height:32px;border-radius:8px;background:#5C2D91;color:#EDE7FF;font-size:16px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mt{font-size:13px;color:#5A3E00;line-height:1.6;padding-top:4px}
+.mt strong{color:#7B3FC9}
+
+/* ZINCIR */
+.chain{background:#fff;border-radius:12px;border:1.5px solid #D5C5F0;padding:14px;margin-bottom:12px}
+.chain h4{font-size:13px;font-weight:700;color:#5C2D91;margin-bottom:8px}
+.chain-row{display:flex;align-items:center;gap:6px;font-size:13px;color:#444;margin-bottom:6px;flex-wrap:wrap}
+.chain-row .cr{background:#7B3FC9;color:#fff;border-radius:6px;padding:3px 10px;font-size:12px;font-weight:600}
+.chain-row .ca{color:#7B3FC9;font-size:16px;font-weight:700}
+.chain-row .ce{background:#F0E6FF;border-radius:6px;padding:3px 10px;font-size:12px;color:#5C2D91}
+
+/* TIMELINE */
+.tl{position:relative;padding-left:22px;margin-bottom:12px}
+.tl::before{content:'';position:absolute;left:6px;top:4px;bottom:4px;width:2px;background:#D5C5F0}
+.tli{position:relative;margin-bottom:14px}
+.tldot{position:absolute;left:-18px;top:5px;width:12px;height:12px;border-radius:50%;background:#7B3FC9}
+.tli h4{font-size:13px;font-weight:700;color:#1a1a2e;margin-bottom:2px}
+.tli p{font-size:12px;color:#555;line-height:1.5}
+.tli .badge{display:inline-block;font-size:10px;font-weight:700;padding:1px 7px;border-radius:5px;background:#EDE7FF;color:#5C2D91;margin-left:6px}
+
+/* TEKRAR PLANI */
+.rplan{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.rp{border-radius:10px;padding:10px;background:#fff;border:1.5px solid #D5C5F0;text-align:center}
+.rp .ri{font-size:22px;margin-bottom:4px}
+.rp .rt{font-size:11px;font-weight:700;color:#7B3FC9}
+.rp .rd{font-size:11px;color:#666;margin-top:3px;line-height:1.4}
+
+/* QUIZ */
+.quiz-q{border-radius:12px;border:1.5px solid #D5C5F0;background:#fff;padding:14px 16px;margin-bottom:12px}
+.quiz-q .qno{font-size:10px;color:#7B3FC9;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.quiz-q p{font-size:14px;font-weight:600;color:#1a1a2e;margin-bottom:10px;line-height:1.5}
+.qopts{display:flex;flex-direction:column;gap:6px}
+.qopt{padding:9px 14px;border-radius:8px;border:1.5px solid #ddd;background:#fafafa;font-size:13px;cursor:pointer;color:#333;text-align:left;font-family:'Segoe UI',sans-serif;transition:all .15s}
+.qopt:hover:not(:disabled){border-color:#7B3FC9;color:#5C2D91;background:#F0E6FF}
+.qopt.correct{background:#E6F9F0;border-color:#22AA66;color:#006633;font-weight:600}
+.qopt.wrong{background:#FFEBEB;border-color:#CC2222;color:#AA0000}
+.qopt:disabled{cursor:default}
+.qfb{font-size:12px;margin-top:8px;padding:7px 10px;border-radius:8px;display:none;line-height:1.5}
+.qfb.show{display:block}
+.qfb.ok{background:#E6F9F0;color:#006633}
+.qfb.nope{background:#FFEBEB;color:#AA0000}
+.score-bar{display:flex;align-items:center;gap:10px;margin-top:14px;padding:14px 16px;border-radius:12px;background:linear-gradient(135deg,#5C2D91,#7B3FC9);color:#EDE7FF;font-size:14px}
+.score-bar strong{font-size:22px;color:#FFD0FF}
+
+@media(max-width:580px){.cg{grid-template-columns:1fr}.dyn-wrap{flex-direction:column}.rplan{grid-template-columns:1fr 1fr}.ratio-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-icon">⚖️</div>
+  <div>
+    <h1>Kuvvet ve Kuvvetin Ölçülmesi</h1>
+    <p>5. Sınıf Fen Bilimleri · 2. Ünite · 4. Fasikül<br>
+    Hafıza teknikleriyle kalıcı öğrenme</p>
+    <span class="kaz">F.5.2 — Kuvveti Tanıyalım</span>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('temel',this)">📚 Temel Bilgiler</button>
+  <button class="tab" onclick="showTab('dinamometre',this)">🔧 Dinamometre</button>
+  <button class="tab" onclick="showTab('hafiza',this)">🧠 Hafıza Tekniği</button>
+  <button class="tab" onclick="showTab('quiz',this)">✅ Quiz (10 Soru)</button>
+</div>
+
+<!-- ===================== PANEL 1: TEMEL BİLGİLER ===================== -->
+<div id="tab-temel" class="panel active">
+
+  <div class="slabel">Kuvvet Nedir? — Görsel Tanım</div>
+  <div class="force-visual">
+    <svg width="380" height="110" viewBox="0 0 380 110" xmlns="http://www.w3.org/2000/svg">
+      <!-- Cisim -->
+      <rect x="150" y="30" width="80" height="60" rx="8" fill="#EDE7FF" stroke="#7B3FC9" stroke-width="2"/>
+      <text x="190" y="65" text-anchor="middle" font-size="11" fill="#5C2D91" font-weight="bold">CİSİM</text>
+      <!-- İtme oku (soldan) -->
+      <line x1="30" y1="60" x2="145" y2="60" stroke="#DD7700" stroke-width="3" marker-end="url(#arrowOrange)"/>
+      <text x="85" y="52" text-anchor="middle" font-size="11" fill="#DD7700" font-weight="bold">İTME</text>
+      <text x="85" y="80" text-anchor="middle" font-size="10" fill="#888">F₁</text>
+      <!-- Çekme oku (sağa) -->
+      <line x1="235" y1="60" x2="350" y2="60" stroke="#2266CC" stroke-width="3" marker-end="url(#arrowBlue)"/>
+      <text x="293" y="52" text-anchor="middle" font-size="11" fill="#2266CC" font-weight="bold">ÇEKME</text>
+      <text x="293" y="80" text-anchor="middle" font-size="10" fill="#888">F₂</text>
+      <!-- Okların ucu yön gösteriyor -->
+      <defs>
+        <marker id="arrowOrange" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#DD7700"/>
+        </marker>
+        <marker id="arrowBlue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#2266CC"/>
+        </marker>
+      </defs>
+    </svg>
+    <p>Kuvvet bir <strong>yön</strong> ve <strong>büyüklük</strong> içerir — ok ile gösterilir. Okun uzunluğu = kuvvetin büyüklüğü</p>
+  </div>
+
+  <div class="slabel">4 Grupta Chunking — Kuvveti Tanı</div>
+  <div class="cg">
+    <div class="chunk c1">
+      <h4>⚡ Kuvvet Nedir?</h4>
+      <ul>
+        <li>Cisimleri harekete geçirir</li>
+        <li>Hızlandırır veya yavaşlatır</li>
+        <li>Hareket yönünü değiştirir</li>
+        <li>Şekil değişikliği yapar</li>
+      </ul>
+    </div>
+    <div class="chunk c2">
+      <h4>📐 Kuvvetin Özellikleri</h4>
+      <ul>
+        <li>"F" harfi ile gösterilir</li>
+        <li>Birimi: Newton (N)</li>
+        <li>Dinamometre ile ölçülür</li>
+        <li>Yönü: ok işareti ile gösterilir</li>
+      </ul>
+    </div>
+    <div class="chunk c3">
+      <h4>🔀 Kuvvet Çeşitleri</h4>
+      <ul>
+        <li>İtme kuvveti 👋</li>
+        <li>Çekme kuvveti 🔗</li>
+        <li>Sürtünme kuvveti 🔄</li>
+        <li>Yer çekimi · Manyetik · Esneme</li>
+      </ul>
+    </div>
+    <div class="chunk c4">
+      <h4>🧸 Esnek Cisimler</h4>
+      <ul>
+        <li>Kuvvetle şekli değişir</li>
+        <li>Kuvvet kalkınca eski hale döner</li>
+        <li>Yay · Sünger · Silgi · Lastik</li>
+        <li>Esneme sınırı aşılırsa bozulur!</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="slabel">Kuvvet Çeşitleri — Görsel Eşleştirme</div>
+  <div class="scards">
+    <div class="scard"><div class="si">👊</div><div class="sl">İtme Kuvveti</div><div class="sv">İtmek</div><div class="sn">Arabayı öne itmek</div></div>
+    <div class="scard"><div class="si">🔗</div><div class="sl">Çekme Kuvveti</div><div class="sv">Çekmek</div><div class="sn">Halat çekmek</div></div>
+    <div class="scard"><div class="si">🛑</div><div class="sl">Sürtünme</div><div class="sv">Yavaşlatır</div><div class="sn">Zemin freni gibi</div></div>
+    <div class="scard"><div class="si">🌍</div><div class="sl">Yer Çekimi</div><div class="sv">Aşağı çeker</div><div class="sn">Newton'ın elması!</div></div>
+    <div class="scard"><div class="si">🧲</div><div class="sl">Manyetik</div><div class="sv">Çeker/iter</div><div class="sn">Mıknatıs etkisi</div></div>
+    <div class="scard"><div class="si">🌀</div><div class="sl">Esneme</div><div class="sv">Geri iter</div><div class="sn">Yay kuvveti</div></div>
+  </div>
+
+  <div class="slabel">Esnek Cisim — Zihinsel Canlandırma</div>
+  <div class="icard">
+    <h3>🌀 Elastik Bant Deneyi</h3>
+    <p>Bir silgiyi iki parmağınla bastır — şekli değişir. Bırak — eski haline döner. <strong>İşte bu esnekliktir!</strong> Ama çok zorlarsak silgi kırılır. Bu da <strong>esneme sınırını aşmak</strong> demektir. Dinamometreler de aynı mantıkla çalışır — içlerindeki yayın esneme sınırını asla geçmemelisin.</p>
+  </div>
+
+</div>
+
+<!-- ===================== PANEL 2: DİNAMOMETRE ===================== -->
+<div id="tab-dinamometre" class="panel">
+
+  <div class="slabel">Dinamometrenin Yapısı — Görsel Şema</div>
+  <div class="dyn-wrap">
+    <div class="dyn-svg">
+      <svg width="110" height="260" viewBox="0 0 110 260" xmlns="http://www.w3.org/2000/svg">
+        <!-- Gövde -->
+        <rect x="25" y="30" width="60" height="190" rx="12" fill="#EDE7FF" stroke="#7B3FC9" stroke-width="2.5"/>
+        <!-- Üst halka -->
+        <circle cx="55" cy="22" r="13" fill="none" stroke="#5C2D91" stroke-width="3"/>
+        <!-- İçteki yay (helezon) -->
+        <g stroke="#9B59B6" stroke-width="1.5" fill="none">
+          <path d="M40,55 Q55,62 70,55"/>
+          <path d="M40,65 Q55,72 70,65"/>
+          <path d="M40,75 Q55,82 70,75"/>
+          <path d="M40,85 Q55,92 70,85"/>
+          <path d="M40,95 Q55,102 70,95"/>
+          <path d="M40,105 Q55,112 70,105"/>
+          <path d="M40,115 Q55,122 70,115"/>
+          <path d="M40,125 Q55,132 70,125"/>
+        </g>
+        <!-- Skala çizgileri -->
+        <line x1="65" y1="50" x2="80" y2="50" stroke="#5C2D91" stroke-width="1.5"/>
+        <line x1="65" y1="75" x2="75" y2="75" stroke="#5C2D91" stroke-width="1"/>
+        <line x1="65" y1="100" x2="80" y2="100" stroke="#5C2D91" stroke-width="1.5"/>
+        <line x1="65" y1="125" x2="75" y2="125" stroke="#5C2D91" stroke-width="1"/>
+        <line x1="65" y1="150" x2="80" y2="150" stroke="#5C2D91" stroke-width="1.5"/>
+        <line x1="65" y1="175" x2="75" y2="175" stroke="#5C2D91" stroke-width="1"/>
+        <line x1="65" y1="200" x2="80" y2="200" stroke="#5C2D91" stroke-width="1.5"/>
+        <!-- Skala yazıları -->
+        <text x="83" y="53" font-size="9" fill="#5C2D91" font-weight="bold">0</text>
+        <text x="83" y="103" font-size="9" fill="#5C2D91" font-weight="bold">5</text>
+        <text x="80" y="153" font-size="9" fill="#5C2D91" font-weight="bold">10</text>
+        <text x="80" y="203" font-size="9" fill="#5C2D91" font-weight="bold">15</text>
+        <!-- Gösterge iğnesi -->
+        <line x1="35" y1="130" x2="65" y2="130" stroke="#DD0000" stroke-width="2"/>
+        <circle cx="35" cy="130" r="3" fill="#DD0000"/>
+        <!-- Alt kanca -->
+        <path d="M55,220 Q55,245 45,248 Q35,250 38,240" fill="none" stroke="#5C2D91" stroke-width="3"/>
+        <!-- Etiket -->
+        <text x="55" y="255" text-anchor="middle" font-size="9" fill="#888">20 N</text>
+      </svg>
+    </div>
+    <div class="dyn-info">
+      <h4>⚙️ Dinamometre Nasıl Çalışır?</h4>
+      <ul>
+        <li>İçinde esnek bir <strong>yay</strong> bulunur</li>
+        <li>Kuvvet arttıkça yay <strong>uzar</strong></li>
+        <li>Uzama = kuvvet büyüklüğü</li>
+        <li>Küçük kuvvet → <strong>ince yay</strong></li>
+        <li>Büyük kuvvet → <strong>kalın yay</strong></li>
+        <li>İnce yay daha <strong>hassas</strong> ölçer</li>
+        <li>Günlük el kantarı = dinamometre</li>
+        <li>Esneme sınırı geçilmez!</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="slabel">Bölme Değeri Hesabı — Adım Adım</div>
+  <div class="calc-box">
+    <h4>📏 1 Bölmenin Kaç Newton Olduğunu Nasıl Buluruz?</h4>
+    <div class="calc-step"><span class="badge">Formül</span> Bölme Değeri = Maksimum Kuvvet ÷ Bölme Sayısı</div>
+    <div class="calc-step"><span class="badge">Örnek</span> Maksimum: 100 N · Bölme sayısı: 10</div>
+    <div class="calc-step"><span class="badge">Hesap</span> 100 ÷ 10 = <strong>10 N / bölme</strong></div>
+    <div class="calc-result">1 Bölme = 10 Newton</div>
+  </div>
+
+  <div class="slabel">Kuvvet ↔ Uzama Orantısı — Doğru Orantı!</div>
+  <div class="ratio-grid">
+    <div class="ratio-item">
+      <div class="rf">5 N</div>
+      <div class="ca">→</div>
+      <div class="rv">1 bölme uzar</div>
+      <div class="rl">Kuvvet 2 katına çıkarsa…</div>
+    </div>
+    <div class="ratio-item">
+      <div class="rf">10 N</div>
+      <div class="ca">→</div>
+      <div class="rv">2 bölme uzar</div>
+      <div class="rl">Uzama da 2 katına çıkar!</div>
+    </div>
+  </div>
+
+  <div class="icard">
+    <h3>🔗 Kuvvet ve Uzama — Doğru Orantı Demek Ne?</h3>
+    <p>Kuvvet 2 katına çıkarsa yayın uzaması da 2 katına çıkar. Kuvvet 3 katına çıkarsa uzama da 3 katına çıkar. Bu ilişki <strong>doğru orantı</strong> dır. Grafik çizersen düz bir doğru elde edersin! 📈</p>
+  </div>
+
+  <div class="slabel">Dinamometre Seçimi — Hangi Durumda Hangisi?</div>
+  <div class="cg">
+    <div class="chunk c1">
+      <h4>🔬 İnce Yaylı Dinamometre</h4>
+      <ul>
+        <li>Küçük kuvvetler için</li>
+        <li>Daha hassas ölçüm yapar</li>
+        <li>Az kuvvette çok uzama</li>
+        <li>Laboratuvar deneyleri</li>
+      </ul>
+    </div>
+    <div class="chunk c4">
+      <h4>🏋️ Kalın Yaylı Dinamometre</h4>
+      <ul>
+        <li>Büyük kuvvetler için</li>
+        <li>Daha az hassas</li>
+        <li>Çok kuvvette az uzama</li>
+        <li>Endüstriyel kullanım</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="slabel">Isaac Newton — Kim Bu Adam?</div>
+  <div class="tl">
+    <div class="tli">
+      <div class="tldot"></div>
+      <h4>1643 — İngiltere'de Doğdu <span class="badge">Fizikçi & Matematikçi</span></h4>
+      <p>Dünyanın en önemli bilim insanlarından biri. Fiziğin ve matematiğin temellerini attı.</p>
+    </div>
+    <div class="tli">
+      <div class="tldot"></div>
+      <h4>🍎 Ağaçtan Düşen Elma</h4>
+      <p>Elmanın düşmesini gözlemleyerek <strong>yerçekimi kuvvetini</strong> (cisimleri aşağı çeken kuvvet) keşfetti ve açıkladı.</p>
+    </div>
+    <div class="tli">
+      <div class="tldot"></div>
+      <h4>🚗 Hareket Yasaları</h4>
+      <p>Arabalar, toplar ve gezegenler nasıl hareket eder? Newton'ın 3 hareket yasası bunu açıklar.</p>
+    </div>
+    <div class="tli">
+      <div class="tldot"></div>
+      <h4>🌈 Işık ve Gökkuşağı</h4>
+      <p>Işığın renklerden oluştuğunu prizma deneyleriyle gösterdi. Gökkuşağının sırrı Newton'dan gelir!</p>
+    </div>
+    <div class="tli">
+      <div class="tldot"></div>
+      <h4>🏆 Kuvvetin Birimi "Newton (N)"</h4>
+      <p>Bu devasa katkıları nedeniyle kuvvetin birimi onun adıyla <strong>Newton (N)</strong> olarak belirlendi.</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===================== PANEL 3: HAFIZA TEKNİĞİ ===================== -->
+<div id="tab-hafiza" class="panel">
+
+  <div class="slabel">🔡 Akrostiş — "KUVVET" ile Ezber</div>
+  <div class="mbox">
+    <h3>💡 "KUVVET" kelimesinin her harfi bir gerçeği anlatıyor:</h3>
+    <div class="mrow"><div class="ml">K</div><div class="mt"><strong>Kuvvet F harfi ile gösterilir</strong> — Newton (N) birimi ile ölçülür</div></div>
+    <div class="mrow"><div class="ml">U</div><div class="mt"><strong>Uzama ile ölçülür</strong> — Dinamometredeki yay kuvvet artınca uzar</div></div>
+    <div class="mrow"><div class="ml">V</div><div class="mt"><strong>Vektördür</strong> — Yönü vardır, ok ile gösterilir; ok uzadıkça kuvvet büyür</div></div>
+    <div class="mrow"><div class="ml">V</div><div class="mt"><strong>Var olan çeşitleri</strong> — İtme, çekme, sürtünme, yer çekimi, manyetik, esneme</div></div>
+    <div class="mrow"><div class="ml">E</div><div class="mt"><strong>Esnek cisimlerde</strong> — Yay, sünger, silgi, lastik kuvvetle şekil değiştirir</div></div>
+    <div class="mrow"><div class="ml">T</div><div class="mt"><strong>Terim: Newton</strong> — Isaac Newton'ın şerefine kuvvetin birimi adlandırıldı</div></div>
+  </div>
+
+  <div class="slabel">🔗 Neden-Sonuç Zinciri — Mantıkla Ezberle</div>
+  <div class="chain">
+    <h4>Dinamometre Nasıl Çalışır?</h4>
+    <div class="chain-row"><span class="cr">Kuvvet uygulandı</span><span class="ca">→</span><span class="ce">Yay uzar</span><span class="ca">→</span><span class="ce">İbre kayar</span><span class="ca">→</span><span class="ce">Değer okunur</span></div>
+    <div class="chain-row"><span class="cr">Kuvvet büyürse</span><span class="ca">→</span><span class="ce">Uzama artar</span><span class="ca">→</span><span class="ce">Doğru orantı!</span></div>
+    <div class="chain-row"><span class="cr">Esneme sınırı aşılırsa</span><span class="ca">→</span><span class="ce">Yay bozulur</span><span class="ca">→</span><span class="ce">Ölçüm hatalı</span></div>
+  </div>
+
+  <div class="slabel">🎯 Görsel Bağlantı — Elma ve Newton</div>
+  <div class="icard">
+    <h3>🍎 Zihninde Canlandır</h3>
+    <p>1643 yılında İngiltere'deki bir bahçede genç Newton ağacın altında oturuyor. Bir elma aniden düşüyor... Newton düşünüyor: <em>"Neden elma yere düştü? Neden Ay da yere düşmüyor?"</em> Bu soru onu <strong>yerçekimi kuvvetini</strong> keşfetmeye götürdü. Ve bugün kuvveti N (Newton) birimiyle ölçüyoruz — işte bu yüzden!</p>
+  </div>
+
+  <div class="slabel">🧩 Chunking ile Hızlı Tekrar Grupları</div>
+  <div class="cg">
+    <div class="chunk c1"><h4>GRUP 1 — KİMLİK</h4><ul><li>F harfi, N birimi</li><li>Dinamometre ile ölçülür</li><li>Yönü ok ile gösterilir</li></ul></div>
+    <div class="chunk c2"><h4>GRUP 2 — ÇEŞİTLER</h4><ul><li>İtme & Çekme</li><li>Sürtünme & Yer çekimi</li><li>Manyetik & Esneme</li></ul></div>
+    <div class="chunk c3"><h4>GRUP 3 — ESNEK</h4><ul><li>Yay, sünger, silgi, lastik</li><li>Kuvvet → şekil değişir</li><li>Kuvvet kalkar → eski hal</li></ul></div>
+    <div class="chunk c4"><h4>GRUP 4 — DİNAMOMETRE</h4><ul><li>Bölme = Max ÷ Bölme sayısı</li><li>Kuvvet ↑ → Uzama ↑</li><li>İnce yay → hassas ölçüm</li></ul></div>
+  </div>
+
+  <div class="slabel">📅 Tekrar Planı (Spaced Repetition)</div>
+  <div class="rplan">
+    <div class="rp"><div class="ri">📖</div><div class="rt">Bugün</div><div class="rd">Tüm sekmeleri oku, quiz çöz</div></div>
+    <div class="rp"><div class="ri">🔢</div><div class="rt">Yarın</div><div class="rd">Stat kartları & bölme hesabı</div></div>
+    <div class="rp"><div class="ri">⚖️</div><div class="rt">3. Gün</div><div class="rd">Akrostiş "KUVVET" ezberden söyle</div></div>
+    <div class="rp"><div class="ri">✅</div><div class="rt">1 Hafta</div><div class="rd">Quiz tekrar çöz, yanlışları oku</div></div>
+  </div>
+
+</div>
+
+<!-- ===================== PANEL 4: QUIZ ===================== -->
+<div id="tab-quiz" class="panel">
+  <div class="slabel">10 Soruluk Mini Quiz</div>
+  <div id="quiz-container"></div>
+  <div class="score-bar" id="score-bar" style="display:none">
+    ⚖️ Toplam: <strong id="score-val">0</strong>/10 &nbsp;·&nbsp; <span id="score-msg" style="font-size:13px"></span>
+  </div>
+</div>
+
+<script>
+const qs=[
+  {q:"Kuvvetin birimi nedir?",opts:["Kilogram (kg)","Newton (N)","Metre (m)","Joule (J)"],a:1,exp:"Kuvvetin birimi Newton (N)'dur. Bu isim, yer çekimini keşfeden bilim insanı Isaac Newton'dan gelir."},
+  {q:"Kuvveti ölçmekte kullanılan alet hangisidir?",opts:["Termometre","Barometre","Dinamometre","Higrometre"],a:2,exp:"Kuvveti ölçen alete dinamometre denir. İçindeki yayın uzama miktarını ölçerek kuvveti belirler."},
+  {q:"Kuvvet hangi harfle gösterilir?",opts:["K","N","V","F"],a:3,exp:"Kuvvet 'F' harfi ile gösterilir. F, İngilizcede Force (kuvvet) kelimesinin baş harfidir."},
+  {q:"Aşağıdakilerden hangisi esnek bir cisim değildir?",opts:["Yay","Sünger","Taş","Balon"],a:2,exp:"Taş esnek bir cisim değildir. Kuvvet uygulandığında şekli değişmez. Yay, sünger ve balon ise esnektir."},
+  {q:"Kuvvetin yönü nasıl gösterilir?",opts:["Sayı ile","Ok işareti ile","Renk ile","Harf ile"],a:1,exp:"Kuvvetin yönü ok işareti ile gösterilir. Okun uzunluğu arttıkça kuvvetin büyüklüğü de artar."},
+  {q:"Maksimum değeri 50 N, bölme sayısı 10 olan bir dinamometrede 1 bölme kaç Newton'dır?",opts:["1 N","5 N","10 N","50 N"],a:1,exp:"Bölme değeri = Maksimum ÷ Bölme sayısı = 50 ÷ 10 = 5 N. Her bölme 5 Newton'a eşittir."},
+  {q:"Dinamometre hangi özelliği sayesinde kuvveti ölçebilir?",opts:["Isı genleşmesi","Işık yansıması","Yayların esnekliği","Elektrik akımı"],a:2,exp:"Dinamometreler, yayların esneklik özelliği kullanılarak tasarlanmıştır. Kuvvet arttıkça yay uzar."},
+  {q:"Bir dinamometreye uygulanan kuvvet 2 katına çıkarsa yayın uzaması nasıl değişir?",opts:["Değişmez","Yarıya iner","2 katına çıkar","4 katına çıkar"],a:2,exp:"Kuvvet ile uzama doğru orantılıdır. Kuvvet 2 katına çıkarsa uzama da 2 katına çıkar."},
+  {q:"Küçük kuvvetleri ölçmek için nasıl bir yay kullanılır?",opts:["Kalın yay","İnce yay","Kısa yay","Uzun yay"],a:1,exp:"Küçük kuvvetleri ölçmek için ince yaylar kullanılır. İnce yaylı dinamometreler daha hassas ölçüm yapar."},
+  {q:"Isaac Newton kuvvetin birimi olarak anılmasının nedeni nedir?",opts:["İlk dinamometreyi icat etti","Yer çekimi ve hareket yasalarını keşfetti","İlk kez kuvvet ölçtü","Dinamometre fabrikası kurdu"],a:1,exp:"Newton, yerçekimi kuvvetini ve hareket yasalarını keşfederek fiziğe devasa katkılar sağladı. Bu nedenle kuvvetin birimi onun adıyla Newton (N) olarak belirlendi."}
+];
+
+let answered=new Array(qs.length).fill(false);
+let scores=new Array(qs.length).fill(false);
+
+function buildQuiz(){
+  const c=document.getElementById('quiz-container');
+  qs.forEach((q,i)=>{
+    const div=document.createElement('div');
+    div.className='quiz-q';
+    div.id='q'+i;
+    const optsHtml=q.opts.map((o,j)=>`<button class="qopt" onclick="checkAns(${i},${j})" id="o${i}_${j}">${o}</button>`).join('');
+    div.innerHTML=`<div class="qno">Soru ${i+1} / 10</div><p>${q.q}</p><div class="qopts">${optsHtml}</div><div class="qfb" id="fb${i}"></div>`;
+    c.appendChild(div);
+  });
+}
+
+function checkAns(qi,chosen){
+  if(answered[qi])return;
+  answered[qi]=true;
+  const q=qs[qi];
+  const correct=chosen===q.a;
+  scores[qi]=correct;
+  for(let j=0;j<q.opts.length;j++){
+    const btn=document.getElementById('o'+qi+'_'+j);
+    btn.disabled=true;
+    if(j===q.a)btn.classList.add('correct');
+    else if(j===chosen&&!correct)btn.classList.add('wrong');
+  }
+  const fb=document.getElementById('fb'+qi);
+  fb.className='qfb show '+(correct?'ok':'nope');
+  fb.textContent=(correct?'✓ Doğru! ':'✗ Yanlış. ')+q.exp;
+  if(answered.every(Boolean)){
+    const total=scores.filter(Boolean).length;
+    document.getElementById('score-val').textContent=total;
+    const msgs=['Hafıza tekniklerine dön, tekrar dene! 💪','Fena değil, biraz daha çalış! 📚','Çok iyi, az kaldı! 👍','Mükemmel! Kuvvet Uzmanısın! ⚖️'];
+    document.getElementById('score-msg').textContent=msgs[total<4?0:total<7?1:total<10?2:3];
+    document.getElementById('score-bar').style.display='flex';
+  }
+}
+
+function showTab(id,el){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  el.classList.add('active');
+}
+
+buildQuiz();
+</script>
+</body>
+</html>

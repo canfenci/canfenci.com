@@ -1,0 +1,14 @@
+# macOS
+.DS_Store
+
+# Eski git deposu
+canfenci/
+
+# Geçici dosyalar
+*.py
+*.pyc
+__pycache__/
+
+# IDE
+.vscode/
+.idea/

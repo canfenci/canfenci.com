@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>5. Sınıf Fen: Tam Gölgenin Oluşumu | Hafıza Teknikleri + Etkinlikler</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    background: #F2F4F8;
+    color: #1C2A3A;
+    padding: 24px 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  :root {
+    --shadow-dark: #2C3E50;
+    --shadow-mid: #5D6D7E;
+    --shadow-light: #D5DBDB;
+    --accent-orange: #E67E22;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, #1E2A3A, #2C3E50);
+    border-radius: 32px;
+    padding: 1.6rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 28px;
+    color: white;
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+  }
+  .hero-icon {
+    font-size: 68px;
+    filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3));
+  }
+  .hero h2 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+  }
+  .hero p {
+    font-size: 0.85rem;
+    opacity: 0.9;
+    margin-top: 6px;
+  }
+
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .tab {
+    background: white;
+    border: none;
+    padding: 8px 24px;
+    border-radius: 60px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: 0.2s;
+    color: #2C3E50;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    border: 1px solid #BFC9D2;
+  }
+  .tab.active {
+    background: var(--shadow-dark);
+    color: white;
+    border-color: var(--shadow-dark);
+    box-shadow: 0 6px 12px rgba(44,62,80,0.3);
+  }
+  .panel {
+    display: none;
+    animation: fadeIn 0.2s ease;
+  }
+  .panel.active {
+    display: block;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px);}
+    to { opacity: 1; transform: translateY(0);}
+  }
+
+  .section-label {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #7F8C8D;
+    margin: 28px 0 12px 0;
+  }
+
+  .chunk-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+    margin-bottom: 28px;
+  }
+  .chunk {
+    background: white;
+    border-radius: 28px;
+    padding: 18px;
+    border: 1px solid #D5DBDB;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+  }
+  .chunk h4 {
+    font-size: 0.9rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .chunk ul {
+    list-style: none;
+  }
+  .chunk ul li {
+    font-size: 0.8rem;
+    margin-bottom: 8px;
+    padding-left: 22px;
+    position: relative;
+    line-height: 1.4;
+  }
+  .chunk ul li::before {
+    content: "🌑";
+    position: absolute;
+    left: 0;
+    font-size: 12px;
+  }
+  .chunk-blue h4 { color: #2C6E9E; }
+  .chunk-orange h4 { color: #E67E22; }
+  .chunk-green h4 { color: #2E7D64; }
+  .chunk-purple h4 { color: #8F5C8C; }
+
+  .info-card {
+    background: white;
+    border-radius: 24px;
+    padding: 18px;
+    border: 1px solid #D5DBDB;
+    margin-bottom: 20px;
+  }
+  .info-card h3 {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #2C3E50;
+    margin-bottom: 8px;
+  }
+  .rule-badge {
+    background: #EAF2F8;
+    border-radius: 60px;
+    padding: 6px 16px;
+    display: inline-block;
+    margin: 4px;
+    font-size: 0.75rem;
+  }
+
+  /* Sürükle bırak stilleri */
+  .drag-area {
+    background: #FEFCF7;
+    border-radius: 32px;
+    padding: 20px;
+    margin-bottom: 32px;
+    border: 2px solid #D5DBDB;
+  }
+  .drag-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #2C3E50;
+  }
+  .drag-items, .word-bank {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    background: #F4F6F9;
+    padding: 18px;
+    border-radius: 32px;
+    margin-bottom: 24px;
+  }
+  .drag-statement, .drag-word {
+    background: white;
+    border-radius: 60px;
+    padding: 8px 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    font-weight: 600;
+    font-size: 0.8rem;
+    cursor: grab;
+    border: 1px solid #BFC9D2;
+    user-select: none;
+  }
+  .drag-statement:active, .drag-word:active { cursor: grabbing; }
+  .drag-statement.dragging, .drag-word.dragging { opacity: 0.4; }
+  .drop-zones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  .drop-zone {
+    background: #F2F4F8;
+    border-radius: 36px;
+    padding: 16px 28px;
+    text-align: center;
+    min-width: 200px;
+    border: 2px dashed #B0BEC5;
+  }
+  .drop-zone h4 { font-weight: 800; margin-bottom: 12px; }
+  .drop-zone.drag-over { background: #E8F0F8; border-color: #2C3E50; }
+  .dropped-items {
+    min-height: 70px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+  .dropped-badge {
+    background: #D5DBDB;
+    padding: 6px 12px;
+    border-radius: 40px;
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+  .fill-sentences { margin: 20px 0; }
+  .sentence {
+    background: white;
+    border-radius: 20px;
+    padding: 12px 18px;
+    margin-bottom: 14px;
+    font-size: 0.85rem;
+    border-left: 4px solid #E67E22;
+  }
+  .drop-slot {
+    display: inline-block;
+    background: #E8ECF1;
+    border-radius: 40px;
+    padding: 4px 14px;
+    min-width: 100px;
+    text-align: center;
+    font-weight: 700;
+    margin: 0 4px;
+    border: 1px dashed #90A4AE;
+  }
+  .drop-slot.filled {
+    background: #C8E6D9;
+    border: 1px solid #2E7D64;
+    color: #1A5A48;
+  }
+  .reset-btn {
+    background: #2C3E50;
+    border: none;
+    color: white;
+    padding: 8px 24px;
+    border-radius: 60px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 12px;
+    font-size: 0.75rem;
+  }
+  .reset-btn:hover { background: #1A2A38; }
+
+  /* Quiz stilleri */
+  .quiz-q {
+    background: white;
+    border-radius: 24px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    border: 1px solid #D5DBDB;
+  }
+  .quiz-opt {
+    background: #FEFAF2;
+    border: 1px solid #CFD8DC;
+    padding: 8px 18px;
+    border-radius: 60px;
+    margin: 6px 0;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+  }
+  .quiz-opt.correct { background: #DFF2E3; border-color: #2E7D64; }
+  .quiz-opt.wrong { background: #FFEDE6; border-color: #E67E22; }
+  .quiz-fb { margin-top: 10px; padding: 8px 12px; border-radius: 20px; display: none; }
+  .quiz-fb.show { display: block; }
+  .quiz-fb.ok { background: #E6F7E6; color: #2E7D64; }
+  .quiz-fb.nope { background: #FFEFE0; color: #C4510A; }
+  .score-bar {
+    background: #E8ECF1;
+    border-radius: 60px;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    font-weight: bold;
+    margin-top: 20px;
+    display: none;
+  }
+  @media (max-width: 700px) {
+    .hero { flex-direction: column; text-align: center; }
+    .chunk-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-icon">🌑🔦</div>
+  <div>
+    <h2>Tam Gölgenin Oluşumu</h2>
+    <p>5. Sınıf Fen Bilimleri · Işığın doğrusal yayılması ve gölge oluşumu<br>
+    <strong>F.5.4.3.1</strong> — Tam gölgenin oluşum şartlarını ve gölge boyutunu etkileyen değişkenleri açıklar.</p>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('bilgi',this)">📘 Temel Bilgiler</button>
+  <button class="tab" onclick="showTab('degisken',this)">📏 Gölge Büyüklüğü & Örnekler</button>
+  <button class="tab" onclick="showTab('teknik',this)">🧠 Hafıza Teknikleri</button>
+  <button class="tab" onclick="showTab('etkinlik',this)">🎮 Sürükle & Etkinlik</button>
+  <button class="tab" onclick="showTab('quiz',this)">✅ 10 Soruluk Quiz</button>
+</div>
+
+<!-- PANEL 1: TEMEL BİLGİLER -->
+<div id="tab-bilgi" class="panel active">
+  <div class="section-label">🌑 TAM GÖLGE - 4 GRUPLA ÖĞREN</div>
+  <div class="chunk-grid">
+    <div class="chunk chunk-blue">
+      <h4>🔦 Oluşum Şartları</h4>
+      <ul>
+        <li>Işık kaynağı (Güneş, lamba, el feneri)</li>
+        <li>Opak (saydam olmayan) nesne</li>
+        <li>Ekran / perde (gölgenin düştüğü yüzey)</li>
+        <li>Üçü aynı doğrultuda olmalı</li>
+      </ul>
+    </div>
+    <div class="chunk chunk-orange">
+      <h4>⚫ Tam Gölge Nedir?</h4>
+      <ul>
+        <li>Işığın opak cisim arkasında ulaşamadığı karanlık bölge</li>
+        <li>Hiç ışık bulunmaz, tamamen karanlıktır</li>
+        <li>Gölge şekli cismin şekline benzer</li>
+        <li>Çizim: ışınlar cismin uç noktalarına teğet geçer</li>
+      </ul>
+    </div>
+    <div class="chunk chunk-green">
+      <h4>📐 Gölge Büyüklüğü Etkileyenler</h4>
+      <ul>
+        <li>Kaynak-cismin mesafesi: yaklaşınca gölge büyür</li>
+        <li>Cisim-ekran mesafesi: ekran uzaklaşınca gölge büyür</li>
+        <li>Cismin büyüklüğü: büyük cisim → büyük gölge</li>
+      </ul>
+    </div>
+    <div class="chunk chunk-purple">
+      <h4>🌍 Günlük Hayat & Doğa</h4>
+      <ul>
+        <li>Güneş ve Ay tutulmaları (tam gölge)</li>
+        <li>Güneş saatleri (gölge boyu gün içinde değişir)</li>
+        <li>Karagöz-Hacivat gölge oyunu</li>
+        <li>Sokak lambasına yaklaşıp uzaklaşma</li>
+      </ul>
+    </div>
+  </div>
+  <div class="info-card">
+    <h3>🔬 Işık ve Gölge İlişkisi</h3>
+    <p>Işık doğrusal yayılır. Opak bir cisimle karşılaştığında arkasında ışığın ulaşamadığı bölgeye <strong>tam gölge</strong> denir. Gölge oluşumu için ışık kaynağı, opak cisim ve perde aynı doğrultuda olmalıdır.</p>
+  </div>
+</div>
+
+<!-- PANEL 2: GÖLGE BÜYÜKLÜĞÜ ve ÖRNEKLER -->
+<div id="tab-degisken" class="panel">
+  <div class="section-label">📏 GÖLGE BÜYÜKLÜĞÜNÜ ETKİLEYEN DEĞİŞKENLER</div>
+  <div class="info-card">
+    <h3>📌 Işık Kaynağı – Cisim – Perde arasındaki mesafeler</h3>
+    <p>✔ <strong>Kaynak cisme yaklaşırsa</strong> → gölge <strong>BÜYÜR</strong> (ekran sabit)<br>
+    ✔ <strong>Kaynak cisme uzaklaşırsa</strong> → gölge <strong>KÜÇÜLÜR</strong><br>
+    ✔ <strong>Perde cisme yaklaşırsa</strong> → gölge <strong>KÜÇÜLÜR</strong><br>
+    ✔ <strong>Perde cisme uzaklaşırsa</strong> → gölge <strong>BÜYÜR</strong><br>
+    ✔ <strong>Cisim büyükse</strong> → gölge büyük; cisim küçükse gölge küçük.</p>
+  </div>
+  <div class="section-label">🌍 DOĞADAN VE GÜNLÜK HAYATTAN ÖRNEKLER</div>
+  <div class="info-card">
+    <h3>🌞 Güneş Tutulması</h3>
+    <p>Ay, Dünya ile Güneş arasına girer ve Ay'ın tam gölgesi Dünya'ya düşer. Birkaç dakikalığına gündüz karanlık olur.</p>
+    <h3>🌙 Ay Tutulması</h3>
+    <p>Dünya, Güneş ile Ay arasına girer. Dünya'nın gölgesi Ay'ın üzerine düşer ve Ay koyu kırmızı görünür.</p>
+    <h3>🕰️ Güneş Saati</h3>
+    <p>Sabah gölge uzun (batı yönü), öğle vakti gölge en kısa, akşam tekrar uzar (doğu yönü).</p>
+    <h3>🎭 Gölge Oyunu (Karagöz)</h3>
+    <p>Opak figürlerin arkasına ışık tutularak perdede gölgeler oynatılır.</p>
+  </div>
+</div>
+
+<!-- PANEL 3: HAFIZA TEKNİKLERİ -->
+<div id="tab-teknik" class="panel">
+  <div class="section-label">🔡 Akrostiş: “KOLE” - Gölge Oluşumu Şartları</div>
+  <div class="info-card">
+    <h3>💡 KOLE = Kaynak, Opak, Lamba(ışık), Ekran</h3>
+    <p><strong>K</strong>aynak (ışık), <strong>O</strong>pak cisim, <strong>L</strong>amba benzeri ışık, <strong>E</strong>kran (perde) – dört unsur birleşince gölge oluşur.</p>
+  </div>
+  <div class="chunk-grid">
+    <div class="chunk chunk-blue"><h4>📏 Gölge Boyutu (YAKIN – UZAK)</h4><ul><li>Kaynak cisme yakın → büyük gölge</li><li>Kaynak uzak → küçük gölge</li><li>Perde yakın → küçük gölge</li><li>Perde uzak → büyük gölge</li></ul></div>
+    <div class="chunk chunk-orange"><h4>🎭 Günlük Hayat (Karagöz – Tutulma)</h4><ul><li>Karagöz: opak figür + ışık + perde</li><li>Tutulma: Dünya/Ay opak cisim, Güneş ışık kaynağı</li></ul></div>
+    <div class="chunk chunk-green"><h4>🧠 Zihinsel model: “El feneri ve duvar”</h4><ul><li>El fenerini topa yaklaştır → gölge büyür, uzaklaştır → küçülür.</li><li>Topu duvara yaklaştır → gölge küçülür, uzaklaştır → büyür.</li></ul></div>
+  </div>
+  <div class="info-card">
+    <h3>📌 Kısa notlar</h3>
+    <p>Tam gölgede ışık <strong>hiç yoktur</strong>. Gölge çizimi yaparken ışık kaynağından cismin uç noktalarına teğet çizgiler çizilir ve ekranda birleştirilir.</p>
+  </div>
+</div>
+
+<!-- PANEL 4: SÜRÜKLE BIRAK ETKİNLİKLER (10 DOĞRU/YANLIŞ + 10 BOŞLUK) -->
+<div id="tab-etkinlik" class="panel">
+  <!-- Bölüm 1: 10 Doğru/Yanlış -->
+  <div class="drag-area">
+    <div class="drag-title">✅❌ 10 DOĞRU / YANLIŞ ETKİNLİĞİ (Sürükle bırak)</div>
+    <div class="drag-items" id="tf-items-container">
+      <div class="drag-statement" draggable="true" data-tf="true">1. Tam gölge oluşumu için opak cisim gereklidir.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">2. Saydam maddelerin arkasında tam gölge oluşur.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">3. Işık kaynağı cisme yaklaştıkça gölge büyür.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">4. Perde cisme yaklaştırılırsa gölge büyür.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">5. Güneş tutulması, Ay'ın tam gölgesinin Dünya'ya düşmesidir.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">6. Gölge oluşumu için ekran (perde) şart değildir.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">7. Öğle vakti gölge en kısa halini alır.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">8. Cismin büyüklüğü gölgeyi etkilemez.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">9. Karagöz-Hacivat gölge oyunu tam gölge prensibiyle çalışır.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">10. Işık doğrusal yayıldığı için tam gölge oluşur.</div>
+    </div>
+    <div class="drop-zones">
+      <div class="drop-zone" data-zone="true" id="dropTrueZone">
+        <h4>✅ DOĞRU</h4>
+        <div class="dropped-items" id="trueDropped"></div>
+      </div>
+      <div class="drop-zone" data-zone="false" id="dropFalseZone">
+        <h4>❌ YANLIŞ</h4>
+        <div class="dropped-items" id="falseDropped"></div>
+      </div>
+    </div>
+    <button class="reset-btn" id="resetTFBtn">🔄 Doğru/Yanlış Etkinliğini Sıfırla</button>
+  </div>
+
+  <!-- Bölüm 2: 10 Boşluk Doldurma (Sürükle) -->
+  <div class="drag-area">
+    <div class="drag-title">📝 10 BOŞLUK DOLDURMA (Sözcükleri sürükle)</div>
+    <div class="word-bank" id="fillWordBank">
+      <div class="drag-word" draggable="true" data-fillword="opak">opak</div>
+      <div class="drag-word" draggable="true" data-fillword="tam gölge">tam gölge</div>
+      <div class="drag-word" draggable="true" data-fillword="büyür">büyür</div>
+      <div class="drag-word" draggable="true" data-fillword="küçülür">küçülür</div>
+      <div class="drag-word" draggable="true" data-fillword="ekran">ekran</div>
+      <div class="drag-word" draggable="true" data-fillword="Güneş">Güneş</div>
+      <div class="drag-word" draggable="true" data-fillword="Ay">Ay</div>
+      <div class="drag-word" draggable="true" data-fillword="doğrusal">doğrusal</div>
+      <div class="drag-word" draggable="true" data-fillword="kaynak">kaynak</div>
+      <div class="drag-word" draggable="true" data-fillword="gölge oyunu">gölge oyunu</div>
+    </div>
+    <div class="fill-sentences" id="fillSentencesContainer">
+      <div class="sentence">① Işığı geçirmeyen maddelere <span class="drop-slot" data-correct="opak">______</span> madde denir.</div>
+      <div class="sentence">② Işığın opak cisim arkasında ulaşamadığı karanlık bölgeye <span class="drop-slot" data-correct="tam gölge">______</span> denir.</div>
+      <div class="sentence">③ Işık kaynağı cisme yaklaşırsa gölge <span class="drop-slot" data-correct="büyür">______</span>.</div>
+      <div class="sentence">④ Ekran (perde) cisme yaklaştırılırsa gölge <span class="drop-slot" data-correct="küçülür">______</span>.</div>
+      <div class="sentence">⑤ Gölgenin üzerine düştüğü yüzeye <span class="drop-slot" data-correct="ekran">______</span> (perde) denir.</div>
+      <div class="sentence">⑥ <span class="drop-slot" data-correct="Güneş">______</span> tutulması, Ay'ın Dünya ile Güneş arasına girmesiyle oluşur.</div>
+      <div class="sentence">⑦ <span class="drop-slot" data-correct="Ay">______</span> tutulması, Dünya'nın gölgesinin Ay'ın üzerine düşmesidir.</div>
+      <div class="sentence">⑧ Işığın <span class="drop-slot" data-correct="doğrusal">______</span> yayılması sayesinde tam gölge oluşur.</div>
+      <div class="sentence">⑨ Gölge oluşumu için ışık <span class="drop-slot" data-correct="kaynak">______</span>, opak cisim ve perde gereklidir.</div>
+      <div class="sentence">⑩ Karagöz ve Hacivat bir <span class="drop-slot" data-correct="gölge oyunu">______</span> örneğidir.</div>
+    </div>
+    <button class="reset-btn" id="resetFillBtn">🔄 Boşluk Etkinliğini Sıfırla</button>
+  </div>
+</div>
+
+<!-- PANEL 5: 10 SORULUK QUIZ -->
+<div id="tab-quiz" class="panel">
+  <div class="section-label">✅ TAM GÖLGE – 10 SORULUK UZMANLIK QUIZİ</div>
+  <div id="quiz-container"></div>
+  <div class="score-bar" id="score-bar" style="display: none;">🌑 Puan: <strong id="score-val">0</strong> / 10 &nbsp;|&nbsp; <span id="score-msg"></span></div>
+</div>
+
+<script>
+  // ---------- 10 SORULUK QUIZ ----------
+  const quizData = [
+    { q: "Tam gölge oluşumu için aşağıdakilerden hangisi gerekli değildir?", opts: ["Işık kaynağı", "Opak cisim", "Saydam cisim", "Ekran (perde)"], a: 2, exp: "Saydam cisim ışığı geçirir, gölge oluşturmaz. Opak cisim gereklidir." },
+    { q: "Işık kaynağı cisme yaklaştırılırsa gölge nasıl değişir?", opts: ["Küçülür", "Büyür", "Değişmez", "Kaybolur"], a: 1, exp: "Kaynak cisme yaklaştıkça gölge büyür." },
+    { q: "Perde (ekran) cisme yaklaştırılırsa gölge nasıl değişir?", opts: ["Büyür", "Küçülür", "Şekil değiştirir", "Işık yansıtır"], a: 1, exp: "Perde cisme yaklaşırsa gölge küçülür." },
+    { q: "Güneş tutulması hangi gölge olayıdır?", opts: ["Ay'ın gölgesinin Dünya'ya düşmesi", "Dünya'nın gölgesinin Ay'a düşmesi", "Güneş'in gölgesinin Ay'a düşmesi", "Yıldızların gölgesi"], a: 0, exp: "Ay, Dünya ile Güneş arasına girer ve Ay'ın tam gölgesi Dünya'ya düşer." },
+    { q: "Tam gölge ile ilgili hangisi doğrudur?", opts: ["İçinde az da olsa ışık vardır", "Tamamen karanlıktır", "Renklidir", "Saydam maddelerde oluşur"], a: 1, exp: "Tam gölge, ışığın hiç ulaşmadığı tamamen karanlık bölgedir." },
+    { q: "Gölgenin şekli genellikle neye benzer?", opts: ["Işık kaynağının şekline", "Opak cismin şekline", "Perdenin şekline", "Işığın rengine"], a: 1, exp: "Gölge, opak cismin şekline benzer." },
+    { q: "Sabah güneşi ile öğle güneşi arasında gölge boyu nasıl değişir?", opts: ["Sabah uzun, öğle kısa", "Sabah kısa, öğle uzun", "Hep aynı", "Önce kısalır sonra uzar"], a: 0, exp: "Sabah Güneş eğik olduğundan gölge uzun, öğle vakti tepede olduğundan gölge kısadır." },
+    { q: "Aşağıdakilerden hangisi tam gölgeye örnek değildir?", opts: ["Karagöz perdesi", "Sokak lambasında oluşan gölge", "Yağmur damlasının oluşturduğu gökkuşağı", "Güneş tutulması"], a: 2, exp: "Gökkuşağı ışığın kırılmasıdır, gölge değildir." },
+    { q: "Bir cismin gölgesinin büyümesi için aşağıdakilerden hangisi yapılmalıdır?", opts: ["Kaynağı cisme yaklaştırmak", "Perdeyi cisme yaklaştırmak", "Cismi küçültmek", "Kaynağı uzaklaştırmak"], a: 0, exp: "Kaynağı cisme yaklaştırmak gölgeyi büyütür." },
+    { q: "Tam gölge çizimi yapılırken ışınlar nasıl çizilir?", opts: ["Cismin ortasından", "Cismin uç noktalarına teğet", "Rastgele", "Işık kaynağının tersine"], a: 1, exp: "Işınlar cismin uç noktalarına teğet geçecek şekilde çizilir ve ekrana uzatılır." }
+  ];
+  let quizAnswered = new Array(10).fill(false);
+  let quizScores = new Array(10).fill(false);
+
+  function buildQuiz() {
+    const container = document.getElementById('quiz-container');
+    if (!container) return;
+    container.innerHTML = '';
+    quizData.forEach((q, idx) => {
+      const div = document.createElement('div'); div.className = 'quiz-q';
+      let optsHtml = '';
+      q.opts.forEach((opt, optIdx) => {
+        optsHtml += `<button class="quiz-opt" onclick="checkQuiz(${idx}, ${optIdx})" id="qzopt${idx}_${optIdx}">${opt}</button><br>`;
+      });
+      div.innerHTML = `<p><strong>Soru ${idx+1}:</strong> ${q.q}</p><div class="quiz-opts">${optsHtml}</div><div class="quiz-fb" id="qzfb${idx}"></div>`;
+      container.appendChild(div);
+    });
+  }
+
+  function checkQuiz(qIdx, chosen) {
+    if (quizAnswered[qIdx]) return;
+    quizAnswered[qIdx] = true;
+    const q = quizData[qIdx];
+    const isCorrect = (chosen === q.a);
+    quizScores[qIdx] = isCorrect;
+    for (let i = 0; i < q.opts.length; i++) {
+      const btn = document.getElementById(`qzopt${qIdx}_${i}`);
+      if (btn) { btn.disabled = true; if (i === q.a) btn.classList.add('correct'); else if (i === chosen && !isCorrect) btn.classList.add('wrong'); }
+    }
+    const fbDiv = document.getElementById(`qzfb${qIdx}`);
+    fbDiv.style.display = 'block';
+    fbDiv.className = `quiz-fb show ${isCorrect ? 'ok' : 'nope'}`;
+    fbDiv.textContent = isCorrect ? `✓ Doğru! ${q.exp}` : `✗ Yanlış! Doğru: ${q.opts[q.a]}. ${q.exp}`;
+    if (quizAnswered.every(v => v === true)) {
+      const total = quizScores.filter(Boolean).length;
+      document.getElementById('score-val').innerHTML = total;
+      let msg = total <= 4 ? '📖 Gölge konusunu tekrar et, etkinliklere göz at!' : (total <= 7 ? '🌓 İyi! Biraz daha pratik yap.' : (total <= 9 ? '🎉 Harikasın! Gölge Uzmanısın!' : '🏆 Mükemmel! Tam gölgeyi çok iyi kavradın!'));
+      document.getElementById('score-msg').innerHTML = msg;
+      document.getElementById('score-bar').style.display = 'flex';
+    }
+  }
+  window.checkQuiz = checkQuiz;
+
+  // ---------- SÜRÜKLE BIRAK (DOĞRU/YANLIŞ) ----------
+  let draggedItem = null;
+  document.addEventListener('dragstart', (e) => {
+    if (e.target.classList.contains('drag-statement') || e.target.classList.contains('drag-word')) {
+      draggedItem = e.target;
+      e.target.classList.add('dragging');
+      e.dataTransfer.setData('text/plain', e.target.innerText);
+      e.dataTransfer.effectAllowed = 'move';
+    }
+  });
+  document.addEventListener('dragend', (e) => {
+    if (e.target.classList.contains('drag-statement') || e.target.classList.contains('drag-word')) e.target.classList.remove('dragging');
+    draggedItem = null;
+  });
+  const dropZones = document.querySelectorAll('.drop-zone');
+  dropZones.forEach(zone => {
+    zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', () => { zone.classList.remove('drag-over'); });
+    zone.addEventListener('drop', (e) => {
+      e.preventDefault(); zone.classList.remove('drag-over');
+      if (!draggedItem) return;
+      if (draggedItem.classList.contains('drag-statement')) {
+        const isTrueZone = zone.getAttribute('data-zone') === 'true';
+        const statementTruth = draggedItem.getAttribute('data-tf') === 'true';
+        if (isTrueZone !== statementTruth) { alert('❌ Bu ifade buraya ait değil! Tekrar dene.'); return; }
+        const targetList = zone.querySelector('.dropped-items');
+        const badge = document.createElement('div'); badge.className = 'dropped-badge'; badge.innerText = draggedItem.innerText;
+        targetList.appendChild(badge);
+        draggedItem.remove(); draggedItem = null;
+      }
+    });
+  });
+  // Fill-in boşluklar
+  const fillSlots = document.querySelectorAll('.drop-slot');
+  fillSlots.forEach(slot => {
+    slot.addEventListener('dragover', (e) => { e.preventDefault(); slot.style.backgroundColor = '#E0E9F0'; });
+    slot.addEventListener('dragleave', () => { if (!slot.classList.contains('filled')) slot.style.backgroundColor = '#E8ECF1'; });
+    slot.addEventListener('drop', (e) => {
+      e.preventDefault(); slot.style.backgroundColor = '#E8ECF1';
+      if (!draggedItem || !draggedItem.classList.contains('drag-word')) return;
+      const correctAnswer = slot.getAttribute('data-correct');
+      const droppedWord = draggedItem.getAttribute('data-fillword');
+      if (correctAnswer === droppedWord) {
+        if (slot.classList.contains('filled')) return;
+        slot.innerText = droppedWord; slot.classList.add('filled');
+        draggedItem.remove(); draggedItem = null;
+      } else { alert(`Yanlış kelime! "${droppedWord}" bu boşluğa uygun değil.`); }
+    });
+  });
+
+  // RESET DOĞRU/YANLIŞ
+  function resetTF() {
+    const trueDiv = document.getElementById('trueDropped'); const falseDiv = document.getElementById('falseDropped');
+    trueDiv.innerHTML = ''; falseDiv.innerHTML = '';
+    const originalStatements = [
+      "1. Tam gölge oluşumu için opak cisim gereklidir.", "2. Saydam maddelerin arkasında tam gölge oluşur.",
+      "3. Işık kaynağı cisme yaklaştıkça gölge büyür.", "4. Perde cisme yaklaştırılırsa gölge büyür.",
+      "5. Güneş tutulması, Ay'ın tam gölgesinin Dünya'ya düşmesidir.", "6. Gölge oluşumu için ekran (perde) şart değildir.",
+      "7. Öğle vakti gölge en kısa halini alır.", "8. Cismin büyüklüğü gölgeyi etkilemez.",
+      "9. Karagöz-Hacivat gölge oyunu tam gölge prensibiyle çalışır.", "10. Işık doğrusal yayıldığı için tam gölge oluşur."
+    ];
+    const tfVals = ["true","false","true","false","true","false","true","false","true","true"];
+    const container = document.getElementById('tf-items-container');
+    container.innerHTML = '';
+    for (let i = 0; i < originalStatements.length; i++) {
+      const div = document.createElement('div');
+      div.className = 'drag-statement';
+      div.setAttribute('draggable', 'true');
+      div.setAttribute('data-tf', tfVals[i]);
+      div.innerText = originalStatements[i];
+      container.appendChild(div);
+    }
+    draggedItem = null;
+  }
+  // RESET BOŞLUK
+  function resetFill() {
+    const bank = document.getElementById('fillWordBank');
+    const originalWords = ["opak","tam gölge","büyür","küçülür","ekran","Güneş","Ay","doğrusal","kaynak","gölge oyunu"];
+    bank.innerHTML = '';
+    originalWords.forEach(w => {
+      const wordDiv = document.createElement('div');
+      wordDiv.className = 'drag-word';
+      wordDiv.setAttribute('draggable', 'true');
+      wordDiv.setAttribute('data-fillword', w);
+      wordDiv.innerText = w;
+      bank.appendChild(wordDiv);
+    });
+    const slots = document.querySelectorAll('.drop-slot');
+    const placeholders = ["______","______","______","______","______","______","______","______","______","______"];
+    slots.forEach((slot, idx) => {
+      slot.innerText = placeholders[idx];
+      slot.classList.remove('filled');
+      slot.style.backgroundColor = '#E8ECF1';
+    });
+    draggedItem = null;
+  }
+  document.getElementById('resetTFBtn')?.addEventListener('click', resetTF);
+  document.getElementById('resetFillBtn')?.addEventListener('click', resetFill);
+
+  function showTab(tabId, btn) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(`tab-${tabId}`).classList.add('active');
+    btn.classList.add('active');
+  }
+  window.showTab = showTab;
+  buildQuiz();
+</script>
+</body>
+</html>

@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>5. Sınıf Fen: Isı ve Sıcaklık | Hafıza Teknikleri + Etkinlikler</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    background: #FFF8F0;
+    color: #2C3E2F;
+    padding: 24px 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  :root {
+    --heat-red: #E65100;
+    --heat-orange: #FF8C42;
+    --cool-blue: #2C7A6E;
+    --warm-bg: #FFF3E0;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, #E65100, #FF9800);
+    border-radius: 32px;
+    padding: 1.6rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 28px;
+    color: white;
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+  }
+  .hero-icon {
+    font-size: 68px;
+    filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.2));
+  }
+  .hero h2 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+  }
+  .hero p {
+    font-size: 0.85rem;
+    opacity: 0.9;
+    margin-top: 6px;
+  }
+
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .tab {
+    background: white;
+    border: none;
+    padding: 8px 24px;
+    border-radius: 60px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: 0.2s;
+    color: #E65100;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    border: 1px solid #FFD5B5;
+  }
+  .tab.active {
+    background: var(--heat-red);
+    color: white;
+    border-color: var(--heat-red);
+    box-shadow: 0 6px 12px rgba(230,81,0,0.3);
+  }
+  .panel {
+    display: none;
+    animation: fadeIn 0.2s ease;
+  }
+  .panel.active {
+    display: block;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px);}
+    to { opacity: 1; transform: translateY(0);}
+  }
+
+  .section-label {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #B85C1A;
+    margin: 28px 0 12px 0;
+  }
+
+  .chunk-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+    margin-bottom: 28px;
+  }
+  .chunk {
+    background: white;
+    border-radius: 28px;
+    padding: 18px;
+    border: 1px solid #FFDEBF;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+  }
+  .chunk h4 {
+    font-size: 0.9rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .chunk ul {
+    list-style: none;
+  }
+  .chunk ul li {
+    font-size: 0.8rem;
+    margin-bottom: 8px;
+    padding-left: 22px;
+    position: relative;
+    line-height: 1.4;
+  }
+  .chunk ul li::before {
+    content: "🔥";
+    position: absolute;
+    left: 0;
+    font-size: 12px;
+  }
+  .chunk-orange h4 { color: #E65100; }
+  .chunk-blue h4 { color: #2C7A6E; }
+  .chunk-green h4 { color: #2E7D64; }
+  .chunk-purple h4 { color: #8F5C8C; }
+
+  .info-card {
+    background: white;
+    border-radius: 24px;
+    padding: 18px;
+    border: 1px solid #FFDEBF;
+    margin-bottom: 20px;
+  }
+  .info-card h3 {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #E65100;
+    margin-bottom: 8px;
+  }
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #FFF9F0;
+    border-radius: 20px;
+    overflow: hidden;
+  }
+  .compare-table th, .compare-table td {
+    border: 1px solid #FFD5B5;
+    padding: 12px;
+    text-align: left;
+  }
+  .compare-table th {
+    background: #FFE0C0;
+    color: #B44A00;
+  }
+
+  /* Sürükle bırak stilleri */
+  .drag-area {
+    background: #FEFCF7;
+    border-radius: 32px;
+    padding: 20px;
+    margin-bottom: 32px;
+    border: 2px solid #FFDEBF;
+  }
+  .drag-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #E65100;
+  }
+  .drag-items, .word-bank {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    background: #FDF7F0;
+    padding: 18px;
+    border-radius: 32px;
+    margin-bottom: 24px;
+  }
+  .drag-statement, .drag-word {
+    background: white;
+    border-radius: 60px;
+    padding: 8px 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    font-weight: 600;
+    font-size: 0.8rem;
+    cursor: grab;
+    border: 1px solid #FFD0A8;
+    user-select: none;
+  }
+  .drag-statement:active, .drag-word:active { cursor: grabbing; }
+  .drag-statement.dragging, .drag-word.dragging { opacity: 0.4; }
+  .drop-zones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  .drop-zone {
+    background: #F7EFE6;
+    border-radius: 36px;
+    padding: 16px 28px;
+    text-align: center;
+    min-width: 200px;
+    border: 2px dashed #E8C8A8;
+  }
+  .drop-zone h4 { font-weight: 800; margin-bottom: 12px; }
+  .drop-zone.drag-over { background: #FFE6D5; border-color: #E65100; }
+  .dropped-items {
+    min-height: 70px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+  .dropped-badge {
+    background: #FFD5B5;
+    padding: 6px 12px;
+    border-radius: 40px;
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+  .fill-sentences { margin: 20px 0; }
+  .sentence {
+    background: white;
+    border-radius: 20px;
+    padding: 12px 18px;
+    margin-bottom: 14px;
+    font-size: 0.85rem;
+    border-left: 4px solid #FF8C42;
+  }
+  .drop-slot {
+    display: inline-block;
+    background: #F4E8DD;
+    border-radius: 40px;
+    padding: 4px 14px;
+    min-width: 100px;
+    text-align: center;
+    font-weight: 700;
+    margin: 0 4px;
+    border: 1px dashed #D4A87A;
+  }
+  .drop-slot.filled {
+    background: #C8E6D9;
+    border: 1px solid #2E7D64;
+    color: #1A5A48;
+  }
+  .reset-btn {
+    background: #E65100;
+    border: none;
+    color: white;
+    padding: 8px 24px;
+    border-radius: 60px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 12px;
+    font-size: 0.75rem;
+  }
+  .reset-btn:hover { background: #BF3F00; }
+
+  /* Quiz stilleri */
+  .quiz-q {
+    background: white;
+    border-radius: 24px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    border: 1px solid #FFDEBF;
+  }
+  .quiz-opt {
+    background: #FEFAF2;
+    border: 1px solid #FFD0A8;
+    padding: 8px 18px;
+    border-radius: 60px;
+    margin: 6px 0;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+  }
+  .quiz-opt.correct { background: #DFF2E3; border-color: #2E7D64; }
+  .quiz-opt.wrong { background: #FFEDE6; border-color: #E65100; }
+  .quiz-fb { margin-top: 10px; padding: 8px 12px; border-radius: 20px; display: none; }
+  .quiz-fb.show { display: block; }
+  .quiz-fb.ok { background: #E6F7E6; color: #2E7D64; }
+  .quiz-fb.nope { background: #FFEFE0; color: #C4510A; }
+  .score-bar {
+    background: #FFE6D5;
+    border-radius: 60px;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    font-weight: bold;
+    margin-top: 20px;
+    display: none;
+  }
+  @media (max-width: 700px) {
+    .hero { flex-direction: column; text-align: center; }
+    .chunk-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-icon">🌡️🔥</div>
+  <div>
+    <h2>Isı ve Sıcaklık</h2>
+    <p>5. Sınıf Fen Bilimleri · Enerji mi? Ölçüm mü? Isı akışı ve denge sıcaklığı<br>
+    <strong>F.5.5.3.1</strong> — Isı ve sıcaklık kavramlarını karşılaştırır, ısı alışverişini açıklar.</p>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('bilgi',this)">📘 Temel Bilgiler</button>
+  <button class="tab" onclick="showTab('fark',this)">📊 Isı - Sıcaklık Farkları</button>
+  <button class="tab" onclick="showTab('teknik',this)">🧠 Hafıza Teknikleri</button>
+  <button class="tab" onclick="showTab('etkinlik',this)">🎮 Sürükle & Etkinlik</button>
+  <button class="tab" onclick="showTab('quiz',this)">✅ 10 Soruluk Quiz</button>
+</div>
+
+<!-- PANEL 1: TEMEL BİLGİLER -->
+<div id="tab-bilgi" class="panel active">
+  <div class="section-label">🔥 ISI VE SICAKLIK - 4 GRUPLA ÖĞREN</div>
+  <div class="chunk-grid">
+    <div class="chunk chunk-orange">
+      <h4>⚡ Isı Nedir?</h4>
+      <ul>
+        <li>Enerji türüdür (alınıp verilebilir)</li>
+        <li>Birim: Joule (J) veya Kalori (cal)</li>
+        <li>Ölçüm aleti: Kalorimetre kabı</li>
+        <li>Madde ısı alınca ısınır, verince soğur</li>
+      </ul>
+    </div>
+    <div class="chunk chunk-blue">
+      <h4>🌡️ Sıcaklık Nedir?</h4>
+      <ul>
+        <li>Enerji değil, bir ölçümdür</li>
+        <li>Birim: Derece Celsius (°C)</li>
+        <li>Ölçüm aleti: Termometre</li>
+        <li>Maddelerin sıcak/soğuk derecesini belirtir</li>
+      </ul>
+    </div>
+    <div class="chunk chunk-green">
+      <h4>🔄 Isı Akışı</h4>
+      <ul>
+        <li>Her zaman sıcak maddeden soğuk maddeye doğru olur</li>
+        <li>Sıcaklıklar eşitleninceye kadar devam eder</li>
+        <li>Denge sıcaklığı: iki maddenin son ortak sıcaklığı</li>
+      </ul>
+    </div>
+    <div class="chunk chunk-purple">
+      <h4>📏 Denge Sıcaklığı Hesabı</h4>
+      <ul>
+        <li>Aynı cins ve eşit kütlede: (T1 + T2)/2</li>
+        <li>Örnek: 80°C su + 20°C su → denge 50°C</li>
+        <li>Farklı kütlede: kütlesi büyük olana yakın</li>
+      </ul>
+    </div>
+  </div>
+  <div class="info-card">
+    <h3>🔬 Isı ve Sıcaklık Günlük Hayatta</h3>
+    <p>✔ Bir bardak sıcak çorba, elimize ısı verir (ısı alışverişi). Çorbanın sıcaklığı yüksektir, termometre ile ölçülür.<br>
+    ✔ Kalorifer peteği odaya ısı verir, odanın sıcaklığı yükselir.<br>
+    ✔ Buz elimize ısı alır, elimiz üşür (ısı elimizden buza geçer).</p>
+  </div>
+</div>
+
+<!-- PANEL 2: ISI VE SICAKLIK FARKLARI TABLOSU -->
+<div id="tab-fark" class="panel">
+  <div class="section-label">📊 ISI ve SICAKLIK KARŞILAŞTIRMASI</div>
+  <table class="compare-table">
+    <thead><tr><th>Özellik</th><th>Isı</th><th>Sıcaklık</th></tr></thead>
+    <tbody>
+      <tr><td>Enerji mi?</td><td>✅ Evet, bir enerji türüdür</td><td>❌ Hayır, enerji değil ölçümdür</td></tr>
+      <tr><td>Birimi</td><td>Joule (J) veya Kalori (cal)</td><td>Derece Celsius (°C)</td></tr>
+      <tr><td>Ölçüm aleti</td><td>Kalorimetre kabı</td><td>Termometre</td></tr>
+      <tr><td>Aktarılabilir mi?</td><td>Evet, maddeler arasında aktarılır</td><td>Hayır, aktarılmaz</td></tr>
+      <tr><td>Maddeye bağlı</td><td>Kütleye bağlıdır (daha çok kütle → daha çok ısı)</td><td>Kütleden bağımsızdır (sıcaklık ortak)</td></tr>
+    </tbody>
+  </table>
+  <div class="info-card">
+    <h3>🌡️ Isı Akışı ve Denge Sıcaklığı</h3>
+    <p><strong>Isı Akış Yönü:</strong> Sıcak maddeden soğuk maddeye doğru.<br>
+    <strong>Denge Sıcaklığı:</strong> Isı alışverişi sonunda maddelerin ulaştığı ortak sıcaklık. Örneğin 80°C su ile 20°C su karıştırılırsa (eşit kütle) denge sıcaklığı 50°C olur.<br>
+    📌 Unutma: Sıcaklık farkı yoksa ısı alışverişi olmaz.</p>
+  </div>
+</div>
+
+<!-- PANEL 3: HAFIZA TEKNİKLERİ -->
+<div id="tab-teknik" class="panel">
+  <div class="section-label">🔡 Akrostiş: "ISIT - SICAK"</div>
+  <div class="info-card">
+    <h3>💡 I - S - I - T / S - I - C - A - K</h3>
+    <p><strong>I</strong>sı = <strong>E</strong>nerji (Joule, kalori)<br>
+    <strong>S</strong>ıcaklık = <strong>Ö</strong>lçüm (termometre, °C)<br>
+    <strong>I</strong>sı aktarılır, <strong>T</strong>ermometre sıcaklık ölçer<br>
+    <strong>S</strong>ıcaktan soğuğa ısı akar, <strong>I</strong>sı alınca sıcaklık artar, <strong>C</strong>elsius birim, <strong>A</strong>kış dengeye kadar, <strong>K</strong>alorimetre ısı ölçer.</p>
+  </div>
+  <div class="chunk-grid">
+    <div class="chunk chunk-orange"><h4>📌 Kısa Ezber</h4><ul><li>Isı = enerji, birim Joule, alet kalorimetre</li><li>Sıcaklık = ölçüm, birim °C, alet termometre</li><li>Isı sıcaktan soğuğa akar</li><li>Denge sıcaklığı = (T1+T2)/2 (eşit kütle, aynı cins)</li></ul></div>
+    <div class="chunk chunk-blue"><h4>🧠 Zihinsel model: “Sıcak çorba”</h4><ul><li>Çorbanın sıcaklığı 80°C (termometre ölçer)</li><li>Çorba kaşığa ısı verir (ısı aktarımı)</li><li>Kaşık ısınır, çorba soğur → denge sıcaklığına ulaşır</li></ul></div>
+  </div>
+  <div class="info-card">
+    <h3>📐 Denge Sıcaklığı Hesaplama Pratiği</h3>
+    <p>80°C sıcaklığındaki 1 kg su ile 20°C’deki 1 kg su karıştırılırsa:<br>
+    Toplam sıcaklık = 80 + 20 = 100 → Ortalama = 100/2 = <strong>50°C</strong> denge sıcaklığı.<br>
+    Eğer kütleler farklıysa denge, kütlesi büyük olanın sıcaklığına daha yakın olur.</p>
+  </div>
+</div>
+
+<!-- PANEL 4: SÜRÜKLE BIRAK ETKİNLİKLER (10 DOĞRU/YANLIŞ + 10 BOŞLUK) -->
+<div id="tab-etkinlik" class="panel">
+  <!-- Bölüm 1: 10 Doğru/Yanlış -->
+  <div class="drag-area">
+    <div class="drag-title">✅❌ 10 DOĞRU / YANLIŞ ETKİNLİĞİ (Sürükle bırak)</div>
+    <div class="drag-items" id="tf-items-container">
+      <div class="drag-statement" draggable="true" data-tf="true">1. Isı bir enerji türüdür.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">2. Sıcaklığın birimi Joule'dür.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">3. Isı alan maddenin sıcaklığı artar.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">4. Termometre ile ısı ölçülür.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">5. Isı akışı daima sıcak maddeden soğuk maddeye doğrudur.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">6. Soğuk maddelerde ısı yoktur.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">7. Kalorimetre kabı ısı ölçmek için kullanılır.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">8. Aynı sıcaklıktaki iki madde arasında ısı alışverişi olmaz.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">9. Sıcaklık maddeler arasında aktarılabilir.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">10. Denge sıcaklığı, iki maddenin sıcaklıklarının ortalaması olabilir (eşit kütle).</div>
+    </div>
+    <div class="drop-zones">
+      <div class="drop-zone" data-zone="true" id="dropTrueZone">
+        <h4>✅ DOĞRU</h4>
+        <div class="dropped-items" id="trueDropped"></div>
+      </div>
+      <div class="drop-zone" data-zone="false" id="dropFalseZone">
+        <h4>❌ YANLIŞ</h4>
+        <div class="dropped-items" id="falseDropped"></div>
+      </div>
+    </div>
+    <button class="reset-btn" id="resetTFBtn">🔄 Doğru/Yanlış Etkinliğini Sıfırla</button>
+  </div>
+
+  <!-- Bölüm 2: 10 Boşluk Doldurma (Sürükle) -->
+  <div class="drag-area">
+    <div class="drag-title">📝 10 BOŞLUK DOLDURMA (Sözcükleri sürükle)</div>
+    <div class="word-bank" id="fillWordBank">
+      <div class="drag-word" draggable="true" data-fillword="ısı">ısı</div>
+      <div class="drag-word" draggable="true" data-fillword="sıcaklık">sıcaklık</div>
+      <div class="drag-word" draggable="true" data-fillword="Joule">Joule</div>
+      <div class="drag-word" draggable="true" data-fillword="termometre">termometre</div>
+      <div class="drag-word" draggable="true" data-fillword="kalorimetre">kalorimetre</div>
+      <div class="drag-word" draggable="true" data-fillword="enerji">enerji</div>
+      <div class="drag-word" draggable="true" data-fillword="sıcaktan">sıcaktan</div>
+      <div class="drag-word" draggable="true" data-fillword="denge">denge</div>
+      <div class="drag-word" draggable="true" data-fillword="50">50</div>
+      <div class="drag-word" draggable="true" data-fillword="Celsius">Celsius</div>
+    </div>
+    <div class="fill-sentences" id="fillSentencesContainer">
+      <div class="sentence">① Maddeler arasında aktarılabilen enerjiye <span class="drop-slot" data-correct="ısı">______</span> denir.</div>
+      <div class="sentence">② Bir maddenin soğuk veya sıcak olduğunu belirten ölçüme <span class="drop-slot" data-correct="sıcaklık">______</span> denir.</div>
+      <div class="sentence">③ Isının bilimsel birimi <span class="drop-slot" data-correct="Joule">______</span>'dur (J).</div>
+      <div class="sentence">④ Sıcaklık ölçmek için kullanılan araç <span class="drop-slot" data-correct="termometre">______</span>'dir.</div>
+      <div class="sentence">⑤ Isı miktarını ölçmek için <span class="drop-slot" data-correct="kalorimetre">______</span> kabı kullanılır.</div>
+      <div class="sentence">⑥ Isı bir <span class="drop-slot" data-correct="enerji">______</span> türüdür.</div>
+      <div class="sentence">⑦ Isı akış yönü daima <span class="drop-slot" data-correct="sıcaktan">______</span> soğuğa doğrudur.</div>
+      <div class="sentence">⑧ Isı alışverişi sonunda ulaşılan ortak sıcaklığa <span class="drop-slot" data-correct="denge">______</span> sıcaklığı denir.</div>
+      <div class="sentence">⑨ 80°C su ile 20°C su eşit kütlede karıştırılırsa denge sıcaklığı <span class="drop-slot" data-correct="50">______</span> °C olur.</div>
+      <div class="sentence">⑩ Sıcaklık birimi derece <span class="drop-slot" data-correct="Celsius">______</span> (°C)'tur.</div>
+    </div>
+    <button class="reset-btn" id="resetFillBtn">🔄 Boşluk Etkinliğini Sıfırla</button>
+  </div>
+</div>
+
+<!-- PANEL 5: 10 SORULUK QUIZ -->
+<div id="tab-quiz" class="panel">
+  <div class="section-label">✅ ISI VE SICAKLIK – 10 SORULUK UZMANLIK QUIZİ</div>
+  <div id="quiz-container"></div>
+  <div class="score-bar" id="score-bar" style="display: none;">🌡️ Puan: <strong id="score-val">0</strong> / 10 &nbsp;|&nbsp; <span id="score-msg"></span></div>
+</div>
+
+<script>
+  // ---------- 10 SORULUK QUIZ ----------
+  const quizData = [
+    { q: "Isının birimi aşağıdakilerden hangisidir?", opts: ["Derece Celsius", "Joule", "Metre", "Kilogram"], a: 1, exp: "Isının birimi Joule (J) veya Kalori'dir (cal)." },
+    { q: "Sıcaklık ölçmek için hangi araç kullanılır?", opts: ["Kalorimetre", "Termometre", "Barometre", "Dinamometre"], a: 1, exp: "Sıcaklık termometre ile ölçülür." },
+    { q: "Isı alışverişinin yönü ile ilgili hangisi doğrudur?", opts: ["Soğuktan sıcağa", "Sıcaktan soğuğa", "Rastgele", "Aynı sıcaklıkta da olur"], a: 1, exp: "Isı her zaman sıcak maddeden soğuk maddeye akar." },
+    { q: "80°C ve 20°C sıcaklığındaki eşit kütleli sular karıştırılırsa denge sıcaklığı kaç °C olur?", opts: ["100°C", "60°C", "50°C", "30°C"], a: 2, exp: "(80+20)/2 = 50°C denge sıcaklığıdır." },
+    { q: "Aşağıdakilerden hangisi sıcaklığın birimidir?", opts: ["Joule", "Kalori", "Celsius", "Newton"], a: 2, exp: "Sıcaklık birimi derece Celsius (°C)'tur." },
+    { q: "Bir madde dışarı ısı verdiğinde aşağıdakilerden hangisi olur?", opts: ["Sıcaklığı artar", "Sıcaklığı azalır", "Enerji kazanır", "Hâl değiştirir"], a: 1, exp: "Isı veren maddenin sıcaklığı düşer, soğur." },
+    { q: "Isı ile ilgili hangisi yanlıştır?", opts: ["Bir enerjidir", "Aktarılabilir", "Kalorimetre ile ölçülür", "Sıcaklıkla aynı anlama gelir"], a: 3, exp: "Isı ve sıcaklık farklı kavramlardır, aynı anlama gelmez." },
+    { q: "Aynı sıcaklıktaki iki cisim birbirine dokundurulursa ne olur?", opts: ["Sıcak olan soğur", "Soğuk olan ısınır", "Isı alışverişi olmaz", "Her ikisinin sıcaklığı değişir"], a: 2, exp: "Sıcaklıklar eşit olduğu için ısı akışı olmaz." },
+    { q: "Bir maddenin sıcaklığının 10°C artması ne anlama gelir?", opts: ["Isı almıştır", "Isı vermiştir", "Kütlesi artmıştır", "Hacmi azalmıştır"], a: 0, exp: "Sıcaklık artışı, maddenin ısı aldığını gösterir." },
+    { q: "Kalorimetre kabı hangi amaçla kullanılır?", opts: ["Sıcaklık ölçmek", "Isı miktarını ölçmek", "Basınç ölçmek", "Kütle ölçmek"], a: 1, exp: "Kalorimetre kabı, alınan veya verilen ısı miktarını ölçmek için kullanılır." }
+  ];
+  let quizAnswered = new Array(10).fill(false);
+  let quizScores = new Array(10).fill(false);
+
+  function buildQuiz() {
+    const container = document.getElementById('quiz-container');
+    if (!container) return;
+    container.innerHTML = '';
+    quizData.forEach((q, idx) => {
+      const div = document.createElement('div'); div.className = 'quiz-q';
+      let optsHtml = '';
+      q.opts.forEach((opt, optIdx) => {
+        optsHtml += `<button class="quiz-opt" onclick="checkQuiz(${idx}, ${optIdx})" id="qzopt${idx}_${optIdx}">${opt}</button><br>`;
+      });
+      div.innerHTML = `<p><strong>Soru ${idx+1}:</strong> ${q.q}</p><div class="quiz-opts">${optsHtml}</div><div class="quiz-fb" id="qzfb${idx}"></div>`;
+      container.appendChild(div);
+    });
+  }
+
+  function checkQuiz(qIdx, chosen) {
+    if (quizAnswered[qIdx]) return;
+    quizAnswered[qIdx] = true;
+    const q = quizData[qIdx];
+    const isCorrect = (chosen === q.a);
+    quizScores[qIdx] = isCorrect;
+    for (let i = 0; i < q.opts.length; i++) {
+      const btn = document.getElementById(`qzopt${qIdx}_${i}`);
+      if (btn) { btn.disabled = true; if (i === q.a) btn.classList.add('correct'); else if (i === chosen && !isCorrect) btn.classList.add('wrong'); }
+    }
+    const fbDiv = document.getElementById(`qzfb${qIdx}`);
+    fbDiv.style.display = 'block';
+    fbDiv.className = `quiz-fb show ${isCorrect ? 'ok' : 'nope'}`;
+    fbDiv.textContent = isCorrect ? `✓ Doğru! ${q.exp}` : `✗ Yanlış! Doğru: ${q.opts[q.a]}. ${q.exp}`;
+    if (quizAnswered.every(v => v === true)) {
+      const total = quizScores.filter(Boolean).length;
+      document.getElementById('score-val').innerHTML = total;
+      let msg = total <= 4 ? '📖 Isı ve sıcaklık farkını tekrar et!' : (total <= 7 ? '🌡️ İyi! Biraz daha pratik yap.' : (total <= 9 ? '🎉 Harikasın! Isı Uzmanısın!' : '🏆 Mükemmel! Isı ve sıcaklığı çok iyi kavradın!'));
+      document.getElementById('score-msg').innerHTML = msg;
+      document.getElementById('score-bar').style.display = 'flex';
+    }
+  }
+  window.checkQuiz = checkQuiz;
+
+  // ---------- SÜRÜKLE BIRAK (DOĞRU/YANLIŞ) ----------
+  let draggedItem = null;
+  document.addEventListener('dragstart', (e) => {
+    if (e.target.classList.contains('drag-statement') || e.target.classList.contains('drag-word')) {
+      draggedItem = e.target;
+      e.target.classList.add('dragging');
+      e.dataTransfer.setData('text/plain', e.target.innerText);
+      e.dataTransfer.effectAllowed = 'move';
+    }
+  });
+  document.addEventListener('dragend', (e) => {
+    if (e.target.classList.contains('drag-statement') || e.target.classList.contains('drag-word')) e.target.classList.remove('dragging');
+    draggedItem = null;
+  });
+  const dropZones = document.querySelectorAll('.drop-zone');
+  dropZones.forEach(zone => {
+    zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', () => { zone.classList.remove('drag-over'); });
+    zone.addEventListener('drop', (e) => {
+      e.preventDefault(); zone.classList.remove('drag-over');
+      if (!draggedItem) return;
+      if (draggedItem.classList.contains('drag-statement')) {
+        const isTrueZone = zone.getAttribute('data-zone') === 'true';
+        const statementTruth = draggedItem.getAttribute('data-tf') === 'true';
+        if (isTrueZone !== statementTruth) { alert('❌ Bu ifade buraya ait değil! Tekrar dene.'); return; }
+        const targetList = zone.querySelector('.dropped-items');
+        const badge = document.createElement('div'); badge.className = 'dropped-badge'; badge.innerText = draggedItem.innerText;
+        targetList.appendChild(badge);
+        draggedItem.remove(); draggedItem = null;
+      }
+    });
+  });
+  // Fill-in boşluklar
+  const fillSlots = document.querySelectorAll('.drop-slot');
+  fillSlots.forEach(slot => {
+    slot.addEventListener('dragover', (e) => { e.preventDefault(); slot.style.backgroundColor = '#FFE0C8'; });
+    slot.addEventListener('dragleave', () => { if (!slot.classList.contains('filled')) slot.style.backgroundColor = '#F4E8DD'; });
+    slot.addEventListener('drop', (e) => {
+      e.preventDefault(); slot.style.backgroundColor = '#F4E8DD';
+      if (!draggedItem || !draggedItem.classList.contains('drag-word')) return;
+      const correctAnswer = slot.getAttribute('data-correct');
+      const droppedWord = draggedItem.getAttribute('data-fillword');
+      if (correctAnswer === droppedWord) {
+        if (slot.classList.contains('filled')) return;
+        slot.innerText = droppedWord; slot.classList.add('filled');
+        draggedItem.remove(); draggedItem = null;
+      } else { alert(`Yanlış kelime! "${droppedWord}" bu boşluğa uygun değil.`); }
+    });
+  });
+
+  // RESET DOĞRU/YANLIŞ
+  function resetTF() {
+    const trueDiv = document.getElementById('trueDropped'); const falseDiv = document.getElementById('falseDropped');
+    trueDiv.innerHTML = ''; falseDiv.innerHTML = '';
+    const originalStatements = [
+      "1. Isı bir enerji türüdür.", "2. Sıcaklığın birimi Joule'dür.",
+      "3. Isı alan maddenin sıcaklığı artar.", "4. Termometre ile ısı ölçülür.",
+      "5. Isı akışı daima sıcak maddeden soğuk maddeye doğrudur.", "6. Soğuk maddelerde ısı yoktur.",
+      "7. Kalorimetre kabı ısı ölçmek için kullanılır.", "8. Aynı sıcaklıktaki iki madde arasında ısı alışverişi olmaz.",
+      "9. Sıcaklık maddeler arasında aktarılabilir.", "10. Denge sıcaklığı, iki maddenin sıcaklıklarının ortalaması olabilir (eşit kütle)."
+    ];
+    const tfVals = ["true","false","true","false","true","false","true","true","false","true"];
+    const container = document.getElementById('tf-items-container');
+    container.innerHTML = '';
+    for (let i = 0; i < originalStatements.length; i++) {
+      const div = document.createElement('div');
+      div.className = 'drag-statement';
+      div.setAttribute('draggable', 'true');
+      div.setAttribute('data-tf', tfVals[i]);
+      div.innerText = originalStatements[i];
+      container.appendChild(div);
+    }
+    draggedItem = null;
+  }
+  // RESET BOŞLUK
+  function resetFill() {
+    const bank = document.getElementById('fillWordBank');
+    const originalWords = ["ısı","sıcaklık","Joule","termometre","kalorimetre","enerji","sıcaktan","denge","50","Celsius"];
+    bank.innerHTML = '';
+    originalWords.forEach(w => {
+      const wordDiv = document.createElement('div');
+      wordDiv.className = 'drag-word';
+      wordDiv.setAttribute('draggable', 'true');
+      wordDiv.setAttribute('data-fillword', w);
+      wordDiv.innerText = w;
+      bank.appendChild(wordDiv);
+    });
+    const slots = document.querySelectorAll('.drop-slot');
+    const placeholders = ["______","______","______","______","______","______","______","______","______","______"];
+    slots.forEach((slot, idx) => {
+      slot.innerText = placeholders[idx];
+      slot.classList.remove('filled');
+      slot.style.backgroundColor = '#F4E8DD';
+    });
+    draggedItem = null;
+  }
+  document.getElementById('resetTFBtn')?.addEventListener('click', resetTF);
+  document.getElementById('resetFillBtn')?.addEventListener('click', resetFill);
+
+  function showTab(tabId, btn) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(`tab-${tabId}`).classList.add('active');
+    btn.classList.add('active');
+  }
+  window.showTab = showTab;
+  buildQuiz();
+</script>
+</body>
+</html>

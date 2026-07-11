@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>5. Sınıf Fen: Maddenin Hal Değişimi | Hafıza Teknikleri + Etkinlikler</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    background: #F0F7F4;
+    color: #1A3B2E;
+    padding: 24px 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  :root {
+    --heat-red: #D94A2B;
+    --cool-blue: #2C7A6E;
+    --solid-brown: #8B5A2B;
+    --liquid-teal: #3E9C8C;
+    --gas-gray: #7F8C8D;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, #D94A2B, #A63E1F);
+    border-radius: 32px;
+    padding: 1.6rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 28px;
+    color: white;
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+  }
+  .hero-icon {
+    font-size: 68px;
+    filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.2));
+  }
+  .hero h2 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+  }
+  .hero p {
+    font-size: 0.85rem;
+    opacity: 0.9;
+    margin-top: 6px;
+  }
+
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .tab {
+    background: white;
+    border: none;
+    padding: 8px 24px;
+    border-radius: 60px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: 0.2s;
+    color: #D94A2B;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    border: 1px solid #F0C4B8;
+  }
+  .tab.active {
+    background: var(--heat-red);
+    color: white;
+    border-color: var(--heat-red);
+    box-shadow: 0 6px 12px rgba(217,74,43,0.3);
+  }
+  .panel {
+    display: none;
+    animation: fadeIn 0.2s ease;
+  }
+  .panel.active {
+    display: block;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px);}
+    to { opacity: 1; transform: translateY(0);}
+  }
+
+  .section-label {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #8C6B5A;
+    margin: 28px 0 12px 0;
+  }
+
+  .chunk-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+    margin-bottom: 28px;
+  }
+  .chunk {
+    background: white;
+    border-radius: 28px;
+    padding: 18px;
+    border: 1px solid #E2DCD5;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+  }
+  .chunk h4 {
+    font-size: 0.9rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .chunk ul {
+    list-style: none;
+  }
+  .chunk ul li {
+    font-size: 0.8rem;
+    margin-bottom: 8px;
+    padding-left: 22px;
+    position: relative;
+    line-height: 1.4;
+  }
+  .chunk ul li::before {
+    content: "🔥";
+    position: absolute;
+    left: 0;
+    font-size: 12px;
+  }
+  .chunk-red h4 { color: #D94A2B; }
+  .chunk-blue h4 { color: #2C7A6E; }
+  .chunk-green h4 { color: #2E7D64; }
+  .chunk-purple h4 { color: #8F5C8C; }
+
+  .info-card {
+    background: white;
+    border-radius: 24px;
+    padding: 18px;
+    border: 1px solid #E2DCD5;
+    margin-bottom: 20px;
+  }
+  .info-card h3 {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #D94A2B;
+    margin-bottom: 8px;
+  }
+  .change-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: space-between;
+    margin-top: 12px;
+  }
+  .change-item {
+    flex: 1;
+    background: #FDF8F4;
+    border-radius: 24px;
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #F0D5C8;
+  }
+  .change-icon {
+    font-size: 32px;
+  }
+
+  /* Sürükle bırak stilleri */
+  .drag-area {
+    background: #FEFCF7;
+    border-radius: 32px;
+    padding: 20px;
+    margin-bottom: 32px;
+    border: 2px solid #E2DCD5;
+  }
+  .drag-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #D94A2B;
+  }
+  .drag-items, .word-bank {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    background: #F7F2EE;
+    padding: 18px;
+    border-radius: 32px;
+    margin-bottom: 24px;
+  }
+  .drag-statement, .drag-word {
+    background: white;
+    border-radius: 60px;
+    padding: 8px 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    font-weight: 600;
+    font-size: 0.8rem;
+    cursor: grab;
+    border: 1px solid #E0C8BC;
+    user-select: none;
+  }
+  .drag-statement:active, .drag-word:active { cursor: grabbing; }
+  .drag-statement.dragging, .drag-word.dragging { opacity: 0.4; }
+  .drop-zones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  .drop-zone {
+    background: #F2F0EC;
+    border-radius: 36px;
+    padding: 16px 28px;
+    text-align: center;
+    min-width: 200px;
+    border: 2px dashed #D1C0B2;
+  }
+  .drop-zone h4 { font-weight: 800; margin-bottom: 12px; }
+  .drop-zone.drag-over { background: #E8E0D8; border-color: #D94A2B; }
+  .dropped-items {
+    min-height: 70px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+  .dropped-badge {
+    background: #E0D2C8;
+    padding: 6px 12px;
+    border-radius: 40px;
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+  .fill-sentences { margin: 20px 0; }
+  .sentence {
+    background: white;
+    border-radius: 20px;
+    padding: 12px 18px;
+    margin-bottom: 14px;
+    font-size: 0.85rem;
+    border-left: 4px solid #D94A2B;
+  }
+  .drop-slot {
+    display: inline-block;
+    background: #EDE5DE;
+    border-radius: 40px;
+    padding: 4px 14px;
+    min-width: 100px;
+    text-align: center;
+    font-weight: 700;
+    margin: 0 4px;
+    border: 1px dashed #C5AFA0;
+  }
+  .drop-slot.filled {
+    background: #C8E6D9;
+    border: 1px solid #2E7D64;
+    color: #1A5A48;
+  }
+  .reset-btn {
+    background: #D94A2B;
+    border: none;
+    color: white;
+    padding: 8px 24px;
+    border-radius: 60px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 12px;
+    font-size: 0.75rem;
+  }
+  .reset-btn:hover { background: #B83A1F; }
+
+  /* Quiz stilleri */
+  .quiz-q {
+    background: white;
+    border-radius: 24px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    border: 1px solid #E2DCD5;
+  }
+  .quiz-opt {
+    background: #FEFAF2;
+    border: 1px solid #E0C8BC;
+    padding: 8px 18px;
+    border-radius: 60px;
+    margin: 6px 0;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+  }
+  .quiz-opt.correct { background: #DFF2E3; border-color: #2E7D64; }
+  .quiz-opt.wrong { background: #FFEDE6; border-color: #D94A2B; }
+  .quiz-fb { margin-top: 10px; padding: 8px 12px; border-radius: 20px; display: none; }
+  .quiz-fb.show { display: block; }
+  .quiz-fb.ok { background: #E6F7E6; color: #2E7D64; }
+  .quiz-fb.nope { background: #FFEFE0; color: #C4510A; }
+  .score-bar {
+    background: #E8E0D8;
+    border-radius: 60px;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    font-weight: bold;
+    margin-top: 20px;
+    display: none;
+  }
+  @media (max-width: 700px) {
+    .hero { flex-direction: column; text-align: center; }
+    .chunk-grid { grid-template-columns: 1fr; }
+    .change-grid { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-icon">🧊💧💨</div>
+  <div>
+    <h2>Maddenin Hal Değişimi</h2>
+    <p>5. Sınıf Fen Bilimleri · Erime, Donma, Buharlaşma, Yoğuşma, Süblimleşme, Kırağlaşma<br>
+    <strong>F.5.5.2.1</strong> — Hal değişimlerini ve tanecik hareketlerini açıklar.</p>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('bilgi',this)">📘 Temel Bilgiler</button>
+  <button class="tab" onclick="showTab('degisimler',this)">🔄 Hal Değişimleri</button>
+  <button class="tab" onclick="showTab('teknik',this)">🧠 Hafıza Teknikleri</button>
+  <button class="tab" onclick="showTab('etkinlik',this)">🎮 Sürükle & Etkinlik</button>
+  <button class="tab" onclick="showTab('quiz',this)">✅ 10 Soruluk Quiz</button>
+</div>
+
+<!-- PANEL 1: TEMEL BİLGİLER (CHUNKING) -->
+<div id="tab-bilgi" class="panel active">
+  <div class="section-label">⚛️ HAL DEĞİŞİMİ - 4 GRUPLA ÖĞREN</div>
+  <div class="chunk-grid">
+    <div class="chunk chunk-red">
+      <h4>🔥 Isı Alan (Endotermik)</h4>
+      <ul>
+        <li>Erime: Katı → Sıvı (ısı alır)</li>
+        <li>Buharlaşma: Sıvı → Gaz (ısı alır)</li>
+        <li>Süblimleşme: Katı → Gaz (doğrudan, ısı alır)</li>
+        <li>Örnek: Buz erir, su buharlaşır, naftalin süblimleşir</li>
+      </ul>
+    </div>
+    <div class="chunk chunk-blue">
+      <h4>❄️ Isı Veren (Ekzotermik)</h4>
+      <ul>
+        <li>Donma: Sıvı → Katı (ısı verir)</li>
+        <li>Yoğuşma: Gaz → Sıvı (ısı verir)</li>
+        <li>Kırağlaşma: Gaz → Katı (doğrudan, ısı verir)</li>
+        <li>Örnek: Su donar, camda buğu, kırağı oluşumu</li>
+      </ul>
+    </div>
+    <div class="chunk chunk-green">
+      <h4>🧪 Tanecik Yapısı Değişimi</h4>
+      <ul>
+        <li>Erime/donma: tanecikler arası boşluk artar/azalır</li>
+        <li>Buharlaşma/yoğuşma: tanecik bağımsızlaşır / yakınlaşır</li>
+        <li>Taneciklerin kendisi değişmez, düzeni değişir</li>
+      </ul>
+    </div>
+    <div class="chunk chunk-purple">
+      <h4>🌡️ Buharlaşma vs Kaynama</h4>
+      <ul>
+        <li>Buharlaşma: her sıcaklıkta, yüzeyde</li>
+        <li>Kaynama: belirli sıcaklıkta, kabın her yerinde</li>
+        <li>Örnek: Çamaşır kuruması (buharlaşma), suyun 100°C'de kaynaması</li>
+      </ul>
+    </div>
+  </div>
+  <div class="info-card">
+    <h3>🔬 Maddenin Halleri ve Tanecik Hareketleri</h3>
+    <p><strong>Katı:</strong> Tanecikler birbirine çok yakın, sadece titreşim.<br>
+    <strong>Sıvı:</strong> Tanecikler arası boşluk az, titreşim+dönme+öteleme.<br>
+    <strong>Gaz:</strong> Tanecikler arası boşluk çok, bağımsız hareket, sıkıştırılabilir.<br>
+    Hal değişiminde maddenin sıcaklığı değişirken tanecik yapısı değişmez, sadece düzen ve boşluk değişir.</p>
+  </div>
+</div>
+
+<!-- PANEL 2: HAL DEĞİŞİMLERİ VE ÖRNEKLER -->
+<div id="tab-degisimler" class="panel">
+  <div class="section-label">🔄 ISI ALARAK GERÇEKLEŞEN DEĞİŞİMLER</div>
+  <div class="change-grid">
+    <div class="change-item"><div class="change-icon">🧊➡️💧</div><h3>Erime</h3><p>Katı → Sıvı<br>Isı alır<br>Örn: Buz erimesi, mum erimesi</p></div>
+    <div class="change-item"><div class="change-icon">💧➡️💨</div><h3>Buharlaşma</h3><p>Sıvı → Gaz<br>Isı alır (her sıcaklıkta)<br>Örn: Suyun buharlaşması, terleme</p></div>
+    <div class="change-item"><div class="change-icon">🧊➡️💨</div><h3>Süblimleşme</h3><p>Katı → Gaz (doğrudan)<br>Isı alır<br>Örn: Naftalin, kuru buz</p></div>
+  </div>
+  <div class="section-label">❄️ ISI VEREREK GERÇEKLEŞEN DEĞİŞİMLER</div>
+  <div class="change-grid">
+    <div class="change-item"><div class="change-icon">💧➡️🧊</div><h3>Donma</h3><p>Sıvı → Katı<br>Isı verir<br>Örn: Suyun donması, kar yağması</p></div>
+    <div class="change-item"><div class="change-icon">💨➡️💧</div><h3>Yoğuşma</h3><p>Gaz → Sıvı<br>Isı verir<br>Örn: Camda buğu, yağmur oluşumu</p></div>
+    <div class="change-item"><div class="change-icon">💨➡️🧊</div><h3>Kırağlaşma</h3><p>Gaz → Katı (doğrudan)<br>Isı verir<br>Örn: Kırağı, soğuk havada buzlanma</p></div>
+  </div>
+  <div class="info-card">
+    <h3>📌 Günlük Hayattan İlginç Örnekler</h3>
+    <p>✔ Kar erirken ortamdan ısı aldığı için hava soğur.<br>
+    ✔ Kar yağarken su donduğu için çevreye ısı verir, hava ılıklaşır.<br>
+    ✔ Elbiselerin arasındaki naftalin, sıvılaşmadan doğrudan gaz hale geçer (süblimleşme).<br>
+    ✔ Soğuk bir bardağın dışında su damlacıkları oluşması yoğuşmadır.</p>
+  </div>
+</div>
+
+<!-- PANEL 3: HAFIZA TEKNİKLERİ -->
+<div id="tab-teknik" class="panel">
+  <div class="section-label">🔡 Akrostiş: “EBD SKY” (Erime, Buharlaşma, Donma, Süblimleşme, Kırağlaşma, Yoğuşma)</div>
+  <div class="info-card">
+    <h3>💡 "E - B - D - S - K - Y" kuralı</h3>
+    <p><strong>E</strong>rime: Isı alır, katıdan sıvıya<br>
+    <strong>B</strong>uharlaşma: Isı alır, sıvıdan gaza<br>
+    <strong>D</strong>onma: Isı verir, sıvıdan katıya<br>
+    <strong>S</strong>üblimleşme: Isı alır, katıdan gaza (atlar)<br>
+    <strong>K</strong>ırağlaşma: Isı verir, gazdan katıya (atlar)<br>
+    <strong>Y</strong>oğuşma: Isı verir, gazdan sıvıya</p>
+  </div>
+  <div class="chunk-grid">
+    <div class="chunk chunk-red"><h4>🎯 Zihinsel Canlandırma: “Buz Küpü”</h4><ul><li>Buz erirken ısı alır → çevreyi soğutur</li><li>Su donarken ısı verir → çevreyi ısıtır</li><li>Çaydanlıktaki buhar cama çarpar → yoğuşma</li></ul></div>
+    <div class="chunk chunk-blue"><h4>📝 Buharlaşma vs Kaynama</h4><ul><li>Buharlaşma her sıcaklıkta, yüzeyde</li><li>Kaynama belirli sıcaklıkta, her yerde</li><li>“Her kaynama buharlaşmadır ama her buharlaşma kaynama değildir”</li></ul></div>
+  </div>
+  <div class="info-card">
+    <h3>🧠 Kısa notlar</h3>
+    <p>Süblimleşme (katı → gaz) ve kırağlaşma (gaz → katı) ara hali olmadan gerçekleşir. Örnek: Naftalin (süblimleşme), kışın ağaçlarda oluşan kırağı (kırağlaşma).</p>
+  </div>
+</div>
+
+<!-- PANEL 4: SÜRÜKLE BIRAK ETKİNLİKLER (10 DOĞRU/YANLIŞ + 10 BOŞLUK) -->
+<div id="tab-etkinlik" class="panel">
+  <!-- Bölüm 1: 10 Doğru/Yanlış -->
+  <div class="drag-area">
+    <div class="drag-title">✅❌ 10 DOĞRU / YANLIŞ ETKİNLİĞİ (Sürükle bırak)</div>
+    <div class="drag-items" id="tf-items-container">
+      <div class="drag-statement" draggable="true" data-tf="true">1. Erime olayında madde ısı alır.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">2. Donma olayında madde ısı alır.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">3. Buharlaşma her sıcaklıkta gerçekleşebilir.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">4. Kaynama sadece yüzeyde gerçekleşir.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">5. Süblimleşme katıdan gaz hale doğrudan geçiştir.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">6. Yoğuşma ısı alarak gerçekleşir.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">7. Kırağlaşma gazdan katıya doğrudan geçiştir.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">8. Kar erirken hava sıcaklığı düşer (ısı alır).</div>
+      <div class="drag-statement" draggable="true" data-tf="false">9. Tanecikler hal değişiminde kimlik değiştirir.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">10. Naftalin süblimleşmeye örnektir.</div>
+    </div>
+    <div class="drop-zones">
+      <div class="drop-zone" data-zone="true" id="dropTrueZone">
+        <h4>✅ DOĞRU</h4>
+        <div class="dropped-items" id="trueDropped"></div>
+      </div>
+      <div class="drop-zone" data-zone="false" id="dropFalseZone">
+        <h4>❌ YANLIŞ</h4>
+        <div class="dropped-items" id="falseDropped"></div>
+      </div>
+    </div>
+    <button class="reset-btn" id="resetTFBtn">🔄 Doğru/Yanlış Etkinliğini Sıfırla</button>
+  </div>
+
+  <!-- Bölüm 2: 10 Boşluk Doldurma (Sürükle) -->
+  <div class="drag-area">
+    <div class="drag-title">📝 10 BOŞLUK DOLDURMA (Sözcükleri sürükle)</div>
+    <div class="word-bank" id="fillWordBank">
+      <div class="drag-word" draggable="true" data-fillword="erime">erime</div>
+      <div class="drag-word" draggable="true" data-fillword="donma">donma</div>
+      <div class="drag-word" draggable="true" data-fillword="buharlaşma">buharlaşma</div>
+      <div class="drag-word" draggable="true" data-fillword="yoğuşma">yoğuşma</div>
+      <div class="drag-word" draggable="true" data-fillword="süblimleşme">süblimleşme</div>
+      <div class="drag-word" draggable="true" data-fillword="kırağlaşma">kırağlaşma</div>
+      <div class="drag-word" draggable="true" data-fillword="ısı">ısı</div>
+      <div class="drag-word" draggable="true" data-fillword="öteleme">öteleme</div>
+      <div class="drag-word" draggable="true" data-fillword="kaynama">kaynama</div>
+      <div class="drag-word" draggable="true" data-fillword="naftalin">naftalin</div>
+    </div>
+    <div class="fill-sentences" id="fillSentencesContainer">
+      <div class="sentence">① Katı bir maddenin ısı alarak sıvı hale geçmesine <span class="drop-slot" data-correct="erime">______</span> denir.</div>
+      <div class="sentence">② Sıvı bir maddenin ısı vererek katı hale geçmesine <span class="drop-slot" data-correct="donma">______</span> denir.</div>
+      <div class="sentence">③ Sıvının her sıcaklıkta yüzeyden gaz hale geçmesine <span class="drop-slot" data-correct="buharlaşma">______</span> denir.</div>
+      <div class="sentence">④ Gaz halindeki bir maddenin ısı vererek sıvı hale geçmesine <span class="drop-slot" data-correct="yoğuşma">______</span> denir.</div>
+      <div class="sentence">⑤ Katı bir maddenin sıvı hale geçmeden doğrudan gaz hale geçmesine <span class="drop-slot" data-correct="süblimleşme">______</span> denir.</div>
+      <div class="sentence">⑥ Gaz halindeki su buharının doğrudan katı hale (kırağı) geçmesine <span class="drop-slot" data-correct="kırağlaşma">______</span> denir.</div>
+      <div class="sentence">⑦ Hal değişimlerinin temel sebebi maddenin <span class="drop-slot" data-correct="ısı">______</span> alması veya vermesidir.</div>
+      <div class="sentence">⑧ Sıvı taneciklerinin bir yerden başka yere gitmesine <span class="drop-slot" data-correct="öteleme">______</span> hareketi denir.</div>
+      <div class="sentence">⑨ Suyun 100°C'de her yerinde gerçekleşen buharlaşma olayına <span class="drop-slot" data-correct="kaynama">______</span> denir.</div>
+      <div class="sentence">⑩ Elbiselerin arasına konulan <span class="drop-slot" data-correct="naftalin">______</span> süblimleşmeye örnektir.</div>
+    </div>
+    <button class="reset-btn" id="resetFillBtn">🔄 Boşluk Etkinliğini Sıfırla</button>
+  </div>
+</div>
+
+<!-- PANEL 5: 10 SORULUK QUIZ -->
+<div id="tab-quiz" class="panel">
+  <div class="section-label">✅ MADDE HAL DEĞİŞİMİ – 10 SORULUK UZMANLIK QUIZİ</div>
+  <div id="quiz-container"></div>
+  <div class="score-bar" id="score-bar" style="display: none;">🧊 Puan: <strong id="score-val">0</strong> / 10 &nbsp;|&nbsp; <span id="score-msg"></span></div>
+</div>
+
+<script>
+  // ---------- 10 SORULUK QUIZ ----------
+  const quizData = [
+    { q: "Buzun erimesi sırasında aşağıdakilerden hangisi gerçekleşir?", opts: ["Isı verir", "Isı alır", "Sıcaklık artmaz", "Tanecikler küçülür"], a: 1, exp: "Erime olayında madde çevreden ısı alır." },
+    { q: "Hangisi ısı vererek gerçekleşen bir hal değişimidir?", opts: ["Erime", "Buharlaşma", "Donma", "Süblimleşme"], a: 2, exp: "Donma olayında sıvı katılaşırken çevreye ısı verir." },
+    { q: "Suyun buharlaşması ile kaynaması arasındaki fark nedir?", opts: ["Buharlaşma her sıcaklıkta, kaynama belirli sıcaklıkta", "Kaynama her sıcaklıkta, buharlaşma belirli sıcaklıkta", "İkisi de aynıdır", "Buharlaşma sadece yüzeyde, kaynama her yerde"], a: 0, exp: "Buharlaşma her sıcaklıkta yüzeyde, kaynama belirli sıcaklıkta tüm sıvıda olur." },
+    { q: "Kırağlaşma olayında madde hangi haller arasında geçiş yapar?", opts: ["Katı → Sıvı", "Sıvı → Gaz", "Gaz → Katı (doğrudan)", "Katı → Gaz"], a: 2, exp: "Kırağlaşma, gaz halindeki su buharının doğrudan katı hale (kırağı) geçmesidir." },
+    { q: "Aşağıdakilerden hangisi süblimleşmeye örnektir?", opts: ["Buzun erimesi", "Suyun kaynaması", "Naftalinin gazlaşması", "Çaydanlıkta buğu"], a: 2, exp: "Naftalin katı halden doğrudan gaza geçer, süblimleşme örneğidir." },
+    { q: "Bir maddenin katı hali sıvı hale geçerken tanecikleri arasındaki boşluk nasıl değişir?", opts: ["Azalır", "Artar", "Değişmez", "Önce azalır sonra artar"], a: 1, exp: "Erime sırasında tanecikler arasındaki boşluk artar." },
+    { q: "Yoğuşma olayı hangi durumda gerçekleşir?", opts: ["Sıvı ısıtıldığında", "Gaz soğutulduğunda", "Katı ısıtıldığında", "Gaz ısıtıldığında"], a: 1, exp: "Yoğuşma, gaz soğuyarak sıvı hale geçtiğinde olur (ısı verir)." },
+    { q: "Kar yağarken havanın ılıklaşmasının nedeni nedir?", opts: ["Kar erirken ısı alır", "Kar yağarken su donar ve ısı verir", "Hava soğur", "Rüzgar etkisi"], a: 1, exp: "Sıvı su donarken çevreye ısı verir, bu nedenle kar yağarken hava ılıklaşabilir." },
+    { q: "Hangisi sadece sıvı yüzeyinde gerçekleşir?", opts: ["Kaynama", "Buharlaşma", "Erime", "Donma"], a: 1, exp: "Buharlaşma her sıcaklıkta sıvının yüzeyinde olur, kaynama tüm sıvıda olur." },
+    { q: "Bir maddenin tanecikleri arasındaki boşluğun en fazla olduğu hal hangisidir?", opts: ["Katı", "Sıvı", "Gaz", "Plazma"], a: 2, exp: "Gazlarda tanecikler arası boşluk en fazladır." }
+  ];
+  let quizAnswered = new Array(10).fill(false);
+  let quizScores = new Array(10).fill(false);
+
+  function buildQuiz() {
+    const container = document.getElementById('quiz-container');
+    if (!container) return;
+    container.innerHTML = '';
+    quizData.forEach((q, idx) => {
+      const div = document.createElement('div'); div.className = 'quiz-q';
+      let optsHtml = '';
+      q.opts.forEach((opt, optIdx) => {
+        optsHtml += `<button class="quiz-opt" onclick="checkQuiz(${idx}, ${optIdx})" id="qzopt${idx}_${optIdx}">${opt}</button><br>`;
+      });
+      div.innerHTML = `<p><strong>Soru ${idx+1}:</strong> ${q.q}</p><div class="quiz-opts">${optsHtml}</div><div class="quiz-fb" id="qzfb${idx}"></div>`;
+      container.appendChild(div);
+    });
+  }
+
+  function checkQuiz(qIdx, chosen) {
+    if (quizAnswered[qIdx]) return;
+    quizAnswered[qIdx] = true;
+    const q = quizData[qIdx];
+    const isCorrect = (chosen === q.a);
+    quizScores[qIdx] = isCorrect;
+    for (let i = 0; i < q.opts.length; i++) {
+      const btn = document.getElementById(`qzopt${qIdx}_${i}`);
+      if (btn) { btn.disabled = true; if (i === q.a) btn.classList.add('correct'); else if (i === chosen && !isCorrect) btn.classList.add('wrong'); }
+    }
+    const fbDiv = document.getElementById(`qzfb${qIdx}`);
+    fbDiv.style.display = 'block';
+    fbDiv.className = `quiz-fb show ${isCorrect ? 'ok' : 'nope'}`;
+    fbDiv.textContent = isCorrect ? `✓ Doğru! ${q.exp}` : `✗ Yanlış! Doğru: ${q.opts[q.a]}. ${q.exp}`;
+    if (quizAnswered.every(v => v === true)) {
+      const total = quizScores.filter(Boolean).length;
+      document.getElementById('score-val').innerHTML = total;
+      let msg = total <= 4 ? '📖 Hal değişimlerini tekrar et, etkinliklere göz at!' : (total <= 7 ? '🌡️ İyi! Biraz daha pratik yap.' : (total <= 9 ? '🎉 Harikasın! Hal Değişim Uzmanısın!' : '🏆 Mükemmel! Isı ve hal değişimini çok iyi kavradın!'));
+      document.getElementById('score-msg').innerHTML = msg;
+      document.getElementById('score-bar').style.display = 'flex';
+    }
+  }
+  window.checkQuiz = checkQuiz;
+
+  // ---------- SÜRÜKLE BIRAK (DOĞRU/YANLIŞ) ----------
+  let draggedItem = null;
+  document.addEventListener('dragstart', (e) => {
+    if (e.target.classList.contains('drag-statement') || e.target.classList.contains('drag-word')) {
+      draggedItem = e.target;
+      e.target.classList.add('dragging');
+      e.dataTransfer.setData('text/plain', e.target.innerText);
+      e.dataTransfer.effectAllowed = 'move';
+    }
+  });
+  document.addEventListener('dragend', (e) => {
+    if (e.target.classList.contains('drag-statement') || e.target.classList.contains('drag-word')) e.target.classList.remove('dragging');
+    draggedItem = null;
+  });
+  const dropZones = document.querySelectorAll('.drop-zone');
+  dropZones.forEach(zone => {
+    zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', () => { zone.classList.remove('drag-over'); });
+    zone.addEventListener('drop', (e) => {
+      e.preventDefault(); zone.classList.remove('drag-over');
+      if (!draggedItem) return;
+      if (draggedItem.classList.contains('drag-statement')) {
+        const isTrueZone = zone.getAttribute('data-zone') === 'true';
+        const statementTruth = draggedItem.getAttribute('data-tf') === 'true';
+        if (isTrueZone !== statementTruth) { alert('❌ Bu ifade buraya ait değil! Tekrar dene.'); return; }
+        const targetList = zone.querySelector('.dropped-items');
+        const badge = document.createElement('div'); badge.className = 'dropped-badge'; badge.innerText = draggedItem.innerText;
+        targetList.appendChild(badge);
+        draggedItem.remove(); draggedItem = null;
+      }
+    });
+  });
+  // Fill-in boşluklar
+  const fillSlots = document.querySelectorAll('.drop-slot');
+  fillSlots.forEach(slot => {
+    slot.addEventListener('dragover', (e) => { e.preventDefault(); slot.style.backgroundColor = '#E0D9D0'; });
+    slot.addEventListener('dragleave', () => { if (!slot.classList.contains('filled')) slot.style.backgroundColor = '#EDE5DE'; });
+    slot.addEventListener('drop', (e) => {
+      e.preventDefault(); slot.style.backgroundColor = '#EDE5DE';
+      if (!draggedItem || !draggedItem.classList.contains('drag-word')) return;
+      const correctAnswer = slot.getAttribute('data-correct');
+      const droppedWord = draggedItem.getAttribute('data-fillword');
+      if (correctAnswer === droppedWord) {
+        if (slot.classList.contains('filled')) return;
+        slot.innerText = droppedWord; slot.classList.add('filled');
+        draggedItem.remove(); draggedItem = null;
+      } else { alert(`Yanlış kelime! "${droppedWord}" bu boşluğa uygun değil.`); }
+    });
+  });
+
+  // RESET DOĞRU/YANLIŞ
+  function resetTF() {
+    const trueDiv = document.getElementById('trueDropped'); const falseDiv = document.getElementById('falseDropped');
+    trueDiv.innerHTML = ''; falseDiv.innerHTML = '';
+    const originalStatements = [
+      "1. Erime olayında madde ısı alır.", "2. Donma olayında madde ısı alır.",
+      "3. Buharlaşma her sıcaklıkta gerçekleşebilir.", "4. Kaynama sadece yüzeyde gerçekleşir.",
+      "5. Süblimleşme katıdan gaz hale doğrudan geçiştir.", "6. Yoğuşma ısı alarak gerçekleşir.",
+      "7. Kırağlaşma gazdan katıya doğrudan geçiştir.", "8. Kar erirken hava sıcaklığı düşer (ısı alır).",
+      "9. Tanecikler hal değişiminde kimlik değiştirir.", "10. Naftalin süblimleşmeye örnektir."
+    ];
+    const tfVals = ["true","false","true","false","true","false","true","true","false","true"];
+    const container = document.getElementById('tf-items-container');
+    container.innerHTML = '';
+    for (let i = 0; i < originalStatements.length; i++) {
+      const div = document.createElement('div');
+      div.className = 'drag-statement';
+      div.setAttribute('draggable', 'true');
+      div.setAttribute('data-tf', tfVals[i]);
+      div.innerText = originalStatements[i];
+      container.appendChild(div);
+    }
+    draggedItem = null;
+  }
+  // RESET BOŞLUK
+  function resetFill() {
+    const bank = document.getElementById('fillWordBank');
+    const originalWords = ["erime","donma","buharlaşma","yoğuşma","süblimleşme","kırağlaşma","ısı","öteleme","kaynama","naftalin"];
+    bank.innerHTML = '';
+    originalWords.forEach(w => {
+      const wordDiv = document.createElement('div');
+      wordDiv.className = 'drag-word';
+      wordDiv.setAttribute('draggable', 'true');
+      wordDiv.setAttribute('data-fillword', w);
+      wordDiv.innerText = w;
+      bank.appendChild(wordDiv);
+    });
+    const slots = document.querySelectorAll('.drop-slot');
+    const placeholders = ["______","______","______","______","______","______","______","______","______","______"];
+    slots.forEach((slot, idx) => {
+      slot.innerText = placeholders[idx];
+      slot.classList.remove('filled');
+      slot.style.backgroundColor = '#EDE5DE';
+    });
+    draggedItem = null;
+  }
+  document.getElementById('resetTFBtn')?.addEventListener('click', resetTF);
+  document.getElementById('resetFillBtn')?.addEventListener('click', resetFill);
+
+  function showTab(tabId, btn) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(`tab-${tabId}`).classList.add('active');
+    btn.classList.add('active');
+  }
+  window.showTab = showTab;
+  buildQuiz();
+</script>
+</body>
+</html>

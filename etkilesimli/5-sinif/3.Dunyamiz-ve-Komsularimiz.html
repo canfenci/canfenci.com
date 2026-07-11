@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dünyamız ve Gökyüzündeki Komşularımız | Hareketler & Model</title>
+<style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #F4F9FF;
+    color: #1a2a3a;
+    padding: 24px 20px;
+    max-width: 900px;
+    margin: auto;
+  }
+
+  h1 {
+    font-size: 28px;
+    color: #004080;
+    text-align: center;
+    margin-bottom: 6px;
+    letter-spacing: -0.3px;
+  }
+
+  .subtitle {
+    text-align: center;
+    font-size: 13px;
+    color: #5a6e7c;
+    margin-bottom: 24px;
+    border-bottom: 2px solid #cce4ff;
+    display: inline-block;
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: 6px;
+  }
+
+  /* hero */
+  .hero {
+    background: linear-gradient(115deg, #002b5c, #1b4f8b);
+    border-radius: 28px;
+    padding: 1.5rem 1.8rem;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 28px;
+    color: white;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+  .hero .icon-stack {
+    font-size: 64px;
+    background: rgba(255,215,0,0.2);
+    border-radius: 80px;
+    padding: 12px;
+  }
+  .hero h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .hero p {
+    font-size: 14px;
+    opacity: 0.9;
+    line-height: 1.5;
+  }
+  .hero strong {
+    color: #FFD966;
+  }
+
+  /* tab bar */
+  .tabs {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+    background: #fff;
+    padding: 8px 12px;
+    border-radius: 60px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  }
+  .tab {
+    padding: 8px 20px;
+    border-radius: 40px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    background: #eef3fc;
+    color: #1f5680;
+    transition: all 0.2s;
+  }
+  .tab.active {
+    background: #1f6eb0;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0,80,120,0.2);
+  }
+
+  .panel {
+    display: none;
+    animation: fade 0.25s ease;
+  }
+  .panel.active {
+    display: block;
+  }
+  @keyframes fade { from { opacity:0; } to { opacity:1; } }
+
+  .section-label {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #4f7ea0;
+    margin: 24px 0 12px 0;
+    border-left: 4px solid #ff914d;
+    padding-left: 12px;
+  }
+
+  /* kart stilleri */
+  .grid-3cols {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .card {
+    background: white;
+    border-radius: 20px;
+    padding: 16px;
+    box-shadow: 0 5px 12px rgba(0,0,0,0.05);
+    border: 1px solid #e2edf7;
+    transition: all 0.2s;
+  }
+  .card-icon {
+    font-size: 38px;
+    margin-bottom: 10px;
+  }
+  .card h4 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #004070;
+  }
+  .card ul {
+    list-style: none;
+    font-size: 13px;
+    line-height: 1.75;
+    color: #2d4c6c;
+  }
+  .card ul li::before {
+    content: "🌀 ";
+    font-weight: 600;
+    color: #ff8c42;
+  }
+
+  .info-highlight {
+    background: #e8f0fe;
+    border-left: 6px solid #ff914d;
+    border-radius: 20px;
+    padding: 16px 20px;
+    margin: 20px 0;
+  }
+  .info-highlight p {
+    font-size: 14px;
+    color: #1c4468;
+  }
+
+  .timeline {
+    background: #FFF7E8;
+    border-radius: 24px;
+    padding: 16px;
+    border: 1px solid #ffdcb5;
+    margin: 16px 0;
+  }
+  .tl-item {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+  .tl-icon {
+    font-size: 28px;
+  }
+  .tl-text h4 {
+    font-size: 16px;
+    font-weight: 800;
+    color: #b44d00;
+  }
+
+  .mnemonic-box {
+    background: #FFF3CF;
+    border-radius: 24px;
+    padding: 18px;
+    border: 1px solid #FFD966;
+  }
+  .mnemonic-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 14px;
+    align-items: flex-start;
+  }
+  .ml {
+    width: 38px;
+    height: 38px;
+    background: #ffaa44;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 22px;
+    color: #2c2c2c;
+  }
+  .mtext {
+    font-size: 14px;
+    color: #3a2a0a;
+    line-height: 1.4;
+    flex: 1;
+  }
+
+  .comparison {
+    display: flex;
+    justify-content: space-around;
+    background: #FFFFFFDD;
+    padding: 16px;
+    border-radius: 32px;
+    backdrop-filter: blur(2px);
+    text-align: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .comp-item {
+    flex: 1;
+    background: #fafcff;
+    border-radius: 24px;
+    padding: 12px;
+  }
+
+  .warn-card {
+    background: #ffede3;
+    border-radius: 20px;
+    padding: 14px 18px;
+    display: flex;
+    gap: 14px;
+    margin: 20px 0;
+    border: 1px solid #ffbc7a;
+  }
+
+  .quiz-q {
+    background: white;
+    border-radius: 24px;
+    padding: 18px;
+    margin-bottom: 16px;
+    border: 1px solid #cde0ef;
+  }
+  .quiz-opts {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 14px 0 8px;
+  }
+  .quiz-opt {
+    background: #f9fafc;
+    border: 1px solid #cbdae6;
+    padding: 10px 16px;
+    border-radius: 48px;
+    font-size: 13px;
+    cursor: pointer;
+    text-align: left;
+    transition: 0.1s;
+  }
+  .quiz-opt:hover:not(:disabled) {
+    background: #e3f0ff;
+    border-color: #ff914d;
+  }
+  .quiz-opt.correct {
+    background: #d4f0dc;
+    border-color: #2c8730;
+  }
+  .quiz-opt.wrong {
+    background: #ffe0e0;
+    border-color: #c7362b;
+  }
+  .quiz-fb {
+    font-size: 13px;
+    padding: 8px 12px;
+    border-radius: 16px;
+    display: none;
+  }
+  .score-bar {
+    background: #e2f0fa;
+    border-radius: 48px;
+    padding: 12px 20px;
+    margin-top: 20px;
+    display: flex;
+    gap: 12px;
+    align-items: baseline;
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="icon-stack">🌍☀️🌙</div>
+  <div>
+    <h2>Dünyamız ve Gökyüzündeki Komşularımız</h2>
+    <p>5. Sınıf Fen Bilimleri · Hareketler, Modeller ve Temsil<br>
+    <strong>F.5.1.3.1</strong> — Güneş, Dünya ve Ay’ın birbirlerine göre hareketleri, hacimsel büyüklükler, bilimsel model.</p>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('hareket',this)">🌀 Hareketler & Model</button>
+  <button class="tab" onclick="showTab('karsilastirma',this)">📏 Büyüklük & Zaman</button>
+  <button class="tab" onclick="showTab('teknikler',this)">🧠 Hafıza Tekniği (Akrostiş)</button>
+  <button class="tab" onclick="showTab('biliminsani',this)">🌟 Uluğ Bey & Tarih</button>
+  <button class="tab" onclick="showTab('quiz',this)">✅ Kendini Test Et</button>
+</div>
+
+<!-- PANEL 1: HAREKETLER VE MODEL -->
+<div id="tab-hareket" class="panel active">
+  <div class="section-label">🔄 Hareket çeşitleri: Dönme ve Dolanma</div>
+  <div class="grid-3cols">
+    <div class="card"><div class="card-icon">☀️</div><h4>Güneş'in Hareketi</h4><ul><li>Kendi ekseni etrafında dönme (25 günde)</li><li>Samanyolu Galaksisi etrafında dolanma</li><li>Yön: saat yönünün tersi</li></ul></div>
+    <div class="card"><div class="card-icon">🌍</div><h4>Dünya'nın Hareketleri</h4><ul><li>Kendi ekseni → 24 saat (gece-gündüz)</li><li>Güneş etrafında dolanma → 365 gün 6 saat (mevsimler)</li><li>Her iki hareket yönü: saat yönünün tersi</li></ul></div>
+    <div class="card"><div class="card-icon">🌙</div><h4>Ay'ın Üç Hareketi</h4><ul><li>Kendi ekseni etrafında (27 gün 8 saat)</li><li>Dünya etrafında dolanma (27 gün 8 saat)</li><li>Dünya ile birlikte Güneş etrafında dolanma (365 gün 6 saat)</li></ul></div>
+  </div>
+
+  <div class="info-highlight">
+    <p><strong>🎯 Modelleme Kuralı:</strong> Güneş, Dünya ve Ay’ın tüm dönme ve dolanma hareketleri <strong>saat yönünün tersine</strong> gerçekleşir. Bu evrensel bir temsildir.</p>
+    <p style="margin-top:10px;">🧪 Bilimsel model hazırlarken <strong>hacim farklarını</strong> da temsil etmeyi unutma: Güneş > Dünya > Ay (sırasıyla büyüklük).</p>
+  </div>
+
+  <div class="section-label">🔁 Ay’ın Özel Durumu: Hep Aynı Yüzü Görürüz</div>
+  <div class="card" style="background:#EFF7FF;">
+    <p>🌗 Ay, hem kendi ekseni etrafında dönme hem de Dünya etrafında dolanma sürelerini <strong>27 gün 8 saatte</strong> tamamladığı için <strong>aynı yüzü</strong> bize dönüktür. (Eşit süre = kilitli dönüş).</p>
+    <p style="margin-top:8px;"><strong>📌 Önemli:</strong> Ay'ın iki hareket süresi eşit olduğundan “karanlık yüz” diye bir ifade yanlıştır; sadece göremediğimiz arka yüz vardır.</p>
+  </div>
+
+  <div class="section-label">📐 Hacimsel Büyüklük Modeli (Ölçek Temsili)</div>
+  <div class="comparison">
+    <div class="comp-item">🏀 <strong>Güneş (çok büyük)</strong><br>Dünya’dan ~109 kat çap<br>1,3 milyon dünya sığar</div>
+    <div class="comp-item">⚽ <strong>Dünya</strong><br>Ay’dan ~4 kat çap<br>49 tane Ay sığar</div>
+    <div class="comp-item">🏐 <strong>Ay</strong><br>Dünya’nın yaklaşık 1/4’ü çap</div>
+  </div>
+</div>
+
+<!-- PANEL 2: BÜYÜKLÜK & ZAMAN SAYILARI -->
+<div id="tab-karsilastirma" class="panel">
+  <div class="section-label">🔢 Süreler ve sayısal karşılaştırmalar</div>
+  <div class="grid-3cols">
+    <div class="card"><div class="card-icon">⏱️</div><h4>Dönme Süreleri</h4><ul><li>Güneş: 25 gün</li><li>Dünya: 24 saat → 1 gün</li><li>Ay: 27 gün 8 saat</li></ul></div>
+    <div class="card"><div class="card-icon">📅</div><h4>Dolanma Süreleri</h4><ul><li>Dünya (Güneş çevresi): 365 gün 6 saat → 1 yıl</li><li>Ay (Dünya çevresi): 27 gün 8 saat</li><li>Ay (Güneş çevresi – Dünya ile): 365 gün 6 saat</li></ul></div>
+    <div class="card"><div class="card-icon">🌡️</div><h4>Bilimsel Modelde Hacim</h4><ul><li>Hacim: cismin uzayda kapladığı yer (cm³,m³)</li><li>Sıralama: Güneş > Dünya > Ay</li><li>Modelleme: gerçek oranlar ölçeklenir</li></ul></div>
+  </div>
+
+  <div class="info-highlight">
+    <h4 style="margin-bottom:8px;">✨ Sonuç Oluşumları:</h4>
+    <ul style="margin-left:20px;">
+      <li>🔆 Dünya’nın dönme hareketi → <strong>gece-gündüz</strong></li>
+      <li>🍂 Dünya’nın dolanma hareketi → <strong>mevsimler</strong></li>
+      <li>🌙 Ay’ın evreleri (dolanma + dönme) → aynı yüzün görülmesi</li>
+    </ul>
+  </div>
+
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-icon">📏</div><div class="tl-text"><h4>Ölçek Modeli Önerisi</h4><p>Bir fen sınıfında Güneş = 50 cm top, Dünya = 0,5 cm nohut, Ay = 0,1 cm toplu iğne başı. Hareket yönleri mutlaka saat yönünün tersi çizilir.</p></div></div>
+    <div class="tl-item"><div class="tl-icon">⚡</div><div class="tl-text"><h4>Püf Noktası</h4><p>Hacim karşılaştırırken "Ay'dan Dünya'ya, Dünya'dan Güneş’e" doğru büyür. Çap farkı Güneş/Dünya ~109 kat, Dünya/Ay ~3,7 kat.</p></div></div>
+  </div>
+</div>
+
+<!-- PANEL 3: HAFIZA TEKNİĞİ (AKROSTİŞ VE KODLAMA) -->
+<div id="tab-teknikler" class="panel">
+  <div class="section-label">🔡 “HAREKET” Akrostişi – Hareket ve Model Bilgileri</div>
+  <div class="mnemonic-box">
+    <div class="mnemonic-row"><div class="ml">H</div><div class="mtext"><strong>Hepsi saat yönünün tersine</strong> — Güneş, Dünya, Ay'ın tüm dönme/dolanma yönü aynı.</div></div>
+    <div class="mnemonic-row"><div class="ml">A</div><div class="mtext"><strong>Aynı yüz Ay’dan gelir</strong> — Dönme ve dolanma süresi eşit (27 gün 8 saat).</div></div>
+    <div class="mnemonic-row"><div class="ml">R</div><div class="mtext"><strong>Rakamları unutma: 24 saat – 365 gün – 25 gün</strong> (Dünya dönme/dolanma , Güneş dönme).</div></div>
+    <div class="mnemonic-row"><div class="ml">E</div><div class="mtext"><strong>Eksen etrafında dönme = gece-gündüz</strong> — Dünya’nın kendi ekseni.</div></div>
+    <div class="mnemonic-row"><div class="ml">K</div><div class="mtext"><strong>Kocaman Güneş, Dünya ortanca, Ay minik</strong> — Hacim sıralaması.</div></div>
+    <div class="mnemonic-row"><div class="ml">E</div><div class="mtext"><strong>Eşit süre (Ay’ın dönme & dolanma) = hep aynı yüz</strong> — özel bağlantı.</div></div>
+    <div class="mnemonic-row"><div class="ml">T</div><div class="mtext"><strong>Tüm gök cisimleri hareket eder; modelde göster</strong> — Fen modelleme kazanımı.</div></div>
+  </div>
+
+  <div class="section-label">🧩 Chunking – Hareketleri 3 Grupta Topla</div>
+  <div class="grid-3cols">
+    <div class="card"><h4>🟠 GRUP 1 – Dönme</h4><ul><li>Güneş: 25 günde</li><li>Dünya: 24 saatte</li><li>Ay: 27 gün 8 saatte</li></ul></div>
+    <div class="card"><h4>🟢 GRUP 2 – Dolanma (Ana)</h4><ul><li>Dünya → Güneş etrafında: 1 yıl</li><li>Ay → Dünya etrafında: 27 gün 8 saat</li><li>Ay→Güneş: Dünya ile birlikte 1 yıl</li></ul></div>
+    <div class="card"><h4>🔵 GRUP 3 – Model Bilgisi</h4><ul><li>Hacim büyüklüğü: G > D > A</li><li>Yön: saat yönünün tersi</li><li>Ay’ın hep aynı yüzü görünür</li></ul></div>
+  </div>
+
+  <div class="warn-card">
+    <div>⚠️</div>
+    <div><strong>Model Hazırlarken Dikkat!</strong> Ölçeklendirme yaparken hem büyüklük farkını hem hareket yönünü (ters saat yönü) göstermelisiniz. Gerçek uzaklıklar çok büyük olduğundan modele sığdırmak için oran ayarlanır.</div>
+  </div>
+</div>
+
+<!-- PANEL 4: ULUĞ BEY & TARİHSEL KATKI -->
+<div id="tab-biliminsani" class="panel">
+  <div class="section-label">🌟 Bilim İnsanı: Uluğ Bey – Gökyüzüne İz Bırakan Türk Hükümdarı</div>
+  <div class="card" style="background:#FAF3E0; border-color:#D3B895;">
+    <div style="display:flex; gap:16px; flex-wrap:wrap; align-items:center;">
+      <span style="font-size:64px;">🔭</span>
+      <div>
+        <h3 style="color:#7A4B1A;">Uluğ Bey (1394–1449)</h3>
+        <p>Matematik ve astronomiye ilgi duyan büyük Türk hükümdarı. Semerkant’ta kurduğu rasathane ile gök bilimi alanında çığır açan gözlemler yaptı. Yıldız kataloğu (Zîc-i Uluğ Bey) ile ünlüdür.</p>
+        <p><strong>📌 Bilimsel miras:</strong> Onun çalışmaları, gök cisimlerinin hareketlerinin daha hassas modellenmesine katkı sağladı. 5. sınıf düzeyinde Güneş-Dünya-Ay modellerine ilham veren gözlemler yapmıştır.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-highlight">
+    <p>🧪 Tarihsel bağlantı: Galileo’dan önce İslam dünyasında Uluğ Bey, gözlemleriyle Güneş lekeleri ve gezegen hareketleri için doğru veriler toplamıştır. Bugünkü bilimsel modellerin temeli bu gözlemlere dayanır.</p>
+  </div>
+
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-icon">📜</div><div class="tl-text"><h4>Bilimsel model gelişimi</h4><p>Uluğ Bey’in rasathanesinde kullanılan usturlap ve kadranlar, gök cisimlerinin konumunu anlamada devrim yarattı. Fen derslerinde "model hazırlama" kültürünün tarihsel öncüsüdür.</p></div></div>
+  </div>
+</div>
+
+<!-- PANEL 5: QUIZ -->
+<div id="tab-quiz" class="panel">
+  <div class="section-label">✅ 8 Soruluk Kavrama Testi (Hareket + Model + Uluğ Bey)</div>
+  <div id="quiz-container"></div>
+  <div class="score-bar" id="score-bar" style="display:none">
+    <span>📊 Puanın:</span> <strong id="score-val">0</strong>/8
+    <span id="score-msg"></span>
+  </div>
+</div>
+
+<script>
+  const quizData = [
+    { q: "Dünya’nın kendi ekseni etrafında dönme süresi kaç saattir?", opts: ["24 saat", "365 gün", "27 gün", "25 gün"], a: 0, exp: "Dünya kendi ekseni etrafında 24 saatte döner, bu 1 gündür." },
+    { q: "Güneş’in kendi ekseni etrafında dönme süresi yaklaşık olarak nedir?", opts: ["24 gün", "365 gün", "25 gün", "27 gün 8 saat"], a: 2, exp: "Güneş kendi ekseni etrafında 25 günde döner." },
+    { q: "Ay’ın hem kendi ekseni hem Dünya etrafında dolanma süreleri eşittir. Bu süre ne kadardır?", opts: ["24 saat", "27 gün 8 saat", "365 gün", "30 gün"], a: 1, exp: "Ay'ın dönme ve dolanma süreleri 27 gün 8 saattir. Bu nedenle hep aynı yüzü görülür." },
+    { q: "Güneş, Dünya ve Ay’ın yaptığı dönme ve dolanma hareketlerinin yönü nasıldır?", opts: ["Saat yönünde", "Saat yönünün tersi", "Farklı yönlerde", "Sadece Dünya ters yönde"], a: 1, exp: "Üç gök cisminin hareket yönü saat yönünün tersidir." },
+    { q: "Hacimsel büyüklük sıralaması aşağıdakilerden hangisidir?", opts: ["Ay > Dünya > Güneş", "Güneş > Dünya > Ay", "Dünya > Güneş > Ay", "Güneş > Ay > Dünya"], a: 1, exp: "En büyük Güneş, sonra Dünya, en küçük Ay’dır." },
+    { q: "Dünya’nın Güneş etrafında dolanması sonucunda aşağıdakilerden hangisi oluşur?", opts: ["Gece-gündüz", "Mevsimler", "Ay’ın evreleri", "Güneş lekeleri"], a: 1, exp: "Dolanma hareketi mevsimleri oluşturur. Gece-gündüz dönme sonucudur." },
+    { q: "Tarihte Semerkant’ta rasathane kuran, matematik ve astronomiye katkı sağlayan Türk hükümdarı kimdir?", opts: ["Piri Reis", "Ali Kuşçu", "Uluğ Bey", "Biruni"], a: 2, exp: "Uluğ Bey, Semerkant Rasathanesi ile bilim tarihine damga vurmuştur." },
+    { q: "Ay ile ilgili hangi ifade doğrudur?", opts: ["Ay Dünya etrafında 365 günde döner", "Ay’ın iki hareket süresi farklı olduğundan hep aynı yüzünü görürüz", "Ay’ın dönme ve dolanma süreleri eşittir (27 gün 8 saat)", "Ay’ın kendi ekseni etrafında dönme süresi 24 saattir"], a: 2, exp: "Doğru: Ay'ın dönme ve dolanma süresi eşit (27 gün 8 saat) -> hep aynı yüz." }
+  ];
+
+  let answered = new Array(quizData.length).fill(false);
+  let scores = new Array(quizData.length).fill(false);
+
+  function buildQuiz() {
+    const container = document.getElementById('quiz-container');
+    container.innerHTML = '';
+    quizData.forEach((item, idx) => {
+      const qDiv = document.createElement('div');
+      qDiv.className = 'quiz-q';
+      qDiv.id = `q${idx}`;
+      let optsHtml = '';
+      item.opts.forEach((opt, optIdx) => {
+        optsHtml += `<button class="quiz-opt" onclick="checkAns(${idx}, ${optIdx})" id="o${idx}_${optIdx}">${opt}</button>`;
+      });
+      qDiv.innerHTML = `<p><strong>Soru ${idx+1}:</strong> ${item.q}</p><div class="quiz-opts">${optsHtml}</div><div class="quiz-fb" id="fb${idx}"></div>`;
+      container.appendChild(qDiv);
+    });
+  }
+
+  function checkAns(qIdx, chosenIdx) {
+    if (answered[qIdx]) return;
+    answered[qIdx] = true;
+    const correct = (chosenIdx === quizData[qIdx].a);
+    scores[qIdx] = correct;
+
+    // disable all buttons
+    for (let i = 0; i < quizData[qIdx].opts.length; i++) {
+      const btn = document.getElementById(`o${qIdx}_${i}`);
+      if (btn) {
+        btn.disabled = true;
+        if (i === quizData[qIdx].a) btn.classList.add('correct');
+        else if (i === chosenIdx && !correct) btn.classList.add('wrong');
+      }
+    }
+    const fbDiv = document.getElementById(`fb${qIdx}`);
+    fbDiv.classList.add('show');
+    fbDiv.style.display = 'block';
+    if (correct) {
+      fbDiv.className = 'quiz-fb show ok';
+      fbDiv.innerHTML = `✅ Doğru! ${quizData[qIdx].exp}`;
+    } else {
+      fbDiv.className = 'quiz-fb show nope';
+      fbDiv.innerHTML = `❌ Yanlış. ${quizData[qIdx].exp}`;
+    }
+
+    if (answered.every(v => v === true)) {
+      const totalCorrect = scores.filter(v => v === true).length;
+      document.getElementById('score-val').innerText = totalCorrect;
+      let mesaj = "";
+      if (totalCorrect <= 4) mesaj = "Tekrar et, hafıza tekniklerine göz at! 💪";
+      else if (totalCorrect <= 6) mesaj = "İyi gidiyorsun, modellemeyi dene! 📐";
+      else mesaj = "Mükemmel! Güneş-Dünya-Ay uzmanısın! 🌟";
+      document.getElementById('score-msg').innerText = mesaj;
+      document.getElementById('score-bar').style.display = 'flex';
+    }
+  }
+
+  function showTab(tabId, btnElement) {
+    document.querySelectorAll('.panel').forEach(panel => panel.classList.remove('active'));
+    document.getElementById(`tab-${tabId}`).classList.add('active');
+    document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+    btnElement.classList.add('active');
+  }
+
+  buildQuiz();
+</script>
+</body>
+</html>

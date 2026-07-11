@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>5. Sınıf Fen: Destek ve Hareket Sistemi | Hafıza Teknikleri + Etkinlikler</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    background: #F5F7F2;
+    color: #1F3B2C;
+    padding: 24px 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  :root {
+    --bone-light: #E9E0D3;
+    --bone-dark: #B98F6C;
+    --muscle-red: #C44536;
+    --muscle-dark: #9C2E1F;
+    --accent-teal: #2C7A6E;
+    --bg-warm: #FDF9F2;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, #B15E3A, #7C3E22);
+    border-radius: 32px;
+    padding: 1.6rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 28px;
+    color: white;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+  .hero-icon {
+    font-size: 68px;
+  }
+  .hero h2 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+  }
+  .hero p {
+    font-size: 0.85rem;
+    opacity: 0.9;
+    margin-top: 6px;
+  }
+
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .tab {
+    background: white;
+    border: none;
+    padding: 8px 24px;
+    border-radius: 60px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: 0.2s;
+    color: #5E3A2C;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    border: 1px solid #DAC5B2;
+  }
+  .tab.active {
+    background: var(--muscle-red);
+    color: white;
+    border-color: var(--muscle-red);
+    box-shadow: 0 6px 12px rgba(196,69,54,0.2);
+  }
+  .panel {
+    display: none;
+    animation: fadeIn 0.2s ease;
+  }
+  .panel.active {
+    display: block;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px);}
+    to { opacity: 1; transform: translateY(0);}
+  }
+
+  .section-label {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #8C6F55;
+    margin: 28px 0 12px 0;
+  }
+
+  .chunk-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+    margin-bottom: 28px;
+  }
+  .chunk {
+    background: white;
+    border-radius: 28px;
+    padding: 18px;
+    border: 1px solid #E6D9CF;
+  }
+  .chunk h4 {
+    font-size: 0.9rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .chunk ul {
+    list-style: none;
+  }
+  .chunk ul li {
+    font-size: 0.8rem;
+    margin-bottom: 8px;
+    padding-left: 22px;
+    position: relative;
+    line-height: 1.4;
+  }
+  .chunk ul li::before {
+    content: "🦴";
+    position: absolute;
+    left: 0;
+    font-size: 12px;
+  }
+  .chunk-orange h4 { color: var(--muscle-red); }
+  .chunk-blue h4 { color: var(--accent-teal); }
+  .chunk-green h4 { color: #2A7A4B; }
+  .chunk-purple h4 { color: #9B6B9E; }
+
+  .compare-table {
+    background: white;
+    border-radius: 28px;
+    padding: 18px;
+    overflow-x: auto;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+  }
+  th, td {
+    border: 1px solid #E2CFC0;
+    padding: 10px;
+    text-align: left;
+  }
+  th {
+    background: #EEDBCE;
+    color: #4B2F1F;
+  }
+  .info-card {
+    background: white;
+    border-radius: 24px;
+    padding: 18px;
+    border: 1px solid #E1D2C4;
+    margin-bottom: 20px;
+  }
+  .info-card h3 {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--muscle-red);
+    margin-bottom: 8px;
+  }
+
+  /* SÜRÜKLE BIRAK STİLLERİ */
+  .drag-area {
+    background: #FEF9F2;
+    border-radius: 32px;
+    padding: 20px;
+    margin-bottom: 32px;
+    border: 2px solid #E3D2C2;
+  }
+  .drag-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muscle-dark);
+  }
+  .drag-items, .word-bank {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    background: #F4EEE7;
+    padding: 18px;
+    border-radius: 32px;
+    margin-bottom: 24px;
+  }
+  .drag-statement, .drag-word {
+    background: white;
+    border-radius: 60px;
+    padding: 8px 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    font-weight: 600;
+    font-size: 0.8rem;
+    cursor: grab;
+    border: 1px solid #D1BCAA;
+    user-select: none;
+    transition: 0.1s;
+  }
+  .drag-statement:active, .drag-word:active { cursor: grabbing; }
+  .drag-statement.dragging, .drag-word.dragging { opacity: 0.4; }
+  .drop-zones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  .drop-zone {
+    background: #F2EAE2;
+    border-radius: 36px;
+    padding: 16px 28px;
+    text-align: center;
+    min-width: 200px;
+    border: 2px dashed #C7AE98;
+    transition: 0.1s;
+  }
+  .drop-zone h4 {
+    font-weight: 800;
+    margin-bottom: 12px;
+  }
+  .drop-zone.drag-over {
+    background: #E9DBCF;
+    border-color: var(--muscle-red);
+  }
+  .dropped-items {
+    min-height: 70px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+  .dropped-badge {
+    background: #D9C2AE;
+    padding: 6px 12px;
+    border-radius: 40px;
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+  .fill-sentences {
+    margin: 20px 0;
+  }
+  .sentence {
+    background: white;
+    border-radius: 20px;
+    padding: 12px 18px;
+    margin-bottom: 14px;
+    font-size: 0.85rem;
+  }
+  .drop-slot {
+    display: inline-block;
+    background: #F0E5D8;
+    border-radius: 40px;
+    padding: 4px 14px;
+    min-width: 100px;
+    text-align: center;
+    font-weight: 700;
+    margin: 0 4px;
+    border: 1px dashed #BFA88E;
+  }
+  .drop-slot.filled {
+    background: #CBE0D4;
+    border: 1px solid #2A7A4B;
+    color: #1A4A2F;
+  }
+  .reset-btn {
+    background: var(--muscle-red);
+    border: none;
+    color: white;
+    padding: 8px 24px;
+    border-radius: 60px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 12px;
+    font-size: 0.75rem;
+  }
+  .reset-btn:hover {
+    background: #9B351F;
+  }
+
+  /* QUIZ */
+  .quiz-q {
+    background: white;
+    border-radius: 24px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    border: 1px solid #E2CFC0;
+  }
+  .quiz-opt {
+    background: #FCFAF5;
+    border: 1px solid #D1BBAA;
+    padding: 8px 18px;
+    border-radius: 60px;
+    margin: 6px 0;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+  }
+  .quiz-opt.correct {
+    background: #DFF2E3;
+    border-color: #2A7A4B;
+  }
+  .quiz-opt.wrong {
+    background: #FFEDE6;
+    border-color: var(--muscle-red);
+  }
+  .quiz-fb {
+    margin-top: 10px;
+    padding: 8px 12px;
+    border-radius: 20px;
+    display: none;
+  }
+  .quiz-fb.show { display: block; }
+  .quiz-fb.ok { background: #DFF2E3; color: #18653a; }
+  .quiz-fb.nope { background: #FFEDE6; color: #B34824; }
+  .score-bar {
+    background: #EEE2D6;
+    border-radius: 60px;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    font-weight: bold;
+    margin-top: 20px;
+    display: none;
+  }
+
+  @media (max-width: 700px) {
+    .hero { flex-direction: column; text-align: center; }
+    .chunk-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-icon">🦴💪</div>
+  <div>
+    <h2>Destek ve Hareket Sistemi</h2>
+    <p>5. Sınıf Fen Bilimleri · İskelet + Kas sistemi · Hafıza teknikleri ve sürükle-bırak etkinlikleri<br>
+    <strong>F.5.3.2.1</strong> — Kemik, eklem, kas çeşitleri ve sağlıklı yaşam</p>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('bilgi',this)">📘 Temel Bilgiler</button>
+  <button class="tab" onclick="showTab('karsilastir',this)">🦴 Kemik & Kas Tablosu</button>
+  <button class="tab" onclick="showTab('teknik',this)">🧠 Hafıza Teknikleri</button>
+  <button class="tab" onclick="showTab('etkinlik',this)">🎮 Sürükle & Etkinlik</button>
+  <button class="tab" onclick="showTab('quiz',this)">✅ 10 Soruluk Quiz</button>
+</div>
+
+<!-- PANEL 1: TEMEL BİLGİLER (CHUNKING) -->
+<div id="tab-bilgi" class="panel active">
+  <div class="section-label">🦴 İskelet Sistemi Görevleri</div>
+  <div class="chunk-grid">
+    <div class="chunk chunk-orange"><h4>📌 Vücuda Şekil & Destek</h4><ul><li>Dik durmayı sağlar</li><li>Vücuda şekil verir</li><li>İç organları korur (beyin, kalp, akciğer)</li></ul></div>
+    <div class="chunk chunk-blue"><h4>🩸 Kan Üretimi & Mineral Depo</h4><ul><li>Kırmızı kemik iliği kan hücresi üretir</li><li>Kalsiyum, fosfor, magnezyum depolar</li><li>Kemikler sert ve canlıdır</li></ul></div>
+    <div class="chunk chunk-green"><h4>🦵 Kemik Çeşitleri</h4><ul><li>Uzun kemikler (kol, bacak)</li><li>Kısa kemikler (el bileği, ayak bileği)</li><li>Yassı kemikler (kafatası, kaburga)</li></ul></div>
+    <div class="chunk chunk-purple"><h4>🔄 Eklemler (Hareket yeteneği)</h4><ul><li>Oynar eklem (dirsek, diz)</li><li>Yarı oynar eklem (omurga)</li><li>Oynamaz eklem (kafatası)</li></ul></div>
+  </div>
+  <div class="info-card">
+    <h3>🧠 İlginç Bilgiler</h3>
+    <p>🔹 Yeni doğan bebekte ~300 kemik varken yetişkinde 206 kemik bulunur (bazı kemikler kaynaşır).<br>
+    🔹 En uzun kemik: uyluk kemiği (femur). En küçük kemik: kulaktaki üzengi kemiği.<br>
+    🔹 Kıkırdak: kemik uçlarında, burun, soluk borusu, kulak kepçesinde bulunur; sürtünmeyi azaltır ve boyca uzamayı sağlar.</p>
+  </div>
+</div>
+
+<!-- PANEL 2: KARŞILAŞTIRMA TABLOSU (KASLAR VE KEMİKLER) -->
+<div id="tab-karsilastir" class="panel">
+  <div class="section-label">💪 Kas Çeşitleri Karşılaştırması (Çizgili, Düz, Kalp Kası)</div>
+  <div class="compare-table">
+    <table>
+      <tr><th>Özellik</th><th>Çizgili Kas (İskelet Kası)</th><th>Düz Kas</th><th>Kalp Kası</th></tr>
+      <tr><td>Renk</td><td>Kırmızı</td><td>Beyaz</td><td>Kırmızı</td></tr>
+      <tr><td>Çalışma şekli</td><td>İstemli (isteğimizle)</td><td>İstemsiz (otomatik)</td><td>İstemsiz (otomatik)</td></tr>
+      <tr><td>Hız</td><td>Hızlı çalışır</td><td>Yavaş ve ritmik</td><td>Hızlı ve ritmik</td></tr>
+      <tr><td>Yorulma</td><td>Çabuk yorulur</td><td>Yorulmaz</td><td>Yorulmaz</td></tr>
+      <tr><td>Bulunduğu yer</td><td>Kollar, bacaklar, yüz</td><td>Mide, bağırsak, iç organlar</td><td>Sadece kalp</td></tr>
+    </table>
+  </div>
+  <div class="info-card">
+    <h3>🦵 Kasların Çalışma Prensibi</h3>
+    <p>Kaslar <strong>çiftler halinde</strong> çalışır. Biri kasılırken diğeri gevşer (örneğin biceps – triceps). En hızlı çalışan kas göz kası, en güçlü kas ise dil kasıdır.</p>
+  </div>
+  <div class="info-card">
+    <h3>🩺 Destek ve Hareket Sistemi Sağlığı</h3>
+    <p>✔ Dengeli beslenme (kalsiyum, fosfor, protein) ✔ Dik duruş ✔ Spor yapmak ✔ Ağır cisimleri belden değil dizleri kırarak kaldırmak.</p>
+  </div>
+</div>
+
+<!-- PANEL 3: HAFIZA TEKNİKLERİ -->
+<div id="tab-teknik" class="panel">
+  <div class="section-label">🔡 Akrostiş: “KEKİK” ile kemik çeşitlerini hatırla</div>
+  <div class="info-card"><h3>📌 KEKİK = Uzun, Kısa, Yassı</h3><p><strong>K</strong>ol ve bacakta <strong>Uzun</strong> kemikler, <strong>E</strong>l bileğinde <strong>Kısa</strong> kemikler, <strong>K</strong>afatasında <strong>Yassı</strong> kemikler. Ek olarak: bebek 300 kemik, yetişkin 206.</p></div>
+  <div class="chunk-grid">
+    <div class="chunk chunk-orange"><h4>💪 Çizgili Kas (İstemli)</h4><ul><li>Kollar, bacaklar, yüz – hızlı yorulur</li><li>“Çizgili = Çabuk komut”</li></ul></div>
+    <div class="chunk chunk-blue"><h4>🫀 Düz Kas (İstemsiz)</h4><ul><li>Mide, bağırsak – yavaş, yorulmaz</li><li>“Düz = Durmaz çalışır”</li></ul></div>
+    <div class="chunk chunk-green"><h4>❤️ Kalp Kası (İstemsiz)</h4><ul><li>Sadece kalpte, ritmik, yorulmaz</li><li>“Kalp kendiliğinden atar”</li></ul></div>
+    <div class="chunk chunk-purple"><h4>🦴 Kemik Görevleri (HİPOK)</h4><ul><li>Hareket, İç organ koruma, Parçacık (kan hücresi), Organlara destek, Kalsiyum deposu</li></ul></div>
+  </div>
+  <div class="info-card"><h3>🧠 Zihinsel Canlandırma: “Kaldıraç gibi çalışan kaslar”</h3><p>Kolunu bükerken biceps kasılır, triceps gevşer. Tam tersi kolunu düzleştirirken triceps kasılır. Bu çiftli çalışma sayesinde hareket uyumlu olur.</p></div>
+</div>
+
+<!-- PANEL 4: SÜRÜKLE BIRAK ETKİNLİKLERİ (10 DOĞRU/YANLIŞ + 10 BOŞLUK) -->
+<div id="tab-etkinlik" class="panel">
+  <!-- Bölüm 1: 10 Doğru/Yanlış -->
+  <div class="drag-area">
+    <div class="drag-title">✅❌ 10 DOĞRU / YANLIŞ ETKİNLİĞİ (Sürükle ve bırak)</div>
+    <div class="drag-items" id="tf-items-container">
+      <div class="drag-statement" draggable="true" data-tf="true">1. Yetişkin bir insanda 206 kemik bulunur.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">2. Düz kaslar istemli olarak çalışır.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">3. Kıkırdak, kemiklerin birbirine sürtünmesini engeller.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">4. Kalp kası istemsiz çalışır ve yorulmaz.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">5. En uzun kemik kulaktaki üzengi kemiğidir.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">6. Kırmızı kemik iliği kan hücreleri üretir.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">7. Oynamaz eklem dirsek ve dizlerde bulunur.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">8. Kaslar çiftler halinde çalışır (biri kasılır, diğeri gevşer).</div>
+      <div class="drag-statement" draggable="true" data-tf="true">9. Kemikler canlı yapılardır ve mineral depolar.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">10. Çizgili kaslar yavaş çalışır ve yorulmaz.</div>
+    </div>
+    <div class="drop-zones">
+      <div class="drop-zone" data-zone="true" id="dropTrueZone">
+        <h4>✅ DOĞRU</h4>
+        <div class="dropped-items" id="trueDropped"></div>
+      </div>
+      <div class="drop-zone" data-zone="false" id="dropFalseZone">
+        <h4>❌ YANLIŞ</h4>
+        <div class="dropped-items" id="falseDropped"></div>
+      </div>
+    </div>
+    <button class="reset-btn" id="resetTFBtn">🔄 Doğru/Yanlış Etkinliğini Sıfırla</button>
+  </div>
+
+  <!-- Bölüm 2: 10 Boşluk Doldurma (Sürükle) -->
+  <div class="drag-area">
+    <div class="drag-title">📝 10 BOŞLUK DOLDURMA (Sözcükleri sürükle)</div>
+    <div class="word-bank" id="fillWordBank">
+      <div class="drag-word" draggable="true" data-fillword="206">206</div>
+      <div class="drag-word" draggable="true" data-fillword="kalsiyum">kalsiyum</div>
+      <div class="drag-word" draggable="true" data-fillword="biceps">biceps</div>
+      <div class="drag-word" draggable="true" data-fillword="kıkırdak">kıkırdak</div>
+      <div class="drag-word" draggable="true" data-fillword="istemsiz">istemsiz</div>
+      <div class="drag-word" draggable="true" data-fillword="femur">femur</div>
+      <div class="drag-word" draggable="true" data-fillword="omurga">omurga</div>
+      <div class="drag-word" draggable="true" data-fillword="çizgili">çizgili</div>
+      <div class="drag-word" draggable="true" data-fillword="eklem">eklem</div>
+      <div class="drag-word" draggable="true" data-fillword="dil">dil</div>
+    </div>
+    <div class="fill-sentences" id="fillSentencesContainer">
+      <div class="sentence">① Yetişkin bir insan iskeletinde toplam <span class="drop-slot" data-correct="206">______</span> kemik vardır.</div>
+      <div class="sentence">② Kemiklerin sertliğini sağlayan mineral <span class="drop-slot" data-correct="kalsiyum">______</span>'dur.</div>
+      <div class="sentence">③ Kolumuzu bükerken <span class="drop-slot" data-correct="biceps">______</span> kası kasılır.</div>
+      <div class="sentence">④ Kemik uçlarında bulunan ve aşınmayı önleyen yapı <span class="drop-slot" data-correct="kıkırdak">______</span>'tır.</div>
+      <div class="sentence">⑤ Mide ve bağırsaklarda bulunan düz kaslar <span class="drop-slot" data-correct="istemsiz">______</span> çalışır.</div>
+      <div class="sentence">⑥ İnsan vücudundaki en uzun kemik <span class="drop-slot" data-correct="femur">______</span>'dur (uyluk kemiği).</div>
+      <div class="sentence">⑦ Omurların birleşmesiyle oluşan, vücudun dik durmasını sağlayan yapı <span class="drop-slot" data-correct="omurga">______</span>'dır.</div>
+      <div class="sentence">⑧ Kollarımızdaki kaslar <span class="drop-slot" data-correct="çizgili">______</span> kas örneğidir ve çabuk yorulur.</div>
+      <div class="sentence">⑨ İki kemiğin birleştiği yere <span class="drop-slot" data-correct="eklem">______</span> denir.</div>
+      <div class="sentence">⑩ Vücudumuzdaki en güçlü kas <span class="drop-slot" data-correct="dil">______</span> kasıdır.</div>
+    </div>
+    <button class="reset-btn" id="resetFillBtn">🔄 Boşluk Etkinliğini Sıfırla</button>
+  </div>
+</div>
+
+<!-- PANEL 5: 10 SORULUK QUIZ -->
+<div id="tab-quiz" class="panel">
+  <div class="section-label">📝 DESTEK VE HAREKET SİSTEMİ – 10 SORULUK UZMANLIK QUIZİ</div>
+  <div id="quiz-container"></div>
+  <div class="score-bar" id="score-bar" style="display: none;">🏆 Puanın: <strong id="score-val">0</strong> / 10 &nbsp;|&nbsp; <span id="score-msg"></span></div>
+</div>
+
+<script>
+  // ---------- 10 SORULUK QUIZ ----------
+  const quizData = [
+    { q: "İskelet sisteminin görevlerinden biri aşağıdakilerden hangisidir?", opts: ["Sindirim yapmak", "Kan hücresi üretmek", "Solunum yapmak", "Hormon salgılamak"], a: 1, exp: "Kırmızı kemik iliği kan hücrelerini üretir." },
+    { q: "Hangisi çizgili kas özelliğidir?", opts: ["İstemsiz çalışır", "Yorulmaz", "Hızlı çalışır ve çabuk yorulur", "Sadece kalpte bulunur"], a: 2, exp: "Çizgili kaslar hızlı kasılır ancak çabuk yorulur." },
+    { q: "Kemiklerin uç kısımlarında bulunan ve büyümeyi sağlayan yapı nedir?", opts: ["Eklem", "Kıkırdak", "Bağ", "Kemik iliği"], a: 1, exp: "Kıkırdak, uzun kemiklerin boyca uzamasını sağlar." },
+    { q: "Yetişkin bir insanda kaç kemik vardır?", opts: ["300", "206", "350", "150"], a: 1, exp: "Yetişkinde 206 kemik bulunur, yenidoğanda 300 civarıdır." },
+    { q: "Hangi eklem türü kafatası kemikleri arasında bulunur?", opts: ["Oynar eklem", "Yarı oynar eklem", "Oynamaz eklem", "Top yuvası eklemi"], a: 2, exp: "Kafatası kemikleri arasında oynamaz eklem bulunur." },
+    { q: "Kalp kası ile ilgili doğru ifade hangisidir?", opts: ["Çizgili ve istemlidir", "Düz kas grubundadır", "İstemsiz çalışır ve yorulmaz", "Sadece iskelet kasıdır"], a: 2, exp: "Kalp kası istemsiz çalışır, yorulmaz ve ritmiktir." },
+    { q: "Ağır bir cisim kaldırırken nasıl davranmalıyız?", opts: ["Belden eğilerek", "Dizleri kırarak bacakları kullanarak", "Sırt üstü yatarak", "Tek elle kaldırarak"], a: 1, exp: "Dizleri büküp bacak kaslarını kullanmak omurgayı korur." },
+    { q: "Hangisi kasların çalışma prensibidir?", opts: ["Tek başına çalışır", "Üçlü gruplar halinde", "Çiftler halinde (zıt çalışma)", "Hepsi aynı anda kasılır"], a: 2, exp: "Kaslar birbirine zıt çalışır; biri kasılırken diğeri gevşer." },
+    { q: "Vücudun en küçük kemiği nerede bulunur?", opts: ["El bileği", "Kulak", "Burun", "Ayak parmağı"], a: 1, exp: "Üzengi kemiği kulakta bulunur ve en küçük kemiktir." },
+    { q: "Kemiklerin sert ve dayanıklı olmasını sağlayan mineraller hangileridir?", opts: ["Demir ve çinko", "Kalsiyum ve fosfor", "Sodyum ve potasyum", "Magnezyum ve kükürt"], a: 1, exp: "Kalsiyum ve fosfor kemiklerin sertliğini sağlar." }
+  ];
+  let quizAnswered = new Array(10).fill(false);
+  let quizScores = new Array(10).fill(false);
+
+  function buildQuiz() {
+    const container = document.getElementById('quiz-container');
+    if (!container) return;
+    container.innerHTML = '';
+    quizData.forEach((q, idx) => {
+      const div = document.createElement('div'); div.className = 'quiz-q';
+      let optsHtml = '';
+      q.opts.forEach((opt, optIdx) => {
+        optsHtml += `<button class="quiz-opt" onclick="checkQuiz(${idx}, ${optIdx})" id="qzopt${idx}_${optIdx}">${opt}</button><br>`;
+      });
+      div.innerHTML = `<p><strong>Soru ${idx+1}:</strong> ${q.q}</p><div class="quiz-opts">${optsHtml}</div><div class="quiz-fb" id="qzfb${idx}"></div>`;
+      container.appendChild(div);
+    });
+  }
+
+  function checkQuiz(qIdx, chosen) {
+    if (quizAnswered[qIdx]) return;
+    quizAnswered[qIdx] = true;
+    const q = quizData[qIdx];
+    const isCorrect = (chosen === q.a);
+    quizScores[qIdx] = isCorrect;
+    for (let i = 0; i < q.opts.length; i++) {
+      const btn = document.getElementById(`qzopt${qIdx}_${i}`);
+      if (btn) { btn.disabled = true; if (i === q.a) btn.classList.add('correct'); else if (i === chosen && !isCorrect) btn.classList.add('wrong'); }
+    }
+    const fbDiv = document.getElementById(`qzfb${qIdx}`);
+    fbDiv.style.display = 'block';
+    fbDiv.className = `quiz-fb show ${isCorrect ? 'ok' : 'nope'}`;
+    fbDiv.textContent = isCorrect ? `✓ Doğru! ${q.exp}` : `✗ Yanlış! Doğru: ${q.opts[q.a]}. ${q.exp}`;
+    if (quizAnswered.every(v => v === true)) {
+      const total = quizScores.filter(Boolean).length;
+      document.getElementById('score-val').innerHTML = total;
+      let msg = total <= 4 ? '📖 Tekrar et, hafıza tekniklerine dön!' : (total <= 7 ? '💪 İyi, bir kez daha göz at!' : (total <= 9 ? '🎉 Harikasın!' : '🏆 Mükemmel! Destek ve Hareket Uzmanısın!'));
+      document.getElementById('score-msg').innerHTML = msg;
+      document.getElementById('score-bar').style.display = 'flex';
+    }
+  }
+  window.checkQuiz = checkQuiz;
+
+  // ---------- SÜRÜKLE BIRAK (DOĞRU/YANLIŞ) ----------
+  let draggedItem = null;
+  document.addEventListener('dragstart', (e) => {
+    if (e.target.classList.contains('drag-statement') || e.target.classList.contains('drag-word')) {
+      draggedItem = e.target;
+      e.target.classList.add('dragging');
+      e.dataTransfer.setData('text/plain', e.target.innerText);
+      e.dataTransfer.effectAllowed = 'move';
+    }
+  });
+  document.addEventListener('dragend', (e) => {
+    if (e.target.classList.contains('drag-statement') || e.target.classList.contains('drag-word')) e.target.classList.remove('dragging');
+    draggedItem = null;
+  });
+  const dropZones = document.querySelectorAll('.drop-zone');
+  dropZones.forEach(zone => {
+    zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', () => { zone.classList.remove('drag-over'); });
+    zone.addEventListener('drop', (e) => {
+      e.preventDefault(); zone.classList.remove('drag-over');
+      if (!draggedItem) return;
+      if (draggedItem.classList.contains('drag-statement')) {
+        const isTrueZone = zone.getAttribute('data-zone') === 'true';
+        const statementTruth = draggedItem.getAttribute('data-tf') === 'true';
+        if (isTrueZone !== statementTruth) { alert('❌ Bu ifade buraya ait değil! Tekrar dene.'); return; }
+        const targetList = zone.querySelector('.dropped-items');
+        const badge = document.createElement('div'); badge.className = 'dropped-badge'; badge.innerText = draggedItem.innerText;
+        targetList.appendChild(badge);
+        draggedItem.remove(); draggedItem = null;
+      }
+    });
+  });
+  // Fill-in boşluklar
+  const fillSlots = document.querySelectorAll('.drop-slot');
+  fillSlots.forEach(slot => {
+    slot.addEventListener('dragover', (e) => { e.preventDefault(); slot.style.backgroundColor = '#F3E0C0'; });
+    slot.addEventListener('dragleave', () => { if (!slot.classList.contains('filled')) slot.style.backgroundColor = '#F0E5D8'; });
+    slot.addEventListener('drop', (e) => {
+      e.preventDefault(); slot.style.backgroundColor = '#F0E5D8';
+      if (!draggedItem || !draggedItem.classList.contains('drag-word')) return;
+      const correctAnswer = slot.getAttribute('data-correct');
+      const droppedWord = draggedItem.getAttribute('data-fillword');
+      if (correctAnswer === droppedWord) {
+        if (slot.classList.contains('filled')) return;
+        slot.innerText = droppedWord; slot.classList.add('filled');
+        draggedItem.remove(); draggedItem = null;
+      } else { alert(`Yanlış kelime! "${droppedWord}" bu boşluğa uygun değil.`); }
+    });
+  });
+
+  // RESET DOĞRU/YANLIŞ
+  function resetTF() {
+    const trueDiv = document.getElementById('trueDropped'); const falseDiv = document.getElementById('falseDropped');
+    trueDiv.innerHTML = ''; falseDiv.innerHTML = '';
+    const originalStatements = [
+      "1. Yetişkin bir insanda 206 kemik bulunur.", "2. Düz kaslar istemli olarak çalışır.",
+      "3. Kıkırdak, kemiklerin birbirine sürtünmesini engeller.", "4. Kalp kası istemsiz çalışır ve yorulmaz.",
+      "5. En uzun kemik kulaktaki üzengi kemiğidir.", "6. Kırmızı kemik iliği kan hücreleri üretir.",
+      "7. Oynamaz eklem dirsek ve dizlerde bulunur.", "8. Kaslar çiftler halinde çalışır (biri kasılır, diğeri gevşer).",
+      "9. Kemikler canlı yapılardır ve mineral depolar.", "10. Çizgili kaslar yavaş çalışır ve yorulmaz."
+    ];
+    const tfVals = ["true","false","true","true","false","true","false","true","true","false"];
+    const container = document.getElementById('tf-items-container');
+    container.innerHTML = '';
+    for (let i = 0; i < originalStatements.length; i++) {
+      const div = document.createElement('div');
+      div.className = 'drag-statement';
+      div.setAttribute('draggable', 'true');
+      div.setAttribute('data-tf', tfVals[i]);
+      div.innerText = originalStatements[i];
+      container.appendChild(div);
+    }
+    draggedItem = null;
+  }
+  // RESET BOŞLUK
+  function resetFill() {
+    const bank = document.getElementById('fillWordBank');
+    const originalWords = ["206","kalsiyum","biceps","kıkırdak","istemsiz","femur","omurga","çizgili","eklem","dil"];
+    bank.innerHTML = '';
+    originalWords.forEach(w => {
+      const wordDiv = document.createElement('div');
+      wordDiv.className = 'drag-word';
+      wordDiv.setAttribute('draggable', 'true');
+      wordDiv.setAttribute('data-fillword', w);
+      wordDiv.innerText = w;
+      bank.appendChild(wordDiv);
+    });
+    const slots = document.querySelectorAll('.drop-slot');
+    const originalPlaceholders = ["______","______","______","______","______","______","______","______","______","______"];
+    slots.forEach((slot, idx) => {
+      slot.innerText = originalPlaceholders[idx];
+      slot.classList.remove('filled');
+      slot.style.backgroundColor = '#F0E5D8';
+    });
+    draggedItem = null;
+  }
+  document.getElementById('resetTFBtn')?.addEventListener('click', resetTF);
+  document.getElementById('resetFillBtn')?.addEventListener('click', resetFill);
+
+  function showTab(tabId, btn) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(`tab-${tabId}`).classList.add('active');
+    btn.classList.add('active');
+  }
+  window.showTab = showTab;
+  buildQuiz();
+</script>
+</body>
+</html>

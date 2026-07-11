@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>5. Sınıf Fen: Evsel Atıklar ve Geri Dönüşüm | Hafıza Teknikleri + Etkinlikler</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    background: #F2F9F2;
+    color: #1A3B2E;
+    padding: 24px 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  :root {
+    --recycle-green: #2E7D64;
+    --recycle-light: #C8E6D9;
+    --waste-orange: #E67E22;
+    --blue-bin: #1E6F9F;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, #2E7D64, #1E5A4F);
+    border-radius: 32px;
+    padding: 1.6rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 28px;
+    color: white;
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+  }
+  .hero-icon {
+    font-size: 68px;
+    filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.2));
+  }
+  .hero h2 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+  }
+  .hero p {
+    font-size: 0.85rem;
+    opacity: 0.9;
+    margin-top: 6px;
+  }
+
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .tab {
+    background: white;
+    border: none;
+    padding: 8px 24px;
+    border-radius: 60px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: 0.2s;
+    color: #2E7D64;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    border: 1px solid #C5E0D9;
+  }
+  .tab.active {
+    background: var(--recycle-green);
+    color: white;
+    border-color: var(--recycle-green);
+    box-shadow: 0 6px 12px rgba(46,125,100,0.3);
+  }
+  .panel {
+    display: none;
+    animation: fadeIn 0.2s ease;
+  }
+  .panel.active {
+    display: block;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px);}
+    to { opacity: 1; transform: translateY(0);}
+  }
+
+  .section-label {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #5B8C6E;
+    margin: 28px 0 12px 0;
+  }
+
+  .chunk-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+    margin-bottom: 28px;
+  }
+  .chunk {
+    background: white;
+    border-radius: 28px;
+    padding: 18px;
+    border: 1px solid #D0E2DC;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+  }
+  .chunk h4 {
+    font-size: 0.9rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .chunk ul {
+    list-style: none;
+  }
+  .chunk ul li {
+    font-size: 0.8rem;
+    margin-bottom: 8px;
+    padding-left: 22px;
+    position: relative;
+    line-height: 1.4;
+  }
+  .chunk ul li::before {
+    content: "♻️";
+    position: absolute;
+    left: 0;
+    font-size: 12px;
+  }
+  .chunk-green h4 { color: #2E7D64; }
+  .chunk-blue h4 { color: #1E6F9F; }
+  .chunk-orange h4 { color: #E67E22; }
+  .chunk-purple h4 { color: #8F5C8C; }
+
+  .info-card {
+    background: white;
+    border-radius: 24px;
+    padding: 18px;
+    border: 1px solid #D0E2DC;
+    margin-bottom: 20px;
+  }
+  .info-card h3 {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #2E7D64;
+    margin-bottom: 8px;
+  }
+  .bin-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin: 15px 0;
+  }
+  .bin {
+    background: #F9FCFA;
+    border-radius: 20px;
+    padding: 10px 16px;
+    text-align: center;
+    min-width: 100px;
+    border: 1px solid #C5E0D9;
+  }
+  .bin-icon {
+    font-size: 32px;
+  }
+
+  /* Sürükle bırak stilleri */
+  .drag-area {
+    background: #FEFCF7;
+    border-radius: 32px;
+    padding: 20px;
+    margin-bottom: 32px;
+    border: 2px solid #D0E2DC;
+  }
+  .drag-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #2E7D64;
+  }
+  .drag-items, .word-bank {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    background: #F2F8F2;
+    padding: 18px;
+    border-radius: 32px;
+    margin-bottom: 24px;
+  }
+  .drag-statement, .drag-word {
+    background: white;
+    border-radius: 60px;
+    padding: 8px 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    font-weight: 600;
+    font-size: 0.8rem;
+    cursor: grab;
+    border: 1px solid #BED6CF;
+    user-select: none;
+  }
+  .drag-statement:active, .drag-word:active { cursor: grabbing; }
+  .drag-statement.dragging, .drag-word.dragging { opacity: 0.4; }
+  .drop-zones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  .drop-zone {
+    background: #F2F8F2;
+    border-radius: 36px;
+    padding: 16px 28px;
+    text-align: center;
+    min-width: 200px;
+    border: 2px dashed #B5CFC6;
+  }
+  .drop-zone h4 { font-weight: 800; margin-bottom: 12px; }
+  .drop-zone.drag-over { background: #E6F0E8; border-color: #2E7D64; }
+  .dropped-items {
+    min-height: 70px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+  .dropped-badge {
+    background: #D0E2DC;
+    padding: 6px 12px;
+    border-radius: 40px;
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+  .fill-sentences { margin: 20px 0; }
+  .sentence {
+    background: white;
+    border-radius: 20px;
+    padding: 12px 18px;
+    margin-bottom: 14px;
+    font-size: 0.85rem;
+    border-left: 4px solid #E67E22;
+  }
+  .drop-slot {
+    display: inline-block;
+    background: #E8F0ED;
+    border-radius: 40px;
+    padding: 4px 14px;
+    min-width: 100px;
+    text-align: center;
+    font-weight: 700;
+    margin: 0 4px;
+    border: 1px dashed #9BBFB4;
+  }
+  .drop-slot.filled {
+    background: #C8E6D9;
+    border: 1px solid #2E7D64;
+    color: #1A5A48;
+  }
+  .reset-btn {
+    background: #2E7D64;
+    border: none;
+    color: white;
+    padding: 8px 24px;
+    border-radius: 60px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 12px;
+    font-size: 0.75rem;
+  }
+  .reset-btn:hover { background: #1E5A4F; }
+
+  /* Quiz stilleri */
+  .quiz-q {
+    background: white;
+    border-radius: 24px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    border: 1px solid #D0E2DC;
+  }
+  .quiz-opt {
+    background: #FEFAF2;
+    border: 1px solid #CFDFD9;
+    padding: 8px 18px;
+    border-radius: 60px;
+    margin: 6px 0;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+  }
+  .quiz-opt.correct { background: #DFF2E3; border-color: #2E7D64; }
+  .quiz-opt.wrong { background: #FFEDE6; border-color: #E67E22; }
+  .quiz-fb { margin-top: 10px; padding: 8px 12px; border-radius: 20px; display: none; }
+  .quiz-fb.show { display: block; }
+  .quiz-fb.ok { background: #E6F7E6; color: #2E7D64; }
+  .quiz-fb.nope { background: #FFEFE0; color: #C4510A; }
+  .score-bar {
+    background: #E2F0EC;
+    border-radius: 60px;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    font-weight: bold;
+    margin-top: 20px;
+    display: none;
+  }
+  @media (max-width: 700px) {
+    .hero { flex-direction: column; text-align: center; }
+    .chunk-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-icon">♻️🗑️</div>
+  <div>
+    <h2>Evsel Atıklar ve Geri Dönüşüm</h2>
+    <p>5. Sınıf Fen Bilimleri · Atık türleri, geri dönüşüm, sıfır atık ve doğa koruma<br>
+    <strong>F.5.7.1.1</strong> — Evsel atıkları geri dönüşüm açısından sınıflandırır ve çevreye katkısını açıklar.</p>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('bilgi',this)">📘 Temel Bilgiler</button>
+  <button class="tab" onclick="showTab('ayristirma',this)">🗑️ Atık Ayrıştırma & Sıfır Atık</button>
+  <button class="tab" onclick="showTab('teknik',this)">🧠 Hafıza Teknikleri</button>
+  <button class="tab" onclick="showTab('etkinlik',this)">🎮 Sürükle & Etkinlik</button>
+  <button class="tab" onclick="showTab('quiz',this)">✅ 10 Soruluk Quiz</button>
+</div>
+
+<!-- PANEL 1: TEMEL BİLGİLER -->
+<div id="tab-bilgi" class="panel active">
+  <div class="section-label">♻️ EVSEL ATIKLAR - 4 GRUPLA ÖĞREN</div>
+  <div class="chunk-grid">
+    <div class="chunk chunk-green">
+      <h4>🗑️ Evsel Atık Nedir?</h4>
+      <ul>
+        <li>Evlerimizde oluşan kullanılmayan malzemeler</li>
+        <li>Sıvı atık: zeytinyağı, temizlik suları, kanalizasyon</li>
+        <li>Katı atık: cam, metal, plastik, kağıt, karton</li>
+        <li>Doğaya atılmamalı, geri dönüşüme kazandırılmalı</li>
+      </ul>
+    </div>
+    <div class="chunk chunk-blue">
+      <h4>🔵 Geri Dönüşüm Kutuları</h4>
+      <ul>
+        <li>Plastik: şişeler, bidonlar, süt kutuları (temiz olmalı)</li>
+        <li>Cam: kırılmamış şişeler, kavanozlar, bardaklar</li>
+        <li>Kağıt: gazete, dergi, defter, karton kutu</li>
+        <li>Metal: alüminyum folyo, konserve kutuları, tencereler</li>
+      </ul>
+    </div>
+    <div class="chunk chunk-orange">
+      <h4>⚠️ Geri Dönüştürülemeyenler</h4>
+      <ul>
+        <li>Kırık camlar (tehlikeli)</li>
+        <li>Yağlı/ıslak karton, tuvalet kağıdı, kağıt havlu</li>
+        <li>Boya, deodorant, makine yağı kutuları (kirli)</li>
+        <li>Tıbbi atıklar (iğne, serum, enjektör)</li>
+        <li>Soba külü, meyve kabuğu, bebek bezi</li>
+      </ul>
+    </div>
+    <div class="chunk chunk-purple">
+      <h4>♻️ Özel Toplanan Atıklar</h4>
+      <ul>
+        <li>Atık piller (pil kutularına atılır)</li>
+        <li>Bitkisel atık yağlar (lavaboya dökülmez, biriktirilir)</li>
+        <li>Akü, elektronik atıklar</li>
+        <li>Bunlar ayrı toplanır, geri kazanılır</li>
+      </ul>
+    </div>
+  </div>
+  <div class="info-card">
+    <h3>🌍 Geri Dönüşüm Neden Önemli?</h3>
+    <p>Doğal kaynakları korur, enerji tasarrufu sağlar, çöplükleri azaltır, kirliliği önler. Örneğin 1 ton kağıt geri dönüştürüldüğünde 17 ağaç kesilmekten kurtulur.</p>
+  </div>
+</div>
+
+<!-- PANEL 2: AYRIŞTIRMA VE SIFIR ATIK -->
+<div id="tab-ayristirma" class="panel">
+  <div class="section-label">🗑️ ATIK AYRIŞTIRMA REHBERİ</div>
+  <div class="bin-grid">
+    <div class="bin"><div class="bin-icon">🥤</div><strong>Plastik</strong><br>Şişe, bidon, temiz olmalı</div>
+    <div class="bin"><div class="bin-icon">🍾</div><strong>Cam</strong><br>Kırılmamış şişe, kavanoz</div>
+    <div class="bin"><div class="bin-icon">📄</div><strong>Kağıt</strong><br>Gazete, defter, kutu</div>
+    <div class="bin"><div class="bin-icon">🔩</div><strong>Metal</strong><br>Konserve, alüminyum</div>
+    <div class="bin"><div class="bin-icon">🔋</div><strong>Pil / Yağ</strong><br>Özel toplama</div>
+  </div>
+  <div class="section-label">🔄 SIFIR ATIK PROJESİ (5 Adım)</div>
+  <div class="info-card">
+    <p><strong>1. Önlemek:</strong> Atık çıkarmamaya çalışmak.<br>
+    <strong>2. Azaltmak:</strong> Atık miktarını en aza indirmek.<br>
+    <strong>3. Tekrar Kullanmak:</strong> Aynı ürünü tekrar değerlendirmek.<br>
+    <strong>4. Geri Dönüşüm:</strong> Atıkları fabrikalara gönderip yeni ürün yapmak.<br>
+    <strong>5. Enerji Geri Kazanımı / Bertaraf:</strong> Geri dönüşmeyen atıklardan enerji elde etmek veya güvenli imha.</p>
+  </div>
+  <div class="section-label">📚 TEMEL KAVRAMLAR (Karıştırma!)</div>
+  <div class="info-card">
+    <p>✔ <strong>Geri Dönüşüm:</strong> A maddesinden tekrar A maddesi üretilir (pet şişeden pet şişe).<br>
+    ✔ <strong>Geri Kazanım:</strong> A maddesinden farklı B maddesi üretilir (plastikten kazak ipliği).<br>
+    ✔ <strong>İleri Dönüşüm (Upcycle):</strong> Atığı evde yeniden değerlendirme (pet şişeden kalemlik).<br>
+    ✔ <strong>Yeniden Kullanım:</strong> Aynı ürünü yıkayıp/onarıp tekrar kullanma (pet şişeyi yıkayıp su koymak).</p>
+  </div>
+</div>
+
+<!-- PANEL 3: HAFIZA TEKNİKLERİ -->
+<div id="tab-teknik" class="panel">
+  <div class="section-label">🔡 Akrostiş: "P-C-K-M" (Plastik, Cam, Kağıt, Metal)</div>
+  <div class="info-card">
+    <h3>💡 P-C-K-M kuralı (Geri dönüşüm kutuları)</h3>
+    <p><strong>P</strong>lastik: Temiz şişeler, bidonlar<br>
+    <strong>C</strong>am: Kırılmamış şişeler, kavanozlar<br>
+    <strong>K</strong>ağıt: Gazete, defter, karton<br>
+    <strong>M</strong>etal: Konserve, alüminyum, çatal-kaşık</p>
+  </div>
+  <div class="chunk-grid">
+    <div class="chunk chunk-green"><h4>📌 Sıfır Atık (Ö-A-T-G-E)</h4><ul><li>Önlemek, Azaltmak, Tekrar kullanmak, Geri dönüşüm, Enerji kazanımı</li></ul></div>
+    <div class="chunk chunk-blue"><h4>⚠️ Geri Dönüşmeyenler (K-T-Y-M)</h4><ul><li>Kırık cam, Tuvalet kağıdı, Yağlı karton, Meyve kabuğu</li></ul></div>
+    <div class="chunk chunk-orange"><h4>♻️ Dönüşüm Kavramları</h4><ul><li>Geri dönüşüm: A→A</li><li>Geri kazanım: A→B</li><li>İleri dönüşüm: Evde yaratıcı kullanım</li></ul></div>
+  </div>
+  <div class="info-card">
+    <h3>🧠 Zihinsel Model: "Ağaç ve Pet Şişe"</h3>
+    <p>Bir pet şişeyi çöpe atmak yerine geri dönüşüm kutusuna atarsak, fabrikada eritilip yeni bir pet şişe olur (geri dönüşüm). Aynı şişeyi kesip kalemlik yaparsak ileri dönüşüm. Şişeyi yıkayıp tekrar su doldurursak yeniden kullanım.</p>
+  </div>
+</div>
+
+<!-- PANEL 4: SÜRÜKLE BIRAK ETKİNLİKLER (10 DOĞRU/YANLIŞ + 10 BOŞLUK) -->
+<div id="tab-etkinlik" class="panel">
+  <!-- Bölüm 1: 10 Doğru/Yanlış -->
+  <div class="drag-area">
+    <div class="drag-title">✅❌ 10 DOĞRU / YANLIŞ ETKİNLİĞİ (Sürükle bırak)</div>
+    <div class="drag-items" id="tf-items-container">
+      <div class="drag-statement" draggable="true" data-tf="true">1. Pet şişeler plastik atık kutusuna atılabilir.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">2. Kırık camlar geri dönüşüm kutusuna atılmalıdır.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">3. Atık piller özel pil kutularında toplanır.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">4. Kağıt havlular geri dönüştürülebilir.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">5. Sıfır Atık Projesi'nde ilk adım "önlemek"tir.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">6. Kızartma yağları lavaboya dökülebilir.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">7. Geri dönüşüm, doğal kaynakları korur.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">8. Alüminyum folyo metal atık kutusuna atılabilir.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">9. Meyve kabukları geri dönüşüm kutusuna atılmalıdır.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">10. Geri kazanımda atıktan farklı bir ürün elde edilir.</div>
+    </div>
+    <div class="drop-zones">
+      <div class="drop-zone" data-zone="true" id="dropTrueZone">
+        <h4>✅ DOĞRU</h4>
+        <div class="dropped-items" id="trueDropped"></div>
+      </div>
+      <div class="drop-zone" data-zone="false" id="dropFalseZone">
+        <h4>❌ YANLIŞ</h4>
+        <div class="dropped-items" id="falseDropped"></div>
+      </div>
+    </div>
+    <button class="reset-btn" id="resetTFBtn">🔄 Doğru/Yanlış Etkinliğini Sıfırla</button>
+  </div>
+
+  <!-- Bölüm 2: 10 Boşluk Doldurma (Sürükle) -->
+  <div class="drag-area">
+    <div class="drag-title">📝 10 BOŞLUK DOLDURMA (Sözcükleri sürükle)</div>
+    <div class="word-bank" id="fillWordBank">
+      <div class="drag-word" draggable="true" data-fillword="evsel">evsel</div>
+      <div class="drag-word" draggable="true" data-fillword="plastik">plastik</div>
+      <div class="drag-word" draggable="true" data-fillword="cam">cam</div>
+      <div class="drag-word" draggable="true" data-fillword="kağıt">kağıt</div>
+      <div class="drag-word" draggable="true" data-fillword="metal">metal</div>
+      <div class="drag-word" draggable="true" data-fillword="sıfır atık">sıfır atık</div>
+      <div class="drag-word" draggable="true" data-fillword="geri dönüşüm">geri dönüşüm</div>
+      <div class="drag-word" draggable="true" data-fillword="pil">pil</div>
+      <div class="drag-word" draggable="true" data-fillword="kompost">kompost</div>
+      <div class="drag-word" draggable="true" data-fillword="temiz">temiz</div>
+    </div>
+    <div class="fill-sentences" id="fillSentencesContainer">
+      <div class="sentence">① Evlerimizde oluşan atıklara <span class="drop-slot" data-correct="evsel">______</span> atık denir.</div>
+      <div class="sentence">② Su şişeleri <span class="drop-slot" data-correct="plastik">______</span> atık kutusuna atılır.</div>
+      <div class="sentence">③ Kırılmamış şişe ve kavanozlar <span class="drop-slot" data-correct="cam">______</span> kutusuna atılır.</div>
+      <div class="sentence">④ Gazete ve dergiler <span class="drop-slot" data-correct="kağıt">______</span> atık kutusuna atılır.</div>
+      <div class="sentence">⑤ Konserve kutuları <span class="drop-slot" data-correct="metal">______</span> atık kutusuna atılır.</div>
+      <div class="sentence">⑥ İsrafı önlemek ve kaynakları korumak için uygulanan projeye <span class="drop-slot" data-correct="sıfır atık">______</span> denir.</div>
+      <div class="sentence">⑦ Atıkların fabrikalarda eritilip yeni ürün yapılmasına <span class="drop-slot" data-correct="geri dönüşüm">______</span> denir.</div>
+      <div class="sentence">⑧ Atık <span class="drop-slot" data-correct="pil">______</span>ler özel kutularda biriktirilmelidir.</div>
+      <div class="sentence">⑨ Meyve ve sebze kabuklarından gübre yapılması <span class="drop-slot" data-correct="kompost">______</span> örneğidir.</div>
+      <div class="sentence">⑩ Geri dönüşüme göndereceğimiz atıkların <span class="drop-slot" data-correct="temiz">______</span> olması gerekir.</div>
+    </div>
+    <button class="reset-btn" id="resetFillBtn">🔄 Boşluk Etkinliğini Sıfırla</button>
+  </div>
+</div>
+
+<!-- PANEL 5: 10 SORULUK QUIZ -->
+<div id="tab-quiz" class="panel">
+  <div class="section-label">✅ EVSEL ATIKLAR VE GERİ DÖNÜŞÜM – 10 SORULUK UZMANLIK QUIZİ</div>
+  <div id="quiz-container"></div>
+  <div class="score-bar" id="score-bar" style="display: none;">♻️ Puan: <strong id="score-val">0</strong> / 10 &nbsp;|&nbsp; <span id="score-msg"></span></div>
+</div>
+
+<script>
+  // ---------- 10 SORULUK QUIZ ----------
+  const quizData = [
+    { q: "Aşağıdakilerden hangisi geri dönüştürülebilir?", opts: ["Kırık cam", "Tuvalet kağıdı", "Pet şişe", "Yağlı pizza kutusu"], a: 2, exp: "Pet şişe plastik olarak geri dönüştürülebilir, temiz olmalıdır." },
+    { q: "Sıfır Atık Projesi'nin ilk adımı nedir?", opts: ["Geri dönüşüm", "Tekrar kullanmak", "Önlemek", "Enerji kazanımı"], a: 2, exp: "Önce atık oluşumunu önlemek en önemli adımdır." },
+    { q: "Hangi atık türü için ayrı toplama kutusu vardır?", opts: ["Meyve kabuğu", "Atık pil", "Soba külü", "Islak mendil"], a: 1, exp: "Piller özel pil atık kutularında toplanır, çevreye zararlıdır." },
+    { q: "Aşağıdakilerden hangisi geri dönüşüme gönderilmemelidir?", opts: ["Gazete", "Alüminyum folyo", "Kırık bardak", "Plastik şişe"], a: 2, exp: "Kırık camlar tehlikeli olduğu için geri dönüşüm kutusuna atılmaz." },
+    { q: "Geri dönüşüm ile ilgili hangisi doğrudur?", opts: ["Doğal kaynakları tüketir", "Enerji tasarrufu sağlar", "Çöplükleri artırır", "Hava kirliliğini artırır"], a: 1, exp: "Geri dönüşüm enerji tasarrufu sağlar ve doğayı korur." },
+    { q: "Pet şişenin fabrikada eritilip yeni pet şişe yapılması hangi kavramdır?", opts: ["Geri kazanım", "Geri dönüşüm", "İleri dönüşüm", "Yeniden kullanım"], a: 1, exp: "Aynı üründen tekrar üretmek geri dönüşümdür." },
+    { q: "Plastikten kazak ipliği üretilmesi hangi kavrama örnektir?", opts: ["Geri dönüşüm", "Geri kazanım", "İleri dönüşüm", "Yeniden kullanım"], a: 1, exp: "Farklı bir ürün elde edildiği için geri kazanımdır." },
+    { q: "Hangisi sıvı evsel atığa örnektir?", opts: ["Plastik şişe", "Cam kavanoz", "Kızartma yağı", "Gazete"], a: 2, exp: "Kızartma yağı sıvı atıktır, lavaboya dökülmemelidir." },
+    { q: "Kağıt geri dönüşümünün faydası nedir?", opts: ["Daha fazla ağaç kesilir", "Su tasarrufu sağlanır", "Ağaçların kesilmesini önler", "Havayı kirletir"], a: 2, exp: "1 ton kağıt geri dönüşümü 17 ağacı kurtarır." },
+    { q: "Aşağıdakilerden hangisi tıbbi atıktır?", opts: ["Meyve kabuğu", "Enjektör", "Plastik şişe", "Alüminyum folyo"], a: 1, exp: "Enjektör, iğne gibi atıklar tıbbi atıktır, özel imha edilir." }
+  ];
+  let quizAnswered = new Array(10).fill(false);
+  let quizScores = new Array(10).fill(false);
+
+  function buildQuiz() {
+    const container = document.getElementById('quiz-container');
+    if (!container) return;
+    container.innerHTML = '';
+    quizData.forEach((q, idx) => {
+      const div = document.createElement('div'); div.className = 'quiz-q';
+      let optsHtml = '';
+      q.opts.forEach((opt, optIdx) => {
+        optsHtml += `<button class="quiz-opt" onclick="checkQuiz(${idx}, ${optIdx})" id="qzopt${idx}_${optIdx}">${opt}</button><br>`;
+      });
+      div.innerHTML = `<p><strong>Soru ${idx+1}:</strong> ${q.q}</p><div class="quiz-opts">${optsHtml}</div><div class="quiz-fb" id="qzfb${idx}"></div>`;
+      container.appendChild(div);
+    });
+  }
+
+  function checkQuiz(qIdx, chosen) {
+    if (quizAnswered[qIdx]) return;
+    quizAnswered[qIdx] = true;
+    const q = quizData[qIdx];
+    const isCorrect = (chosen === q.a);
+    quizScores[qIdx] = isCorrect;
+    for (let i = 0; i < q.opts.length; i++) {
+      const btn = document.getElementById(`qzopt${qIdx}_${i}`);
+      if (btn) { btn.disabled = true; if (i === q.a) btn.classList.add('correct'); else if (i === chosen && !isCorrect) btn.classList.add('wrong'); }
+    }
+    const fbDiv = document.getElementById(`qzfb${qIdx}`);
+    fbDiv.style.display = 'block';
+    fbDiv.className = `quiz-fb show ${isCorrect ? 'ok' : 'nope'}`;
+    fbDiv.textContent = isCorrect ? `✓ Doğru! ${q.exp}` : `✗ Yanlış! Doğru: ${q.opts[q.a]}. ${q.exp}`;
+    if (quizAnswered.every(v => v === true)) {
+      const total = quizScores.filter(Boolean).length;
+      document.getElementById('score-val').innerHTML = total;
+      let msg = total <= 4 ? '📖 Geri dönüşüm konusunu tekrar et!' : (total <= 7 ? '♻️ İyi! Biraz daha pratik yap.' : (total <= 9 ? '🎉 Harikasın! Çevre Uzmanısın!' : '🏆 Mükemmel! Sıfır atık kahramanısın!'));
+      document.getElementById('score-msg').innerHTML = msg;
+      document.getElementById('score-bar').style.display = 'flex';
+    }
+  }
+  window.checkQuiz = checkQuiz;
+
+  // ---------- SÜRÜKLE BIRAK (DOĞRU/YANLIŞ) ----------
+  let draggedItem = null;
+  document.addEventListener('dragstart', (e) => {
+    if (e.target.classList.contains('drag-statement') || e.target.classList.contains('drag-word')) {
+      draggedItem = e.target;
+      e.target.classList.add('dragging');
+      e.dataTransfer.setData('text/plain', e.target.innerText);
+      e.dataTransfer.effectAllowed = 'move';
+    }
+  });
+  document.addEventListener('dragend', (e) => {
+    if (e.target.classList.contains('drag-statement') || e.target.classList.contains('drag-word')) e.target.classList.remove('dragging');
+    draggedItem = null;
+  });
+  const dropZones = document.querySelectorAll('.drop-zone');
+  dropZones.forEach(zone => {
+    zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', () => { zone.classList.remove('drag-over'); });
+    zone.addEventListener('drop', (e) => {
+      e.preventDefault(); zone.classList.remove('drag-over');
+      if (!draggedItem) return;
+      if (draggedItem.classList.contains('drag-statement')) {
+        const isTrueZone = zone.getAttribute('data-zone') === 'true';
+        const statementTruth = draggedItem.getAttribute('data-tf') === 'true';
+        if (isTrueZone !== statementTruth) { alert('❌ Bu ifade buraya ait değil! Tekrar dene.'); return; }
+        const targetList = zone.querySelector('.dropped-items');
+        const badge = document.createElement('div'); badge.className = 'dropped-badge'; badge.innerText = draggedItem.innerText;
+        targetList.appendChild(badge);
+        draggedItem.remove(); draggedItem = null;
+      }
+    });
+  });
+  // Fill-in boşluklar
+  const fillSlots = document.querySelectorAll('.drop-slot');
+  fillSlots.forEach(slot => {
+    slot.addEventListener('dragover', (e) => { e.preventDefault(); slot.style.backgroundColor = '#E0F0EA'; });
+    slot.addEventListener('dragleave', () => { if (!slot.classList.contains('filled')) slot.style.backgroundColor = '#E8F0ED'; });
+    slot.addEventListener('drop', (e) => {
+      e.preventDefault(); slot.style.backgroundColor = '#E8F0ED';
+      if (!draggedItem || !draggedItem.classList.contains('drag-word')) return;
+      const correctAnswer = slot.getAttribute('data-correct');
+      const droppedWord = draggedItem.getAttribute('data-fillword');
+      if (correctAnswer === droppedWord) {
+        if (slot.classList.contains('filled')) return;
+        slot.innerText = droppedWord; slot.classList.add('filled');
+        draggedItem.remove(); draggedItem = null;
+      } else { alert(`Yanlış kelime! "${droppedWord}" bu boşluğa uygun değil.`); }
+    });
+  });
+
+  // RESET DOĞRU/YANLIŞ
+  function resetTF() {
+    const trueDiv = document.getElementById('trueDropped'); const falseDiv = document.getElementById('falseDropped');
+    trueDiv.innerHTML = ''; falseDiv.innerHTML = '';
+    const originalStatements = [
+      "1. Pet şişeler plastik atık kutusuna atılabilir.", "2. Kırık camlar geri dönüşüm kutusuna atılmalıdır.",
+      "3. Atık piller özel pil kutularında toplanır.", "4. Kağıt havlular geri dönüştürülebilir.",
+      "5. Sıfır Atık Projesi'nde ilk adım \"önlemek\"tir.", "6. Kızartma yağları lavaboya dökülebilir.",
+      "7. Geri dönüşüm, doğal kaynakları korur.", "8. Alüminyum folyo metal atık kutusuna atılabilir.",
+      "9. Meyve kabukları geri dönüşüm kutusuna atılmalıdır.", "10. Geri kazanımda atıktan farklı bir ürün elde edilir."
+    ];
+    const tfVals = ["true","false","true","false","true","false","true","true","false","true"];
+    const container = document.getElementById('tf-items-container');
+    container.innerHTML = '';
+    for (let i = 0; i < originalStatements.length; i++) {
+      const div = document.createElement('div');
+      div.className = 'drag-statement';
+      div.setAttribute('draggable', 'true');
+      div.setAttribute('data-tf', tfVals[i]);
+      div.innerText = originalStatements[i];
+      container.appendChild(div);
+    }
+    draggedItem = null;
+  }
+  // RESET BOŞLUK
+  function resetFill() {
+    const bank = document.getElementById('fillWordBank');
+    const originalWords = ["evsel","plastik","cam","kağıt","metal","sıfır atık","geri dönüşüm","pil","kompost","temiz"];
+    bank.innerHTML = '';
+    originalWords.forEach(w => {
+      const wordDiv = document.createElement('div');
+      wordDiv.className = 'drag-word';
+      wordDiv.setAttribute('draggable', 'true');
+      wordDiv.setAttribute('data-fillword', w);
+      wordDiv.innerText = w;
+      bank.appendChild(wordDiv);
+    });
+    const slots = document.querySelectorAll('.drop-slot');
+    const placeholders = ["______","______","______","______","______","______","______","______","______","______"];
+    slots.forEach((slot, idx) => {
+      slot.innerText = placeholders[idx];
+      slot.classList.remove('filled');
+      slot.style.backgroundColor = '#E8F0ED';
+    });
+    draggedItem = null;
+  }
+  document.getElementById('resetTFBtn')?.addEventListener('click', resetTF);
+  document.getElementById('resetFillBtn')?.addEventListener('click', resetFill);
+
+  function showTab(tabId, btn) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(`tab-${tabId}`).classList.add('active');
+    btn.classList.add('active');
+  }
+  window.showTab = showTab;
+  buildQuiz();
+</script>
+</body>
+</html>

@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>5. Sınıf Fen: Ampul Parlaklığını Etkileyen Değişkenler | Hafıza Teknikleri + Etkinlikler</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    background: #F5F9FC;
+    color: #1A3B4F;
+    padding: 24px 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  :root {
+    --circuit-blue: #1E6F9F;
+    --bright-yellow: #F4B942;
+    --energy-orange: #E67E22;
+    --light-bg: #FEFCF5;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, #1E6F9F, #0D4A6E);
+    border-radius: 32px;
+    padding: 1.6rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 28px;
+    color: white;
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+  }
+  .hero-icon {
+    font-size: 68px;
+    filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.2));
+  }
+  .hero h2 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+  }
+  .hero p {
+    font-size: 0.85rem;
+    opacity: 0.9;
+    margin-top: 6px;
+  }
+
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .tab {
+    background: white;
+    border: none;
+    padding: 8px 24px;
+    border-radius: 60px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: 0.2s;
+    color: #1E6F9F;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    border: 1px solid #C5E0F0;
+  }
+  .tab.active {
+    background: var(--circuit-blue);
+    color: white;
+    border-color: var(--circuit-blue);
+    box-shadow: 0 6px 12px rgba(30,111,159,0.3);
+  }
+  .panel {
+    display: none;
+    animation: fadeIn 0.2s ease;
+  }
+  .panel.active {
+    display: block;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px);}
+    to { opacity: 1; transform: translateY(0);}
+  }
+
+  .section-label {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #5B8CAC;
+    margin: 28px 0 12px 0;
+  }
+
+  .chunk-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+    margin-bottom: 28px;
+  }
+  .chunk {
+    background: white;
+    border-radius: 28px;
+    padding: 18px;
+    border: 1px solid #D4E6F2;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+  }
+  .chunk h4 {
+    font-size: 0.9rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .chunk ul {
+    list-style: none;
+  }
+  .chunk ul li {
+    font-size: 0.8rem;
+    margin-bottom: 8px;
+    padding-left: 22px;
+    position: relative;
+    line-height: 1.4;
+  }
+  .chunk ul li::before {
+    content: "💡";
+    position: absolute;
+    left: 0;
+    font-size: 12px;
+  }
+  .chunk-blue h4 { color: #1E6F9F; }
+  .chunk-yellow h4 { color: #E67E22; }
+  .chunk-green h4 { color: #2E7D64; }
+  .chunk-purple h4 { color: #8F5C8C; }
+
+  .info-card {
+    background: white;
+    border-radius: 24px;
+    padding: 18px;
+    border: 1px solid #D4E6F2;
+    margin-bottom: 20px;
+  }
+  .info-card h3 {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #1E6F9F;
+    margin-bottom: 8px;
+  }
+  .example-box {
+    background: #FFF4E8;
+    border-radius: 20px;
+    padding: 12px;
+    margin-top: 10px;
+  }
+  .variable-badge {
+    display: inline-block;
+    background: #E6F0F8;
+    padding: 4px 12px;
+    border-radius: 40px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    margin: 4px;
+  }
+
+  /* Sürükle bırak stilleri */
+  .drag-area {
+    background: #FEFCF7;
+    border-radius: 32px;
+    padding: 20px;
+    margin-bottom: 32px;
+    border: 2px solid #D4E6F2;
+  }
+  .drag-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #1E6F9F;
+  }
+  .drag-items, .word-bank {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    background: #F2F8FC;
+    padding: 18px;
+    border-radius: 32px;
+    margin-bottom: 24px;
+  }
+  .drag-statement, .drag-word {
+    background: white;
+    border-radius: 60px;
+    padding: 8px 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    font-weight: 600;
+    font-size: 0.8rem;
+    cursor: grab;
+    border: 1px solid #BED6E7;
+    user-select: none;
+  }
+  .drag-statement:active, .drag-word:active { cursor: grabbing; }
+  .drag-statement.dragging, .drag-word.dragging { opacity: 0.4; }
+  .drop-zones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  .drop-zone {
+    background: #F2F4F8;
+    border-radius: 36px;
+    padding: 16px 28px;
+    text-align: center;
+    min-width: 200px;
+    border: 2px dashed #B0C4DE;
+  }
+  .drop-zone h4 { font-weight: 800; margin-bottom: 12px; }
+  .drop-zone.drag-over { background: #E6F0F8; border-color: #1E6F9F; }
+  .dropped-items {
+    min-height: 70px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+  .dropped-badge {
+    background: #D4E6F2;
+    padding: 6px 12px;
+    border-radius: 40px;
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+  .fill-sentences { margin: 20px 0; }
+  .sentence {
+    background: white;
+    border-radius: 20px;
+    padding: 12px 18px;
+    margin-bottom: 14px;
+    font-size: 0.85rem;
+    border-left: 4px solid #F4B942;
+  }
+  .drop-slot {
+    display: inline-block;
+    background: #EDF3F8;
+    border-radius: 40px;
+    padding: 4px 14px;
+    min-width: 100px;
+    text-align: center;
+    font-weight: 700;
+    margin: 0 4px;
+    border: 1px dashed #89B7D1;
+  }
+  .drop-slot.filled {
+    background: #C8E6D9;
+    border: 1px solid #2E7D64;
+    color: #1A5A48;
+  }
+  .reset-btn {
+    background: #1E6F9F;
+    border: none;
+    color: white;
+    padding: 8px 24px;
+    border-radius: 60px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 12px;
+    font-size: 0.75rem;
+  }
+  .reset-btn:hover { background: #0D4A6E; }
+
+  /* Quiz stilleri */
+  .quiz-q {
+    background: white;
+    border-radius: 24px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    border: 1px solid #D4E6F2;
+  }
+  .quiz-opt {
+    background: #FEFAF2;
+    border: 1px solid #CFDFE9;
+    padding: 8px 18px;
+    border-radius: 60px;
+    margin: 6px 0;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+  }
+  .quiz-opt.correct { background: #DFF2E3; border-color: #2E7D64; }
+  .quiz-opt.wrong { background: #FFEDE6; border-color: #E67E22; }
+  .quiz-fb { margin-top: 10px; padding: 8px 12px; border-radius: 20px; display: none; }
+  .quiz-fb.show { display: block; }
+  .quiz-fb.ok { background: #E6F7E6; color: #2E7D64; }
+  .quiz-fb.nope { background: #FFEFE0; color: #C4510A; }
+  .score-bar {
+    background: #E1EFF7;
+    border-radius: 60px;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    font-weight: bold;
+    margin-top: 20px;
+    display: none;
+  }
+  @media (max-width: 700px) {
+    .hero { flex-direction: column; text-align: center; }
+    .chunk-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-icon">💡🔋</div>
+  <div>
+    <h2>Basit Bir Elektrik Devresinde Ampul Parlaklığını Etkileyen Değişkenler</h2>
+    <p>5. Sınıf Fen Bilimleri · Pil sayısı ve ampul sayısının parlaklığa etkisi · Bilimsel değişkenler<br>
+    <strong>F.5.6.2.1</strong> — Ampul parlaklığını etkileyen değişkenleri deneyerek keşfeder.</p>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('bilgi',this)">📘 Temel Bilgiler</button>
+  <button class="tab" onclick="showTab('degisken',this)">🔬 Değişkenler ve Etkiler</button>
+  <button class="tab" onclick="showTab('teknik',this)">🧠 Hafıza Teknikleri</button>
+  <button class="tab" onclick="showTab('etkinlik',this)">🎮 Sürükle & Etkinlik</button>
+  <button class="tab" onclick="showTab('quiz',this)">✅ 10 Soruluk Quiz</button>
+</div>
+
+<!-- PANEL 1: TEMEL BİLGİLER -->
+<div id="tab-bilgi" class="panel active">
+  <div class="section-label">🔌 DEVRE ELEMANLARI VE PARLAKLIK</div>
+  <div class="chunk-grid">
+    <div class="chunk chunk-blue">
+      <h4>⚡ Pil (Enerji Kaynağı)</h4>
+      <ul>
+        <li>Devreye elektrik enerjisi sağlar</li>
+        <li>Pil sayısı arttıkça ampul parlaklığı artar</li>
+        <li>Pil sayısı azaldıkça parlaklık azalır</li>
+        <li>Doğru bağlantı: artı (+) ve eksi (-) kutuplar seri</li>
+      </ul>
+    </div>
+    <div class="chunk chunk-yellow">
+      <h4>💡 Ampul (Işık Kaynağı)</h4>
+      <ul>
+        <li>Elektrik enerjisini ışık ve ısıya dönüştürür</li>
+        <li>Ampul sayısı arttıkça her bir ampulün parlaklığı azalır</li>
+        <li>Ampul sayısı azaldıkça kalanlar daha parlak yanar</li>
+      </ul>
+    </div>
+    <div class="chunk chunk-green">
+      <h4>🔘 Anahtar ve Kablo</h4>
+      <ul>
+        <li>Anahtar: devreyi açar/kapar, parlaklığı doğrudan etkilemez (ya akar ya keser)</li>
+        <li>Kablo: iletken, kesik olursa devre çalışmaz</li>
+        <li>Kalın/ince kablo (5.sınıf düzeyinde detay yok, sadece bağlantı)</li>
+      </ul>
+    </div>
+    <div class="chunk chunk-purple">
+      <h4>📊 Parlaklık İlişkisi Özet</h4>
+      <ul>
+        <li>Pil sayısı ↑ → Parlaklık ↑</li>
+        <li>Pil sayısı ↓ → Parlaklık ↓</li>
+        <li>Ampul sayısı ↑ → Parlaklık ↓ (enerji paylaşımı)</li>
+        <li>Ampul sayısı ↓ → Parlaklık ↑ (kalan ampuller)</li>
+      </ul>
+    </div>
+  </div>
+  <div class="info-card">
+    <h3>🎯 Zihinsel Model: "Baba ve Çocuklar"</h3>
+    <p>Bir babanın (pil) vereceği harçlık (enerji) sabitken, çocuk sayısı (ampul) arttıkça her bir çocuğa düşen para azalır → parlaklık azalır. Çocuk sayısı aynı kalırken babanın verdiği para artarsa (pil sayısı artar) her çocuk daha çok alır → parlaklık artar.</p>
+  </div>
+</div>
+
+<!-- PANEL 2: DEĞİŞKENLER VE ETKİLERİ -->
+<div id="tab-degisken" class="panel">
+  <div class="section-label">🔬 BİLİMSEL DEĞİŞKENLER</div>
+  <div class="info-card">
+    <h3>📌 Bağımsız Değişken (Etkileyen)</h3>
+    <p>Deneyde kendi isteğimizle değiştirdiğimiz faktördür. Örneğin: <strong>pil sayısı</strong> veya <strong>ampul sayısı</strong>.</p>
+    <h3>📌 Bağımlı Değişken (Etkilenen)</h3>
+    <p>Bağımsız değişkene bağlı olarak değişen sonuçtur. Burada <strong>ampul parlaklığı</strong> bağımlı değişkendir.</p>
+    <h3>📌 Kontrol Edilen (Sabit) Değişken</h3>
+    <p>Deney süresince sabit tutulan, değiştirilmeyen faktörlerdir. Örneğin: ampul tipi, kablo cinsi, pil kalitesi.</p>
+  </div>
+  <div class="section-label">⚡ PARLAKLIĞI ETKİLEYEN DURUMLAR (KARŞILAŞTIRMALI)</div>
+  <div class="example-box">
+    <p><strong>✔ Pil sayısının etkisi (ampul sayısı sabit):</strong> 1 pil ile çalışan devre, 2 pil ile çalışan devreye göre daha sönük yanar. Pil arttıkça parlaklık artar.</p>
+    <p><strong>✔ Ampul sayısının etkisi (pil sayısı sabit):</strong> 1 ampullü devre, 2 ampullü devreye göre daha parlak yanar. Ampul arttıkça her bir ampulün parlaklığı azalır.</p>
+    <p><strong>✔ Deney tasarımı örneği:</strong> Pil sayısının etkisini görmek için ampul sayısı aynı, pil sayısı farklı iki devre hazırlanır. Ampul sayısının etkisini görmek için pil sayısı aynı, ampul sayısı farklı devreler karşılaştırılır.</p>
+  </div>
+</div>
+
+<!-- PANEL 3: HAFIZA TEKNİKLERİ -->
+<div id="tab-teknik" class="panel">
+  <div class="section-label">🔡 Akrostiş: "PİL ARTTIR → PARLAK, AMPUL ARTTIR → SÖNÜK"</div>
+  <div class="info-card">
+    <h3>💡 P - A - K - S kuralı</h3>
+    <p><strong>P</strong>il sayısı artarsa → <strong>P</strong>arlaklık artar<br>
+    <strong>A</strong>mpul sayısı artarsa → <strong>A</strong>z parlak (sönük)<br>
+    <strong>K</strong>ontrol değişkeni: sabit tutulanlar<br>
+    <strong>S</strong>onucu etkileyen: bağımsız değişken</p>
+  </div>
+  <div class="chunk-grid">
+    <div class="chunk chunk-blue"><h4>🎯 Değişken Ezberi</h4><ul><li>Bağımsız: "Ben değiştiririm" (pil/ampul sayısı)</li><li>Bağımlı: "Buna bağlıdır" (parlaklık)</li><li>Kontrol: "Sabit tutarım" (diğerleri)</li></ul></div>
+    <div class="chunk chunk-yellow"><h4>📊 Pratik Tablo</h4><ul><li>Pil ↑ → Parlaklık ↑ (aynı ampul sayısı)</li><li>Ampul ↑ → Parlaklık ↓ (aynı pil sayısı)</li><li>Örnek: 3 pil + 1 ampul > 3 pil + 2 ampul</li></ul></div>
+    <div class="chunk chunk-green"><h4>🧪 Deney Tasarımı</h4><ul><li>Pil etkisi: ampul sayısı sabit, pil sayısı değişir</li><li>Ampul etkisi: pil sayısı sabit, ampul sayısı değişir</li></ul></div>
+  </div>
+  <div class="info-card">
+    <h3>📌 Unutma!</h3>
+    <p>Eğer devreye yeni ampul eklenirse, mevcut ampuller sönük yanar. Eğer yeni pil eklenirse (doğru bağlı) tüm ampuller daha parlak yanar. Ters bağlı pil devreyi çalıştırmaz.</p>
+  </div>
+</div>
+
+<!-- PANEL 4: SÜRÜKLE BIRAK ETKİNLİKLER (10 DOĞRU/YANLIŞ + 10 BOŞLUK) -->
+<div id="tab-etkinlik" class="panel">
+  <!-- Bölüm 1: 10 Doğru/Yanlış -->
+  <div class="drag-area">
+    <div class="drag-title">✅❌ 10 DOĞRU / YANLIŞ ETKİNLİĞİ (Sürükle bırak)</div>
+    <div class="drag-items" id="tf-items-container">
+      <div class="drag-statement" draggable="true" data-tf="true">1. Pil sayısı arttıkça ampul parlaklığı artar.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">2. Ampul sayısı arttıkça parlaklık artar.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">3. Aynı pil sayısında daha az ampul varsa parlaklık daha fazladır.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">4. Bağımlı değişken, deneyde değiştirdiğimiz faktördür.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">5. Bağımsız değişken pil sayısı veya ampul sayısı olabilir.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">6. Kontrol edilen değişken deney boyunca değiştirilir.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">7. Bir devreye aynı pil sayısıyla 2. ampul eklersek parlaklık azalır.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">8. Pil sayısının etkisini test ederken ampul sayısı sabit olmalıdır.</div>
+      <div class="drag-statement" draggable="true" data-tf="false">9. Ampul parlaklığı bağımsız değişkendir.</div>
+      <div class="drag-statement" draggable="true" data-tf="true">10. 3 pilli devre, 2 pilli devreden daha parlaktır (ampul sayısı aynıysa).</div>
+    </div>
+    <div class="drop-zones">
+      <div class="drop-zone" data-zone="true" id="dropTrueZone">
+        <h4>✅ DOĞRU</h4>
+        <div class="dropped-items" id="trueDropped"></div>
+      </div>
+      <div class="drop-zone" data-zone="false" id="dropFalseZone">
+        <h4>❌ YANLIŞ</h4>
+        <div class="dropped-items" id="falseDropped"></div>
+      </div>
+    </div>
+    <button class="reset-btn" id="resetTFBtn">🔄 Doğru/Yanlış Etkinliğini Sıfırla</button>
+  </div>
+
+  <!-- Bölüm 2: 10 Boşluk Doldurma (Sürükle) -->
+  <div class="drag-area">
+    <div class="drag-title">📝 10 BOŞLUK DOLDURMA (Sözcükleri sürükle)</div>
+    <div class="word-bank" id="fillWordBank">
+      <div class="drag-word" draggable="true" data-fillword="parlaklık">parlaklık</div>
+      <div class="drag-word" draggable="true" data-fillword="pil">pil</div>
+      <div class="drag-word" draggable="true" data-fillword="ampul">ampul</div>
+      <div class="drag-word" draggable="true" data-fillword="bağımsız">bağımsız</div>
+      <div class="drag-word" draggable="true" data-fillword="bağımlı">bağımlı</div>
+      <div class="drag-word" draggable="true" data-fillword="kontrol">kontrol</div>
+      <div class="drag-word" draggable="true" data-fillword="artar">artar</div>
+      <div class="drag-word" draggable="true" data-fillword="azalır">azalır</div>
+      <div class="drag-word" draggable="true" data-fillword="enerji">enerji</div>
+      <div class="drag-word" draggable="true" data-fillword="sabit">sabit</div>
+    </div>
+    <div class="fill-sentences" id="fillSentencesContainer">
+      <div class="sentence">① Ampulün ışık verme şiddetine <span class="drop-slot" data-correct="parlaklık">______</span> denir.</div>
+      <div class="sentence">② Devreye elektrik enerjisi sağlayan eleman <span class="drop-slot" data-correct="pil">______</span>'dir.</div>
+      <div class="sentence">③ Enerjiyi ışığa dönüştüren eleman <span class="drop-slot" data-correct="ampul">______</span>'dur.</div>
+      <div class="sentence">④ Deneyde kendi isteğimizle değiştirdiğimiz değişkene <span class="drop-slot" data-correct="bağımsız">______</span> değişken denir.</div>
+      <div class="sentence">⑤ Bağımsız değişkene bağlı olarak değişen sonuç değişkenine <span class="drop-slot" data-correct="bağımlı">______</span> değişken denir.</div>
+      <div class="sentence">⑥ Deney süresince sabit tutulan değişkene <span class="drop-slot" data-correct="kontrol">______</span> edilen değişken denir.</div>
+      <div class="sentence">⑦ Pil sayısı artarsa ampul parlaklığı <span class="drop-slot" data-correct="artar">______</span>.</div>
+      <div class="sentence">⑧ Aynı pil sayısında ampul sayısı artarsa parlaklık <span class="drop-slot" data-correct="azalır">______</span>.</div>
+      <div class="sentence">⑨ Ampul sayısı arttıkça her ampule düşen <span class="drop-slot" data-correct="enerji">______</span> miktarı azalır.</div>
+      <div class="sentence">⑩ Pil sayısının etkisini test ederken ampul sayısı <span class="drop-slot" data-correct="sabit">______</span> tutulmalıdır.</div>
+    </div>
+    <button class="reset-btn" id="resetFillBtn">🔄 Boşluk Etkinliğini Sıfırla</button>
+  </div>
+</div>
+
+<!-- PANEL 5: 10 SORULUK QUIZ -->
+<div id="tab-quiz" class="panel">
+  <div class="section-label">✅ AMPUL PARLAKLIĞI – 10 SORULUK UZMANLIK QUIZİ</div>
+  <div id="quiz-container"></div>
+  <div class="score-bar" id="score-bar" style="display: none;">💡 Puan: <strong id="score-val">0</strong> / 10 &nbsp;|&nbsp; <span id="score-msg"></span></div>
+</div>
+
+<script>
+  // ---------- 10 SORULUK QUIZ ----------
+  const quizData = [
+    { q: "Bir elektrik devresinde ampul parlaklığını artırmak için aşağıdakilerden hangisi yapılmalıdır?", opts: ["Ampul sayısını artırmak", "Pil sayısını artırmak", "Kablo boyunu uzatmak", "Anahtarı açmak"], a: 1, exp: "Pil sayısı artarsa devredeki enerji artar, parlaklık artar." },
+    { q: "Aynı pil sayısına sahip iki devreden birinde 1 ampul, diğerinde 2 ampul vardır. Hangisi daha parlak yanar?", opts: ["1 ampullü devre", "2 ampullü devre", "İkisi de aynı", "Pil sayısına bağlı"], a: 0, exp: "Pil sayısı sabitken ampul sayısı arttıkça her bir ampulün parlaklığı azalır." },
+    { q: "Bir deneyde ampul sayısını değiştirip pil sayısını sabit tutarak parlaklık ölçülüyor. Bağımsız değişken nedir?", opts: ["Ampul parlaklığı", "Pil sayısı", "Ampul sayısı", "Kablo tipi"], a: 2, exp: "Bağımsız değişken, deneyci tarafından değiştirilen faktördür: ampul sayısı." },
+    { q: "Ampul parlaklığı hangi değişken türüdür?", opts: ["Bağımsız", "Bağımlı", "Kontrol edilen", "Sabit"], a: 1, exp: "Parlaklık, yapılan değişikliklerden etkilendiği için bağımlı değişkendir." },
+    { q: "Bir devreye aynı pil sayısıyla ikinci bir ampul eklendiğinde ilk ampulün parlaklığı nasıl değişir?", opts: ["Artar", "Azalır", "Değişmez", "Önce artar sonra azalır"], a: 1, exp: "Enerji paylaşılacağı için her bir ampul daha az enerji alır, parlaklık azalır." },
+    { q: "Pil sayısının parlaklığa etkisini araştırmak için aşağıdakilerden hangisi sabit tutulmalıdır?", opts: ["Pil sayısı", "Ampul sayısı", "Ampul parlaklığı", "Anahtar durumu"], a: 1, exp: "Ampul sayısı sabit tutulmalı, sadece pil sayısı değiştirilmelidir." },
+    { q: "3 pil ve 1 ampulden oluşan bir devre ile 2 pil ve 1 ampulden oluşan devre karşılaştırılıyor. Hangisi daha parlaktır?", opts: ["3 pilli devre", "2 pilli devre", "İkisi eşit", "Ampul sayısı aynı olduğu için eşit"], a: 0, exp: "Pil sayısı fazla olan devrede enerji fazla olduğundan parlaklık daha fazladır." },
+    { q: "Bir devrede ampul sayısı 2'den 1'e düşürülürse (pil sayısı aynı) kalan ampulün parlaklığı nasıl olur?", opts: ["Söner", "Azalır", "Artar", "Değişmez"], a: 2, exp: "Ampul sayısı azaldığında kalan ampule daha fazla enerji gelir, parlaklık artar." },
+    { q: "Aşağıdakilerden hangisi kontrol edilen (sabit) değişkene örnektir?", opts: ["Pil sayısı", "Ampul parlaklığı", "Ampul tipi (hepsi aynı)", "Ampul sayısı değişiyorsa"], a: 2, exp: "Ampul tipi (aynı marka, aynı güç) deneyde sabit tutulması gereken bir kontrol değişkenidir." },
+    { q: "Bir devrede pil sayısı 1'den 3'e çıkarılırsa ampul parlaklığı nasıl değişir?", opts: ["Söner", "Azalır", "Artar", "Değişmez"], a: 2, exp: "Pil sayısı arttıkça devreye daha fazla enerji verilir, ampul daha parlak yanar." }
+  ];
+  let quizAnswered = new Array(10).fill(false);
+  let quizScores = new Array(10).fill(false);
+
+  function buildQuiz() {
+    const container = document.getElementById('quiz-container');
+    if (!container) return;
+    container.innerHTML = '';
+    quizData.forEach((q, idx) => {
+      const div = document.createElement('div'); div.className = 'quiz-q';
+      let optsHtml = '';
+      q.opts.forEach((opt, optIdx) => {
+        optsHtml += `<button class="quiz-opt" onclick="checkQuiz(${idx}, ${optIdx})" id="qzopt${idx}_${optIdx}">${opt}</button><br>`;
+      });
+      div.innerHTML = `<p><strong>Soru ${idx+1}:</strong> ${q.q}</p><div class="quiz-opts">${optsHtml}</div><div class="quiz-fb" id="qzfb${idx}"></div>`;
+      container.appendChild(div);
+    });
+  }
+
+  function checkQuiz(qIdx, chosen) {
+    if (quizAnswered[qIdx]) return;
+    quizAnswered[qIdx] = true;
+    const q = quizData[qIdx];
+    const isCorrect = (chosen === q.a);
+    quizScores[qIdx] = isCorrect;
+    for (let i = 0; i < q.opts.length; i++) {
+      const btn = document.getElementById(`qzopt${qIdx}_${i}`);
+      if (btn) { btn.disabled = true; if (i === q.a) btn.classList.add('correct'); else if (i === chosen && !isCorrect) btn.classList.add('wrong'); }
+    }
+    const fbDiv = document.getElementById(`qzfb${qIdx}`);
+    fbDiv.style.display = 'block';
+    fbDiv.className = `quiz-fb show ${isCorrect ? 'ok' : 'nope'}`;
+    fbDiv.textContent = isCorrect ? `✓ Doğru! ${q.exp}` : `✗ Yanlış! Doğru: ${q.opts[q.a]}. ${q.exp}`;
+    if (quizAnswered.every(v => v === true)) {
+      const total = quizScores.filter(Boolean).length;
+      document.getElementById('score-val').innerHTML = total;
+      let msg = total <= 4 ? '📖 Değişkenleri ve etkilerini tekrar et!' : (total <= 7 ? '🔋 İyi! Biraz daha pratik yap.' : (total <= 9 ? '🎉 Harikasın! Devre Uzmanısın!' : '🏆 Mükemmel! Ampul parlaklığını çok iyi kavradın!'));
+      document.getElementById('score-msg').innerHTML = msg;
+      document.getElementById('score-bar').style.display = 'flex';
+    }
+  }
+  window.checkQuiz = checkQuiz;
+
+  // ---------- SÜRÜKLE BIRAK (DOĞRU/YANLIŞ) ----------
+  let draggedItem = null;
+  document.addEventListener('dragstart', (e) => {
+    if (e.target.classList.contains('drag-statement') || e.target.classList.contains('drag-word')) {
+      draggedItem = e.target;
+      e.target.classList.add('dragging');
+      e.dataTransfer.setData('text/plain', e.target.innerText);
+      e.dataTransfer.effectAllowed = 'move';
+    }
+  });
+  document.addEventListener('dragend', (e) => {
+    if (e.target.classList.contains('drag-statement') || e.target.classList.contains('drag-word')) e.target.classList.remove('dragging');
+    draggedItem = null;
+  });
+  const dropZones = document.querySelectorAll('.drop-zone');
+  dropZones.forEach(zone => {
+    zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', () => { zone.classList.remove('drag-over'); });
+    zone.addEventListener('drop', (e) => {
+      e.preventDefault(); zone.classList.remove('drag-over');
+      if (!draggedItem) return;
+      if (draggedItem.classList.contains('drag-statement')) {
+        const isTrueZone = zone.getAttribute('data-zone') === 'true';
+        const statementTruth = draggedItem.getAttribute('data-tf') === 'true';
+        if (isTrueZone !== statementTruth) { alert('❌ Bu ifade buraya ait değil! Tekrar dene.'); return; }
+        const targetList = zone.querySelector('.dropped-items');
+        const badge = document.createElement('div'); badge.className = 'dropped-badge'; badge.innerText = draggedItem.innerText;
+        targetList.appendChild(badge);
+        draggedItem.remove(); draggedItem = null;
+      }
+    });
+  });
+  // Fill-in boşluklar
+  const fillSlots = document.querySelectorAll('.drop-slot');
+  fillSlots.forEach(slot => {
+    slot.addEventListener('dragover', (e) => { e.preventDefault(); slot.style.backgroundColor = '#E0F0FA'; });
+    slot.addEventListener('dragleave', () => { if (!slot.classList.contains('filled')) slot.style.backgroundColor = '#EDF3F8'; });
+    slot.addEventListener('drop', (e) => {
+      e.preventDefault(); slot.style.backgroundColor = '#EDF3F8';
+      if (!draggedItem || !draggedItem.classList.contains('drag-word')) return;
+      const correctAnswer = slot.getAttribute('data-correct');
+      const droppedWord = draggedItem.getAttribute('data-fillword');
+      if (correctAnswer === droppedWord) {
+        if (slot.classList.contains('filled')) return;
+        slot.innerText = droppedWord; slot.classList.add('filled');
+        draggedItem.remove(); draggedItem = null;
+      } else { alert(`Yanlış kelime! "${droppedWord}" bu boşluğa uygun değil.`); }
+    });
+  });
+
+  // RESET DOĞRU/YANLIŞ
+  function resetTF() {
+    const trueDiv = document.getElementById('trueDropped'); const falseDiv = document.getElementById('falseDropped');
+    trueDiv.innerHTML = ''; falseDiv.innerHTML = '';
+    const originalStatements = [
+      "1. Pil sayısı arttıkça ampul parlaklığı artar.", "2. Ampul sayısı arttıkça parlaklık artar.",
+      "3. Aynı pil sayısında daha az ampul varsa parlaklık daha fazladır.", "4. Bağımlı değişken, deneyde değiştirdiğimiz faktördür.",
+      "5. Bağımsız değişken pil sayısı veya ampul sayısı olabilir.", "6. Kontrol edilen değişken deney boyunca değiştirilir.",
+      "7. Bir devreye aynı pil sayısıyla 2. ampul eklersek parlaklık azalır.", "8. Pil sayısının etkisini test ederken ampul sayısı sabit olmalıdır.",
+      "9. Ampul parlaklığı bağımsız değişkendir.", "10. 3 pilli devre, 2 pilli devreden daha parlaktır (ampul sayısı aynıysa)."
+    ];
+    const tfVals = ["true","false","true","false","true","false","true","true","false","true"];
+    const container = document.getElementById('tf-items-container');
+    container.innerHTML = '';
+    for (let i = 0; i < originalStatements.length; i++) {
+      const div = document.createElement('div');
+      div.className = 'drag-statement';
+      div.setAttribute('draggable', 'true');
+      div.setAttribute('data-tf', tfVals[i]);
+      div.innerText = originalStatements[i];
+      container.appendChild(div);
+    }
+    draggedItem = null;
+  }
+  // RESET BOŞLUK
+  function resetFill() {
+    const bank = document.getElementById('fillWordBank');
+    const originalWords = ["parlaklık","pil","ampul","bağımsız","bağımlı","kontrol","artar","azalır","enerji","sabit"];
+    bank.innerHTML = '';
+    originalWords.forEach(w => {
+      const wordDiv = document.createElement('div');
+      wordDiv.className = 'drag-word';
+      wordDiv.setAttribute('draggable', 'true');
+      wordDiv.setAttribute('data-fillword', w);
+      wordDiv.innerText = w;
+      bank.appendChild(wordDiv);
+    });
+    const slots = document.querySelectorAll('.drop-slot');
+    const placeholders = ["______","______","______","______","______","______","______","______","______","______"];
+    slots.forEach((slot, idx) => {
+      slot.innerText = placeholders[idx];
+      slot.classList.remove('filled');
+      slot.style.backgroundColor = '#EDF3F8';
+    });
+    draggedItem = null;
+  }
+  document.getElementById('resetTFBtn')?.addEventListener('click', resetTF);
+  document.getElementById('resetFillBtn')?.addEventListener('click', resetFill);
+
+  function showTab(tabId, btn) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(`tab-${tabId}`).classList.add('active');
+    btn.classList.add('active');
+  }
+  window.showTab = showTab;
+  buildQuiz();
+</script>
+</body>
+</html>

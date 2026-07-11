@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Canfenci ile iletişime geçin - İletişim formu ve bilgileri">
+  <title>İletişim - Canfenci</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+  
+  <!-- ===== Header ===== -->
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <a href="index.html" class="logo">
+          <img src="img/logo.svg" alt="Canfenci Logo" height="45">
+        </a>
+        
+        <nav>
+          <ul class="nav-menu">
+            <li><a href="index.html">Ana Sayfa</a></li>
+            <li><a href="5-sinif.html">5. Sınıf</a></li>
+            <li><a href="6-sinif.html">6. Sınıf</a></li>
+            <li><a href="7-sinif.html">7. Sınıf</a></li>
+            <li><a href="8-sinif.html">8. Sınıf</a></li>
+            <li><a href="hakkimizda.html">Hakkımızda</a></li>
+            <li><a href="iletisim.html">İletişim</a></li>
+          </ul>
+        </nav>
+        
+        <button class="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+
+  <!-- ===== Page Header ===== -->
+  <div class="page-header">
+    <div class="container">
+      <h1>📧 İletişim</h1>
+      <p>Bizimle iletişime geçin, sorularınızı yanıtlayalım</p>
+    </div>
+  </div>
+
+  <!-- ===== İletişim Section ===== -->
+  <section>
+    <div class="container">
+      <div class="contact-container">
+        
+        <!-- İletişim Formu -->
+        <div class="contact-form">
+          <h2 style="margin-bottom: 20px; color: var(--primary-color);">Mesaj Gönderin</h2>
+          <form action="#" method="POST">
+            <div class="form-group">
+              <label for="name">Adınız Soyadınız *</label>
+              <input type="text" id="name" name="name" required placeholder="Adınızı ve soyadınızı girin">
+            </div>
+
+            <div class="form-group">
+              <label for="email">E-posta Adresiniz *</label>
+              <input type="email" id="email" name="email" required placeholder="ornek@email.com">
+            </div>
+
+            <div class="form-group">
+              <label for="subject">Konu</label>
+              <input type="text" id="subject" name="subject" placeholder="Mesajınızın konusu">
+            </div>
+
+            <div class="form-group">
+              <label for="message">Mesajınız *</label>
+              <textarea id="message" name="message" required placeholder="Mesajınızı buraya yazın..."></textarea>
+            </div>
+
+            <button type="submit" class="btn-submit">
+              <i class="fas fa-paper-plane"></i> Gönder
+            </button>
+          </form>
+        </div>
+
+        <!-- İletişim Bilgileri -->
+        <div class="contact-info">
+          <div class="info-box">
+            <div class="info-icon">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <div class="info-content">
+              <h3>E-posta</h3>
+              <p>info@canfenci.com</p>
+              <p style="margin-top: 5px; font-size: 14px;">7/24 size dönüş yapıyoruz</p>
+            </div>
+          </div>
+
+          <div class="info-box">
+            <div class="info-icon">
+              <i class="fas fa-clock"></i>
+            </div>
+            <div class="info-content">
+              <h3>Çalışma Saatleri</h3>
+              <p>Hafta içi: 09:00 - 18:00</p>
+              <p style="margin-top: 5px;">Hafta sonu: 10:00 - 16:00</p>
+            </div>
+          </div>
+
+          <div class="info-box">
+            <div class="info-icon">
+              <i class="fas fa-share-alt"></i>
+            </div>
+            <div class="info-content">
+              <h3>Sosyal Medya</h3>
+              <div style="display: flex; gap: 15px; margin-top: 10px; font-size: 24px;">
+                <a href="#" style="color: var(--secondary-color);"><i class="fab fa-instagram"></i></a>
+                <a href="#" style="color: var(--secondary-color);"><i class="fab fa-youtube"></i></a>
+                <a href="#" style="color: var(--secondary-color);"><i class="fab fa-twitter"></i></a>
+                <a href="#" style="color: var(--secondary-color);"><i class="fab fa-facebook"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SSS Section ===== -->
+  <section style="background-color: white;">
+    <div class="container">
+      <div class="section-title">
+        <h2>Sıkça Sorulan Sorular</h2>
+        <p>Merak edilenlerin cevapları</p>
+      </div>
+
+      <div class="grid grid-2">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-question-circle"></i>
+          </div>
+          <div class="feature-content">
+            <h3>Dökümanlar gerçekten ücretsiz mi?</h3>
+            <p>Evet, sitemizde bulunan tüm dökümanlar tamamen ücretsizdir ve hiçbir ücret talep edilmemektedir.</p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-question-circle"></i>
+          </div>
+          <div class="feature-content">
+            <h3>Üyelik gerekli mi?</h3>
+            <p>Hayır, sitemizde üyelik sistemi bulunmamaktadır. Tüm içeriklere doğrudan erişebilirsiniz.</p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-question-circle"></i>
+          </div>
+          <div class="feature-content">
+            <h3>Dökümanlar ne sıklıkla güncelleniyor?</h3>
+            <p>Döküman arşivimiz haftalık olarak yeni içeriklerle güncellenmekte ve mevcut dökümanlar gözden geçirilmektedir.</p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-question-circle"></i>
+          </div>
+          <div class="feature-content">
+            <h3>Öğretmenim, katkıda bulunabilir miyim?</h3>
+            <p>Elbette! Hazırladığınız dökümanları bizimle paylaşmak için iletişim formunu kullanabilirsiniz.</p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-question-circle"></i>
+          </div>
+          <div class="feature-content">
+            <h3>Mobil cihazlardan erişebilir miyim?</h3>
+            <p>Evet, sitemiz tüm cihazlarda (telefon, tablet, bilgisayar) sorunsuz çalışmaktadır.</p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-question-circle"></i>
+          </div>
+          <div class="feature-content">
+            <h3>İndirme limiti var mı?</h3>
+            <p>Hayır, istediğiniz kadar döküman indirebilirsiniz. Hiçbir limit bulunmamaktadır.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Footer ===== -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Canfenci</h3>
+          <p>Ortaokul öğrencileri için hazırlanmış en kapsamlı fen bilimleri döküman arşivi. Tamamen ücretsiz, güncel ve kullanıcı dostu içeriklerle öğrenmeyi kolaylaştırıyoruz.</p>
+        </div>
+        
+        <div class="footer-section">
+          <h3>Hızlı Linkler</h3>
+          <ul class="footer-links">
+            <li><a href="5-sinif.html"><i class="fas fa-chevron-right"></i> 5. Sınıf</a></li>
+            <li><a href="6-sinif.html"><i class="fas fa-chevron-right"></i> 6. Sınıf</a></li>
+            <li><a href="7-sinif.html"><i class="fas fa-chevron-right"></i> 7. Sınıf</a></li>
+            <li><a href="8-sinif.html"><i class="fas fa-chevron-right"></i> 8. Sınıf</a></li>
+            <li><a href="hakkimizda.html"><i class="fas fa-chevron-right"></i> Hakkımızda</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h3>İletişim</h3>
+          <ul class="footer-links">
+            <li><a href="mailto:info@canfenci.com"><i class="fas fa-envelope"></i> info@canfenci.com</a></li>
+            <li><a href="iletisim.html"><i class="fas fa-paper-plane"></i> İletişim Formu</a></li>
+            <li><a href="#"><i class="fab fa-instagram"></i> Instagram</a></li>
+            <li><a href="#"><i class="fab fa-youtube"></i> YouTube</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2026 Canfenci. Tüm hakları saklıdır. | Fen Bilimleri Döküman Arşivi</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Custom JS -->
+  <script src="./js/main.js"></script>
+</body>
+</html>
