@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
   highlightActivePage();
   initStatsCounter();
   initFormValidation();
+  initVisitorCounter();
 });
 
 /* ===== Mobil Menü Toggle ===== */
@@ -328,4 +329,24 @@ function initScrollToTop() {
   scrollBtn.addEventListener('click', function () {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
+}
+
+/* ===== Ziyaretçi Sayacı (CounterAPI) ===== */
+function initVisitorCounter() {
+  const counterElement = document.getElementById('visitor-count');
+  if (!counterElement) return;
+
+  fetch('https://api.counterapi.dev/v1/canfenci/index/up')
+    .then(response => response.json())
+    .then(data => {
+      if (data && typeof data.value !== 'undefined') {
+        counterElement.innerText = Number(data.value).toLocaleString('tr-TR');
+      } else {
+        counterElement.innerText = '—';
+      }
+    })
+    .catch(error => {
+      console.error('Sayaç yüklenemedi:', error);
+      counterElement.innerText = '—';
+    });
 }

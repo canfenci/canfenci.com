@@ -687,6 +687,33 @@ footer {
   padding-top: 20px;
   text-align: center;
   opacity: 0.8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.visitor-counter {
+  font-size: 13.5px;
+  color: #a0aec0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 6px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.visitor-counter:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.visitor-counter span {
+  color: #ff8c42;
+  font-weight: 700;
 }
 
 /* ===== Responsive Design ===== */
