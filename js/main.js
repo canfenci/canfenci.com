@@ -54,62 +54,130 @@ function initStickyHeader() {
 /* ===== Döküman Filtreleme (DÜZELTİLDİ) ===== */
 function initDocumentFilter() {
   const filterButtons = document.querySelectorAll('.sidebar-filter-btn, .filter-btn');
+  const unitSections = document.querySelectorAll('.unit-section');
   const docCards = document.querySelectorAll('.doc-card');
 
-  if (!filterButtons.length || !docCards.length) return;
+  // Hiyerarşik Ünite & Bölüm Yapısı varsa:
+  if (unitSections.length) {
+    function showUnit(unitId) {
+      unitSections.forEach(section => {
+        if (section.id === unitId || unitId === 'all') {
+          section.style.display = 'block';
+          section.classList.add('active');
+        } else {
+          section.style.display = 'none';
+          section.classList.remove('active');
+        }
+      });
+    }
 
-  // Kartların orijinal display değerini sakla
-  let originalDisplay = 'flex'; // varsayılan
-  if (docCards.length > 0) {
-    const computedStyle = window.getComputedStyle(docCards[0]);
-    originalDisplay = computedStyle.display === 'flex' ? 'flex' : 'block';
-  }
+    filterButtons.forEach(button => {
+      button.addEventListener('click', function () {
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
 
-  function filterCards(filterValue) {
-    docCards.forEach(card => {
-      const category = card.getAttribute('data-category');
-      const shouldShow = filterValue === 'all' || category === filterValue;
-      
-      if (shouldShow) {
-        card.style.display = originalDisplay;
-        card.style.opacity = '1';
-        card.style.visibility = 'visible';
-        // Animasyon ekle (isteğe bağlı)
-        card.style.animation = 'none';
-        setTimeout(() => {
-          card.style.animation = 'fadeInUp 0.3s ease';
-        }, 10);
-      } else {
-        card.style.display = 'none';
-        card.style.opacity = '0';
-        card.style.visibility = 'hidden';
+        const unitId = this.getAttribute('data-filter');
+        showUnit(unitId);
+
+        // Mobilde butona kaydır
+        if (window.innerWidth <= 768) {
+          this.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+      });
+    });
+
+    // İlk yüklemede aktif olan veya ilk üniteyi göster
+    const activeFilter = document.querySelector('.sidebar-filter-btn.active');
+    if (activeFilter) {
+      showUnit(activeFilter.getAttribute('data-filter'));
+    } else if (filterButtons.length) {
+      filterButtons[0].classList.add('active');
+      showUnit(filterButtons[0].getAttribute('data-filter'));
+    }
+
+    // Bölüm İçi Sekme (Tab) Değişimi
+    const tabButtons = document.querySelectorAll('.chapter-tab-btn');
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', function () {
+        const card = this.closest('.chapter-card');
+        if (!card) return;
+
+        const tabPaneId = this.getAttribute('data-tab');
+
+        // Sekme butonlarını güncelle
+        card.querySelectorAll('.chapter-tab-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+
+        // Sekme içeriklerini güncelle
+        card.querySelectorAll('.tab-pane').forEach(pane => {
+          if (pane.getAttribute('data-pane') === tabPaneId) {
+            pane.style.display = 'block';
+            pane.classList.add('active');
+          } else {
+            pane.style.display = 'none';
+            pane.classList.remove('active');
+          }
+        });
+      });
+    });
+
+    // Her kartın ilk sekmesini otomatik aktif et
+    document.querySelectorAll('.chapter-card').forEach(card => {
+      const firstTab = card.querySelector('.chapter-tab-btn');
+      if (firstTab) {
+        firstTab.click();
       }
     });
-  }
 
-  filterButtons.forEach(button => {
-    button.addEventListener('click', function (e) {
-      // Aktif buton stilini güncelle
-      filterButtons.forEach(btn => btn.classList.remove('active'));
-      this.classList.add('active');
+  } else if (filterButtons.length && docCards.length) {
+    // Eski filtreleme mantığı (Fallback)
+    let originalDisplay = 'flex';
+    if (docCards.length > 0) {
+      const computedStyle = window.getComputedStyle(docCards[0]);
+      originalDisplay = computedStyle.display === 'flex' ? 'flex' : 'block';
+    }
 
-      const filterValue = this.getAttribute('data-filter');
-      filterCards(filterValue);
+    function filterCards(filterValue) {
+      docCards.forEach(card => {
+        const category = card.getAttribute('data-category');
+        const shouldShow = filterValue === 'all' || category === filterValue;
+        
+        if (shouldShow) {
+          card.style.display = originalDisplay;
+          card.style.opacity = '1';
+          card.style.visibility = 'visible';
+          card.style.animation = 'none';
+          setTimeout(() => {
+            card.style.animation = 'fadeInUp 0.3s ease';
+          }, 10);
+        } else {
+          card.style.display = 'none';
+          card.style.opacity = '0';
+          card.style.visibility = 'hidden';
+        }
+      });
+    }
 
-      // Mobilde butona kaydır
-      if (window.innerWidth <= 768) {
-        this.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-      }
+    filterButtons.forEach(button => {
+      button.addEventListener('click', function () {
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+
+        const filterValue = this.getAttribute('data-filter');
+        filterCards(filterValue);
+
+        if (window.innerWidth <= 768) {
+          this.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+      });
     });
-  });
 
-  // İlk yüklemede "all" filtrelemesini uygula (görünürlük garantisi)
-  const activeFilter = document.querySelector('.sidebar-filter-btn.active, .filter-btn.active');
-  if (activeFilter) {
-    const filterValue = activeFilter.getAttribute('data-filter');
-    filterCards(filterValue);
-  } else {
-    filterCards('all');
+    const activeFilter = document.querySelector('.sidebar-filter-btn.active, .filter-btn.active');
+    if (activeFilter) {
+      filterCards(activeFilter.getAttribute('data-filter'));
+    } else {
+      filterCards('all');
+    }
   }
 }
 
