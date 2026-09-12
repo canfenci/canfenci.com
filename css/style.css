@@ -123,22 +123,202 @@ header.scrolled {
 .nav-menu {
   display: flex;
   list-style: none;
-  gap: 30px;
+  gap: 8px;
   align-items: center;
+  margin: 0;
+  padding: 0;
+  flex-wrap: nowrap;
+}
+
+.nav-menu li {
+  display: inline-flex;
+  white-space: nowrap;
 }
 
 .nav-menu a {
-  color: var(--text-dark);
-  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
   padding: 8px 16px;
-  border-radius: 8px;
-  transition: var(--transition);
+  border-radius: 50px;
+  text-decoration: none;
+  white-space: nowrap;
+  border: 1px solid transparent;
+  color: var(--text-dark);
+  background-color: #F1F5F9;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.nav-menu a:hover,
-.nav-menu a.active {
-  background-color: var(--secondary-color);
-  color: var(--white);
+/* --- Her Sayfa İçin Özel Pastel Renk Tonları --- */
+
+/* Ana Sayfa: Turuncu */
+.nav-menu a[href="index.html"],
+.nav-menu a[href="./index.html"],
+.nav-menu a[href="/"] {
+  background-color: #FFF3E8;
+  color: #C05621;
+  border-color: rgba(230, 126, 34, 0.16);
+}
+.nav-menu a[href="index.html"]:hover,
+.nav-menu a[href="./index.html"]:hover,
+.nav-menu a[href="/"]:hover {
+  background-color: #FFE5CE;
+  color: #9C4221;
+  border-color: rgba(230, 126, 34, 0.35);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(230, 126, 34, 0.22);
+}
+.nav-menu a[href="index.html"].active,
+.nav-menu a[href="./index.html"].active,
+.nav-menu a[href="/"].active {
+  background: linear-gradient(135deg, #E67E22, #D35400);
+  color: #FFFFFF !important;
+  border-color: #D35400;
+  box-shadow: 0 4px 14px rgba(230, 126, 34, 0.35);
+}
+
+/* 5. Sınıf: Mavi */
+.nav-menu a[href*="5-sinif"] {
+  background-color: #EFF6FF;
+  color: #1D4ED8;
+  border-color: rgba(37, 99, 235, 0.16);
+}
+.nav-menu a[href*="5-sinif"]:hover {
+  background-color: #DBEAFE;
+  color: #1E40AF;
+  border-color: rgba(37, 99, 235, 0.35);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.22);
+}
+.nav-menu a[href*="5-sinif"].active {
+  background: linear-gradient(135deg, #2563EB, #1D4ED8);
+  color: #FFFFFF !important;
+  border-color: #1D4ED8;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+}
+
+/* 6. Sınıf: Mor */
+.nav-menu a[href*="6-sinif"] {
+  background-color: #FAF5FF;
+  color: #7E22CE;
+  border-color: rgba(147, 51, 234, 0.16);
+}
+.nav-menu a[href*="6-sinif"]:hover {
+  background-color: #F3E8FF;
+  color: #6B21A8;
+  border-color: rgba(147, 51, 234, 0.35);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(147, 51, 234, 0.22);
+}
+.nav-menu a[href*="6-sinif"].active {
+  background: linear-gradient(135deg, #9333EA, #7E22CE);
+  color: #FFFFFF !important;
+  border-color: #7E22CE;
+  box-shadow: 0 4px 14px rgba(147, 51, 234, 0.35);
+}
+
+/* 7. Sınıf: Yeşil */
+.nav-menu a[href*="7-sinif"] {
+  background-color: #ECFDF5;
+  color: #047857;
+  border-color: rgba(16, 185, 129, 0.16);
+}
+.nav-menu a[href*="7-sinif"]:hover {
+  background-color: #D1FAE5;
+  color: #065F46;
+  border-color: rgba(16, 185, 129, 0.35);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.22);
+}
+.nav-menu a[href*="7-sinif"].active {
+  background: linear-gradient(135deg, #10B981, #059669);
+  color: #FFFFFF !important;
+  border-color: #059669;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+}
+
+/* 8. Sınıf: Mercan / Kırmızı (LGS) */
+.nav-menu a[href*="8-sinif"] {
+  background-color: #FEF2F2;
+  color: #B91C1C;
+  border-color: rgba(239, 68, 68, 0.16);
+}
+.nav-menu a[href*="8-sinif"]:hover {
+  background-color: #FEE2E2;
+  color: #991B1B;
+  border-color: rgba(239, 68, 68, 0.35);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.22);
+}
+.nav-menu a[href*="8-sinif"].active {
+  background: linear-gradient(135deg, #EF4444, #DC2626);
+  color: #FFFFFF !important;
+  border-color: #DC2626;
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
+}
+
+/* Sunum: CanFenci Lacivert */
+.nav-menu a[href*="sunum"] {
+  background-color: #F0F4F8;
+  color: #1B3A5C;
+  border-color: rgba(27, 58, 92, 0.16);
+}
+.nav-menu a[href*="sunum"]:hover {
+  background-color: #E2EAF2;
+  color: #102A45;
+  border-color: rgba(27, 58, 92, 0.35);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(27, 58, 92, 0.22);
+}
+.nav-menu a[href*="sunum"].active {
+  background: linear-gradient(135deg, #1B3A5C, #2C5F8D);
+  color: #FFFFFF !important;
+  border-color: #1B3A5C;
+  box-shadow: 0 4px 14px rgba(27, 58, 92, 0.35);
+}
+
+/* Hakkımızda: Slate / Gri-Mavi */
+.nav-menu a[href*="hakkimizda"] {
+  background-color: #F1F5F9;
+  color: #475569;
+  border-color: rgba(100, 116, 139, 0.16);
+}
+.nav-menu a[href*="hakkimizda"]:hover {
+  background-color: #E2E8F0;
+  color: #1E293B;
+  border-color: rgba(100, 116, 139, 0.35);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(100, 116, 139, 0.2);
+}
+.nav-menu a[href*="hakkimizda"].active {
+  background: linear-gradient(135deg, #64748B, #475569);
+  color: #FFFFFF !important;
+  border-color: #475569;
+  box-shadow: 0 4px 14px rgba(100, 116, 139, 0.35);
+}
+
+/* İletişim: Açık Mavi */
+.nav-menu a[href*="iletisim"] {
+  background-color: #F0F9FF;
+  color: #0369A1;
+  border-color: rgba(14, 165, 233, 0.16);
+}
+.nav-menu a[href*="iletisim"]:hover {
+  background-color: #E0F2FE;
+  color: #0284C7;
+  border-color: rgba(14, 165, 233, 0.35);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.22);
+}
+.nav-menu a[href*="iletisim"].active {
+  background: linear-gradient(135deg, #0EA5E9, #0284C7);
+  color: #FFFFFF !important;
+  border-color: #0284C7;
+  box-shadow: 0 4px 14px rgba(14, 165, 233, 0.35);
 }
 
 .hamburger {
@@ -747,23 +927,60 @@ footer {
 
 /* ===== Responsive Design ===== */
 
-/* Tablet (768px) */
+/* Orta / Küçük Masaüstü Ekranlar (769px - 1180px) */
+@media (max-width: 1180px) and (min-width: 769px) {
+  .nav-menu {
+    gap: 6px;
+  }
+  .nav-menu a {
+    font-size: 13px;
+    padding: 7px 12px;
+  }
+}
+
+@media (max-width: 990px) and (min-width: 769px) {
+  .nav-menu {
+    gap: 4px;
+  }
+  .nav-menu a {
+    font-size: 12px;
+    padding: 6px 9px;
+  }
+}
+
+/* Tablet ve Mobil (768px ve altı) */
 @media (max-width: 768px) {
   .nav-menu {
     position: fixed;
-    top: 80px;
+    top: 75px;
     left: -100%;
     width: 100%;
+    height: calc(100vh - 75px);
+    overflow-y: auto;
     flex-direction: column;
     background-color: var(--white);
-    padding: 30px;
-    box-shadow: var(--shadow);
+    padding: 24px 20px 40px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
     transition: var(--transition);
-    gap: 20px;
+    gap: 10px;
+    align-items: stretch;
   }
 
   .nav-menu.active {
     left: 0;
+  }
+
+  .nav-menu li {
+    width: 100%;
+    display: block;
+  }
+
+  .nav-menu a {
+    width: 100%;
+    padding: 12px 18px;
+    font-size: 15px;
+    border-radius: 14px;
+    justify-content: flex-start;
   }
 
   .hamburger {
