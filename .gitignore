@@ -6,6 +6,8 @@ canfenci/
 
 # Geçici dosyalar
 *.py
+!scripts/check_links.py
+!tests/test_check_links.py
 *.pyc
 __pycache__/
 
